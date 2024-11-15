@@ -80,22 +80,6 @@ export function WorkshopCard({ workshop }: WorkshopCardProps) {
                 </li>
               ))}
             </ul>
-            {/* Add GitHub button if URL exists */}
-            {workshop.github && (
-              <div className="mt-6">
-                <Button variant="outline" asChild className="w-full sm:w-auto">
-                  <a
-                    href={workshop.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center"
-                  >
-                    <Github className="mr-2 h-4 w-4" />
-                    View Source Code
-                  </a>
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </div>

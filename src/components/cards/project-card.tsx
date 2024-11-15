@@ -2,10 +2,10 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { ExternalLink, Github, Check } from "lucide-react";
+import { ExternalLink, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Project } from "@/lib/data";
+import type { Project } from "@/lib/data";
 
 interface ProjectCardProps {
   project: Project;
@@ -37,33 +37,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                 <p className="text-muted-foreground mb-4">
                   {project.description}
                 </p>
-
-                {project.features && project.features.length > 0 && (
-                  <div className="mb-4">
-                    <h5 className="font-medium text-sm mb-3">Key Features:</h5>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {project.features.map((feature, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.1 }}
-                          className="flex items-center gap-2"
-                        >
-                          <div className="flex-shrink-0 rounded-full bg-green-100 dark:bg-green-900 p-1">
-                            <Check className="h-3 w-3 text-green-600 dark:text-green-400" />
-                          </div>
-                          <span className="text-sm text-muted-foreground truncate">
-                            {feature}
-                          </span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col space-x-4">
-                <div className="flex flex-wrap gap-2 mb-4 ">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {project.tech.map((tech) => (
                     <motion.span
                       key={tech}
@@ -74,6 +48,8 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                     </motion.span>
                   ))}
                 </div>
+              </div>
+              <div className="flex space-x-4">
                 <Button variant="outline" asChild className="flex-1">
                   <a
                     href={project.link}
@@ -83,17 +59,15 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                     View Live <ExternalLink className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
-                {project.github && (
-                  <Button variant="outline" asChild className="flex-1">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      GitHub <Github className="ml-2 h-4 w-4" />
-                    </a>
-                  </Button>
-                )}
+                <Button variant="outline" asChild className="flex-1">
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    GitHub <Github className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
               </div>
             </div>
             <div className="relative overflow-hidden">

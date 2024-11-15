@@ -1,19 +1,19 @@
-import { createClient } from "next-sanity";
-import imageUrlBuilder from "@sanity/image-url";
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import { createClient } from 'next-sanity'
+import imageUrlBuilder from '@sanity/image-url'
 
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
-  apiVersion: "2024-02-29",
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: '2024-03-14',
   useCdn: false,
-  perspective: "published",
-});
+  perspective: 'published',
+  stega: false,
+})
 
-const builder = imageUrlBuilder(client);
+const builder = imageUrlBuilder(client)
 
-export function urlFor(source: SanityImageSource) {
-  return builder.image(source);
+export function urlFor(source: any) {
+  return builder.image(source)
 }
 
 // Typed query functions
@@ -23,11 +23,10 @@ export async function getProjects() {
     name,
     description,
     tech,
-    features,
     link,
     github,
     "image": image.asset->url
-  }`);
+  }`)
 }
 
 export async function getPackages() {
@@ -42,7 +41,7 @@ export async function getPackages() {
     documentation,
     tags,
     "image": image.asset->url
-  }`);
+  }`)
 }
 
 export async function getWorkshops() {
@@ -57,7 +56,7 @@ export async function getWorkshops() {
     upcoming,
     recordingLink,
     resources
-  }`);
+  }`)
 }
 
 export async function getSkills() {
@@ -67,19 +66,21 @@ export async function getSkills() {
     description,
     "icon": icon.asset->url,
     colors,
-    "skills": *[_type == "skill" && references(^._id)] {
-      _id,
-      name,
-      description,
-      "icon": icon.asset->url,
-      colors,
-      subSkills
-    }
-  }`);
+   skills[] {
+        name,
+        description,
+        icon,
+        colors,
+        subSkills
+      }
+  }`)
 }
 
-export async function debugQuery(query: string) {
-  const result = await client.fetch(query);
-  console.log("Query result:", JSON.stringify(result, null, 2));
-  return result;
+export async function getAbout() {
+  return client.fetch(`*[_type == "about"][0] {
+    _id,
+    title,
+    content,
+    background
+  }`)
 }

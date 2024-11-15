@@ -5,10 +5,10 @@ export type Project = {
   link: string;
   github: string;
   image: string;
-  features?: string[];
 };
 
 export type Package = {
+  _id: string;
   name: string;
   description: string;
   downloads: number;
@@ -26,7 +26,6 @@ export type Workshop = {
   duration: string;
   level: "Beginner" | "Intermediate" | "Advanced";
   topics: string[];
-  github?: string;
   upcoming?: {
     date: string;
     location: string;
@@ -68,6 +67,7 @@ export const projects: Project[] = [
 
 export const myPackages: Package[] = [
   {
+    _id: "1",
     name: "@mdeal/react-hooks",
     description:
       "A collection of custom React hooks for common UI patterns and animations",
@@ -80,6 +80,7 @@ export const myPackages: Package[] = [
     image: "/projects/saas-dashboard.png",
   },
   {
+    _id: "2",
     name: "@mdeal/ui",
     description:
       "A modern React UI component library with accessibility in mind",
@@ -92,6 +93,7 @@ export const myPackages: Package[] = [
     image: "/projects/ui-library.png",
   },
   {
+    _id: "3",
     name: "@mdeal/forms",
     description:
       "Form validation and handling made simple for React applications",
@@ -118,7 +120,6 @@ export const workshops: Workshop[] = [
       "Custom Hooks",
       "Performance Optimization",
     ],
-    github: "https://github.com/mdeal/react-patterns",
     upcoming: {
       date: "2024-06-15",
       location: "Virtual",
@@ -134,7 +135,6 @@ export const workshops: Workshop[] = [
     duration: "8 hours",
     level: "Intermediate",
     topics: ["App Router", "Server Components", "Data Fetching", "API Routes"],
-    github: "https://github.com/mdeal/nextjs-14",
     upcoming: {
       date: "2024-07-01",
       location: "Virtual",
@@ -155,7 +155,6 @@ export const workshops: Workshop[] = [
       "Generics",
       "React with TypeScript",
     ],
-    github: "https://github.com/mdeal/typescript-fundamentals",
     upcoming: {
       date: "2024-05-20",
       location: "Virtual",

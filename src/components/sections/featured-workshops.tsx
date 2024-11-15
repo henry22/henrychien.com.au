@@ -4,9 +4,20 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { WorkshopCard } from "@/components/cards/workshop-card";
-import { workshops } from "@/lib/data";
+import { useWorkshops } from "@/lib/hooks/usePortfolioData";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function FeaturedWorkshops() {
+  const { data: workshops, isLoading, error } = useWorkshops();
+
+  if (error) {
+    return (
+      <div className="text-center py-20">
+        <p className="text-red-500">Failed to load workshops</p>
+      </div>
+    );
+  }
+
   return (
     <section className="py-20">
       <div className="flex justify-between items-center mb-12">
@@ -19,9 +30,19 @@ export function FeaturedWorkshops() {
         </Link>
       </div>
       <div className="grid gap-8">
-        {workshops.slice(0, 3).map((workshop) => (
-          <WorkshopCard key={workshop.title} workshop={workshop} />
-        ))}
+        {isLoading
+          ? Array(3)
+              .fill(0)
+              .map((_, i) => (
+                <div key={i} className="h-[300px] rounded-lg">
+                  <Skeleton className="w-full h-full" />
+                </div>
+              ))
+          : workshops
+              ?.slice(0, 3)
+              .map((workshop) => (
+                <WorkshopCard key={workshop._id} workshop={workshop} />
+              ))}
       </div>
     </section>
   );

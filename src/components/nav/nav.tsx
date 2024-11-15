@@ -6,10 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Nav() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+
+  const pathName = usePathname();
+
+  const isStudio = pathName.includes("/studio");
+
+  if (isStudio) return null;
 
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {

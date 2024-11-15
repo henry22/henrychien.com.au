@@ -14,19 +14,43 @@ export default {
       type: "text",
     },
     {
-      name: "npm",
+      name: "version",
+      title: "Current Version",
+      type: "string",
+    },
+    {
+      name: "npmLink",
       title: "NPM Package Link",
       type: "url",
     },
     {
-      name: "github",
+      name: "githubLink",
       title: "GitHub Repository",
+      type: "url",
+    },
+    {
+      name: "documentation",
+      title: "Documentation URL",
       type: "url",
     },
     {
       name: "downloads",
       title: "Weekly Downloads",
       type: "number",
+    },
+    {
+      name: "tags",
+      title: "Package Tags",
+      type: "array",
+      of: [{ type: "string" }],
+    },
+    {
+      name: "image",
+      title: "Package Image",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
     },
     {
       name: "featured",

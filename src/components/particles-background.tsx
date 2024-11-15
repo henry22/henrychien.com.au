@@ -9,16 +9,8 @@ export function ParticlesBackground() {
     const canvas = ref.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
-
-    const resizeCanvas = () => {
-      const container = canvas.parentElement;
-      if (container) {
-        canvas.width = container.clientWidth;
-        canvas.height = container.clientHeight;
-      }
-    };
-
-    resizeCanvas();
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     const particles: {
       x: number;
@@ -73,7 +65,8 @@ export function ParticlesBackground() {
     animate();
 
     const handleResize = () => {
-      resizeCanvas();
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
 
     window.addEventListener("resize", handleResize);
@@ -83,13 +76,5 @@ export function ParticlesBackground() {
     };
   }, []);
 
-  return (
-    <div className="absolute inset-0 overflow-hidden">
-      <canvas
-        ref={ref}
-        className="absolute inset-0 w-full h-full"
-        style={{ display: "block" }}
-      />
-    </div>
-  );
+  return <canvas ref={ref} className="absolute inset-0 z-0" />;
 }

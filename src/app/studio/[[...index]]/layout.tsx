@@ -3,10 +3,14 @@ export const metadata = {
   description: "Backend for your portfolio",
 };
 
-export default function StudioLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
 }

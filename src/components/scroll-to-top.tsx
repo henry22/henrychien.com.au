@@ -18,7 +18,7 @@ export function ScrollToTop() {
 
   return (
     <motion.button
-      className="fixed bottom-20 right-8 p-3 bg-primary rounded-full text-white shadow-lg z-50"
+      className="fixed bottom-8 right-8 p-3 bg-primary rounded-full text-white shadow-lg"
       initial={{ opacity: 0 }}
       animate={{ opacity: visible ? 1 : 0 }}
       whileHover={{ scale: 1.1 }}

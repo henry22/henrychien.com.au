@@ -1,21 +1,22 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-import { ProjectCard } from "@/components/cards/project-card";
-import { useProjects } from "@/lib/hooks/usePortfolioData";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from '@/components/ui/button'
+import { ArrowRight } from 'lucide-react'
+import Link from 'next/link'
+import { ProjectCard } from '@/components/cards/project-card'
+import { useProjects } from '@/lib/hooks/usePortfolioData'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Project } from '@/lib/data'
 
 export function FeaturedProjects() {
-  const { data: projects, isLoading, error } = useProjects();
+  const { data: projects, isLoading, error } = useProjects()
 
   if (error) {
     return (
       <div className="text-center py-20">
         <p className="text-red-500">Failed to load projects</p>
       </div>
-    );
+    )
   }
 
   return (
@@ -41,14 +42,10 @@ export function FeaturedProjects() {
               ))
           : projects
               ?.slice(0, 3)
-              .map((project, index) => (
-                <ProjectCard
-                  key={project._id}
-                  project={project}
-                  index={index}
-                />
+              .map((project: Project, index: number) => (
+                <ProjectCard key={project.name} project={project} index={index} />
               ))}
       </div>
     </section>
-  );
+  )
 }
