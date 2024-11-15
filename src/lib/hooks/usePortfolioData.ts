@@ -1,6 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getPackages, getProjects, getWorkshops } from "../sanity/client";
-import { getSkills } from "../sanity/fetch";
+import {
+  getPackages,
+  getProjects,
+  getWorkshops,
+  getSkills,
+} from "../sanity/client";
 
 export function useProjects() {
   return useQuery({

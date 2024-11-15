@@ -7,6 +7,7 @@ export const client = createClient({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
   apiVersion: "2024-02-29",
   useCdn: false,
+  perspective: "published",
 });
 
 const builder = imageUrlBuilder(client);
@@ -22,6 +23,7 @@ export async function getProjects() {
     name,
     description,
     tech,
+    features,
     link,
     github,
     "image": image.asset->url
@@ -74,4 +76,10 @@ export async function getSkills() {
       subSkills
     }
   }`);
+}
+
+export async function debugQuery(query: string) {
+  const result = await client.fetch(query);
+  console.log("Query result:", JSON.stringify(result, null, 2));
+  return result;
 }
