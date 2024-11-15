@@ -26,8 +26,8 @@ export function WorkshopCard({ workshop }: WorkshopCardProps) {
                 workshop.level === "Beginner"
                   ? "default"
                   : workshop.level === "Intermediate"
-                  ? "secondary"
-                  : "destructive"
+                    ? "secondary"
+                    : "destructive"
               }
               className="rounded-full"
             >

@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Nav from "@/components/nav/nav";
 import { Providers } from "./providers";
-import { ParticlesBackground } from "@/components/particles-background";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

@@ -5,6 +5,7 @@ export type Project = {
   link: string;
   github: string;
   image: string;
+  features?: string[];
 };
 
 export type Package = {
