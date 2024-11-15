@@ -1,181 +1,333 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, useInView } from "framer-motion";
-import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
+import { useState } from "react";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { useTheme } from "next-themes";
 
-const skills = [
-  {
-    name: "Next.js",
-    icon: "/icons/nextjs.svg",
-    color: "#000000",
-    description:
-      "Building fast and scalable web applications with server-side rendering and static site generation.",
-    experience: "3 years",
+const skillsTree = {
+  frontend: {
+    name: "Frontend Development",
+    description: "Building beautiful, responsive user interfaces",
+    icon: "/icons/frontend.svg",
+    colors: {
+      light: "#2563eb",
+      dark: "#60a5fa",
+    },
+    skills: [
+      {
+        name: "Next.js",
+        description:
+          "Building modern web applications with server-side rendering",
+        icon: "/icons/nextjs.svg",
+        colors: {
+          light: "#000000",
+          dark: "#ffffff",
+        },
+        subSkills: [
+          "App Router",
+          "Page Router",
+          "Server Actions",
+          "Dynamic routes",
+          "Parallel Routes",
+          "Data Streaming",
+        ],
+      },
+      {
+        name: "React",
+        description: "Building modern web applications with React",
+        icon: "/icons/react.svg",
+        colors: {
+          light: "#087ea4",
+          dark: "#61dafb",
+        },
+        subSkills: [
+          "Functional Components",
+          "Hooks",
+          "Context API",
+          "JSX",
+          "RSC's",
+        ],
+      },
+      {
+        name: "Third Party Libraries",
+        description: "React packages",
+        icon: "/icons/packages.svg",
+        colors: {
+          light: "#7c3aed",
+          dark: "#a78bfa",
+        },
+        subSkills: [
+          "React Hook Form",
+          "React Router",
+          "Tanstack Query",
+          "Zustand",
+        ],
+      },
+      {
+        name: "Authentication",
+        description: "Building secure authentication systems",
+        icon: "/icons/auth.svg",
+        colors: {
+          light: "#ff6b6b",
+          dark: "#ff4500",
+        },
+        subSkills: ["Clerk", "Next Auth", "Auth0", "Self Rolled"],
+      },
+      {
+        name: "TypeScript",
+        description: "Type-safe development for scalable applications",
+        icon: "/icons/typescript.svg",
+        colors: {
+          light: "#3178c6",
+          dark: "#3178c6",
+        },
+        subSkills: [
+          "Generics",
+          "Union Types",
+          "Discriminated Unions",
+          "As const",
+          "type narrowing",
+          "TypeOf & Keyof",
+          "Type Inference",
+          "Decorators",
+          "Zod",
+        ],
+      },
+      {
+        name: "UI & Styling",
+        description: "Creating beautiful and responsive interfaces",
+        icon: "/icons/tailwind.svg",
+        colors: {
+          light: "#06b6d4",
+          dark: "#06b6d4",
+        },
+        subSkills: [
+          "Tailwind CSS",
+          "ShadCN",
+          "Radix UI",
+          "Styled Components",
+          "Charka UI",
+          "Ant Design",
+          "CSS",
+        ],
+      },
+    ],
   },
-  {
-    name: "React",
-    icon: "/icons/react.svg",
-    color: "#61DAFB",
-    description:
-      "Creating dynamic and responsive user interfaces with reusable components and efficient state management.",
-    experience: "5 years",
+  backend: {
+    name: "Backend Development",
+    description: "Building scalable server-side applications",
+    icon: "/icons/backend.svg",
+    colors: {
+      light: "#7c3aed", // Purple-600
+      dark: "#a78bfa", // Purple-400
+    },
+    skills: [
+      {
+        name: "Next.js",
+        description: "Building server-side applications with Next.js",
+        icon: "/icons/nextjs.svg",
+        colors: {
+          light: "#000000",
+          dark: "#ffffff",
+        },
+        subSkills: ["Server Components", "API Routes", "Server Actions"],
+      },
+      {
+        name: "Node.js",
+        description: "Server-side JavaScript runtime",
+        icon: "/icons/nodejs.svg",
+        colors: {
+          light: "#339933",
+          dark: "#339933",
+        },
+        subSkills: ["Express", "REST APIs"],
+      },
+      {
+        name: "Databases",
+        description: "Data storage and management",
+        icon: "/icons/database.svg",
+        colors: {
+          light: "#336791",
+          dark: "#336791",
+        },
+        subSkills: ["PostgreSQL", "Prisma", "Supabase", "Drizzle"],
+      },
+      {
+        name: "CMS",
+        description: "Content Management Systems",
+        icon: "/icons/cms.svg",
+        colors: {
+          light: "#6366f1",
+          dark: "#ffd700",
+        },
+        subSkills: ["Sanity", "Contentful", "Storyblok", "Directus"],
+      },
+    ],
   },
-  {
-    name: "TypeScript",
-    icon: "/icons/typescript.svg",
-    color: "#3178C6",
-    description:
-      "Enhancing JavaScript with static type-checking for more robust and maintainable code.",
-    experience: "4 years",
-  },
-  {
-    name: "Tailwind CSS",
-    icon: "/icons/tailwind.svg",
-    color: "#06B6D4",
-    description:
-      "Rapidly building custom designs with utility-first CSS framework for modern web applications.",
-    experience: "3 years",
-  },
-  {
-    name: "Node.js",
-    icon: "/icons/nodejs.svg",
-    color: "#339933",
-    description:
-      "Developing scalable backend services and APIs with JavaScript runtime built on Chromes V8 engine.",
-    experience: "4 years",
-  },
-  {
-    name: "GraphQL",
-    icon: "/icons/graphql.svg",
-    color: "#E10098",
-    description:
-      "Implementing efficient data querying and manipulation with a powerful API query language.",
-    experience: "2 years",
-  },
-];
+};
 
 function SkillsSection() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
-    align: "start",
-  });
-  const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
-  const [nextBtnEnabled, setNextBtnEnabled] = useState(true);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
 
-  const scrollPrev = useCallback(
-    () => emblaApi && emblaApi.scrollPrev(),
-    [emblaApi]
-  );
-  const scrollNext = useCallback(
-    () => emblaApi && emblaApi.scrollNext(),
-    [emblaApi]
-  );
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setPrevBtnEnabled(emblaApi.canScrollPrev());
-    setNextBtnEnabled(emblaApi.canScrollNext());
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    onSelect();
-    emblaApi.on("select", onSelect);
-    emblaApi.on("reInit", onSelect);
-  }, [emblaApi, onSelect]);
+  const toggleCategory = (categoryName: string) => {
+    setExpandedCategories((prev) =>
+      prev.includes(categoryName)
+        ? prev.filter((name) => name !== categoryName)
+        : [...prev, categoryName]
+    );
+  };
 
   return (
-    <section id="skills" className="relative py-20">
-      <h3 className="text-4xl font-bold mb-12 text-center">
-        Skills & Technologies
-      </h3>
-      <div className="max-w-5xl mx-auto px-4">
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex">
-            {skills.map((skill, index) => (
-              <SkillCard
-                key={skill.name}
-                skill={skill}
-                index={index}
-                isSelected={index === selectedIndex}
-              />
-            ))}
-          </div>
-        </div>
-        <div className="flex justify-center mt-8 space-x-4">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={scrollPrev}
-            disabled={!prevBtnEnabled}
-            className="rounded-full"
-            aria-label="Previous skill"
-          >
-            <ChevronLeft className="h-6 w-6" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={scrollNext}
-            disabled={!nextBtnEnabled}
-            className="rounded-full"
-            aria-label="Next skill"
-          >
-            <ChevronRight className="h-6 w-6" />
-          </Button>
-        </div>
+    <section className="py-20">
+      <h2 className="text-4xl font-bold text-center mb-16">
+        Skills & Expertise
+      </h2>
+      <div className="grid md:grid-cols-2 gap-16 max-w-7xl mx-auto px-4">
+        <SkillTree
+          category={skillsTree.frontend}
+          isExpanded={expandedCategories.includes("frontend")}
+          onToggle={() => toggleCategory("frontend")}
+        />
+        <SkillTree
+          category={skillsTree.backend}
+          isExpanded={expandedCategories.includes("backend")}
+          onToggle={() => toggleCategory("backend")}
+        />
       </div>
     </section>
   );
 }
 
-function SkillCard({ skill, index, isSelected }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+function SkillTree({
+  category,
+  isExpanded,
+  onToggle,
+}: {
+  category: any;
+  isExpanded: boolean;
+  onToggle: () => void;
+}) {
+  const { theme } = useTheme();
+  if (!theme) return null;
+  const currentColor =
+    theme === "dark" ? category.colors.dark : category.colors.light;
 
   return (
-    <div
-      className="flex-[0_0_100%] min-w-0 pl-4 sm:pl-6 md:pl-8"
-      style={{ scrollSnapAlign: "start" }}
-    >
+    <div className="relative">
+      {/* Main Category Card */}
       <motion.div
-        ref={ref}
-        initial={{ opacity: 0, y: 50 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="mb-8"
       >
         <Card
-          className={`w-full h-full transition-all duration-300 ${
-            isSelected ? "scale-100 opacity-100" : "scale-95 opacity-70"
-          }`}
+          className="relative border-2 cursor-pointer hover:shadow-md transition-shadow"
+          style={{ borderColor: currentColor }}
+          onClick={onToggle}
         >
-          <CardContent className="p-6 flex flex-col h-full">
-            <div className="flex items-center mb-4">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
               <div
-                className="w-16 h-16 rounded-full flex items-center justify-center mr-4"
-                style={{ backgroundColor: `${skill.color}20` }}
+                className="w-16 h-16 rounded-xl flex items-center justify-center"
+                style={{ backgroundColor: `${currentColor}20` }}
               >
-                <img src={skill.icon} alt={skill.name} className="w-10 h-10" />
+                <img
+                  src={category.icon}
+                  alt={category.name}
+                  className="w-10 h-10"
+                />
               </div>
-              <div>
-                <h4 className="text-2xl font-semibold">{skill.name}</h4>
-                <p className="text-sm text-muted-foreground">
-                  {skill.experience} of experience
-                </p>
+              <div className="flex-1">
+                <h3 className="text-2xl font-bold">{category.name}</h3>
+                <p className="text-muted-foreground">{category.description}</p>
               </div>
+              {isExpanded ? (
+                <ChevronDown className="w-6 h-6 text-muted-foreground" />
+              ) : (
+                <ChevronRight className="w-6 h-6 text-muted-foreground" />
+              )}
             </div>
-            <p className="text-muted-foreground flex-grow">
-              {skill.description}
-            </p>
           </CardContent>
         </Card>
       </motion.div>
+
+      {/* Skills List */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-6 relative overflow-hidden"
+          >
+            {/* Vertical Line */}
+            <div
+              className="absolute left-8 top-0 bottom-0 w-0.5"
+              style={{ backgroundColor: currentColor }}
+            />
+
+            {category.skills.map((skill: any, index: number) => (
+              <motion.div
+                key={skill.name}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="relative pl-16"
+              >
+                {/* Horizontal Line */}
+                <div
+                  className="absolute left-8 top-8 w-8 h-0.5"
+                  style={{ backgroundColor: currentColor }}
+                />
+
+                <Card className="relative hover:shadow-md transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div
+                        className="w-12 h-12 rounded-lg flex items-center justify-center"
+                        style={{ backgroundColor: `${skill.colors[theme]}20` }}
+                      >
+                        <img
+                          src={skill.icon}
+                          alt={skill.name}
+                          className="w-8 h-8"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-xl font-semibold">{skill.name}</h4>
+                        <p className="text-sm text-muted-foreground">
+                          {skill.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Skill Badges */}
+                    <div className="flex flex-wrap gap-2">
+                      {skill.subSkills.map((subSkill: string) => (
+                        <span
+                          key={subSkill}
+                          className="px-3 py-1 rounded-full text-sm"
+                          style={{
+                            backgroundColor: `${skill.colors[theme]}20`,
+                            color: skill.colors[theme],
+                          }}
+                        >
+                          {subSkill}
+                        </span>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
