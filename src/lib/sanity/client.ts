@@ -97,7 +97,7 @@ export async function getHero() {
     _id,
     title,
     subtitle,
-    content,
+    socialLinks,
     codeSnippet[] {
       ...,
       _type,
