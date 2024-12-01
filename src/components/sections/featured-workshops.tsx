@@ -1,21 +1,22 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-import { WorkshopCard } from "@/components/cards/workshop-card";
-import { useWorkshops } from "@/lib/hooks/usePortfolioData";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from '@/components/ui/button'
+import { ArrowRight } from 'lucide-react'
+import Link from 'next/link'
+import { WorkshopCard } from '@/components/cards/workshop-card'
+import { useWorkshops } from '@/lib/hooks/usePortfolioData'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Workshop } from '@/lib/data'
 
 export function FeaturedWorkshops() {
-  const { data: workshops, isLoading, error } = useWorkshops();
+  const { data: workshops, isLoading, error } = useWorkshops()
 
   if (error) {
     return (
       <div className="text-center py-20">
         <p className="text-red-500">Failed to load workshops</p>
       </div>
-    );
+    )
   }
 
   return (
@@ -40,10 +41,8 @@ export function FeaturedWorkshops() {
               ))
           : workshops
               ?.slice(0, 3)
-              .map((workshop) => (
-                <WorkshopCard key={workshop._id} workshop={workshop} />
-              ))}
+              .map((workshop: Workshop) => <WorkshopCard key={workshop._id} workshop={workshop} />)}
       </div>
     </section>
-  );
+  )
 }

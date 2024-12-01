@@ -1,6 +1,12 @@
-import type { NextConfig } from 'next'
-
-const nextConfig: NextConfig = {
+const nextConfig = {
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+  experimental: {
+    reactCompiler: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -8,9 +14,6 @@ const nextConfig: NextConfig = {
         hostname: 'cdn.sanity.io',
       },
     ],
-  },
-  experimental: {
-    esmExternals: 'loose', // required for Sanity Studio
   },
 }
 

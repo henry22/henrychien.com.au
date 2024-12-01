@@ -1,42 +1,71 @@
-"use client";
+'use client'
 
-import { motion } from "framer-motion";
-
-import { Input } from "@/components/ui/input";
+import { motion } from 'framer-motion'
+import { useQuery } from '@tanstack/react-query'
+import { getProjects } from '@/lib/sanity/client'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Check, ExternalLink, Github, Grid, List } from "lucide-react";
+} from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Check, ExternalLink, Github, Grid, List } from 'lucide-react'
+import { Skeleton } from '@/components/ui/skeleton'
 
-const projects = [
-  {
-    title: "Project 1",
-    image: "/images/project1.png",
-    description: "A project description",
-    tech: ["React", "Next.js", "TypeScript"],
-    features: ["Feature 1", "Feature 2", "Feature 3"],
-    demo: "https://example.com",
-    github: "https://github.com/example/project1",
-  },
-  {
-    title: "Project 2",
-    image: "/images/project2.png",
-    description: "A project description",
-    tech: ["React", "Next.js", "TypeScript"],
-    features: ["Feature 1", "Feature 2", "Feature 3"],
-    demo: "https://example.com",
-    github: "https://github.com/example/project2",
-  },
-];
+interface Project {
+  _id: string
+  name: string
+  description: string
+  tech: string[]
+  link: string
+  github: string
+  image: string
+  features: string[]
+}
 
 export default function Page() {
+  const { data: projects, isLoading } = useQuery<Project[]>({
+    queryKey: ['projects'],
+    queryFn: getProjects,
+  })
+
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <Skeleton className="h-12 w-48 mb-4" />
+        <Skeleton className="h-6 w-96 mb-8" />
+        <div className="grid gap-12">
+          {[1, 2, 3].map(i => (
+            <Card key={i} className="overflow-hidden">
+              <div className="grid md:grid-cols-2 gap-6">
+                <Skeleton className="aspect-video" />
+                <div className="p-6 space-y-4">
+                  <Skeleton className="h-8 w-48" />
+                  <Skeleton className="h-20 w-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-32" />
+                    <div className="flex gap-2">
+                      {[1, 2, 3].map(j => (
+                        <Skeleton key={j} className="h-6 w-16" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (!projects) return null
+
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -44,8 +73,7 @@ export default function Page() {
           <motion.h1
             className="text-4xl font-bold mb-4"
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
+            animate={{ opacity: 1, y: 0 }}>
             Featured Projects
           </motion.h1>
           <p className="text-muted-foreground text-lg">
@@ -62,20 +90,11 @@ export default function Page() {
                 <SelectValue placeholder="Tech Stack" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="react">React</SelectItem>
-                <SelectItem value="nextjs">Next.js</SelectItem>
-                <SelectItem value="typescript">TypeScript</SelectItem>
-                {/* Add more tech options */}
-              </SelectContent>
-            </Select>
-            <Select>
-              <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="web">Web App</SelectItem>
-                <SelectItem value="mobile">Mobile App</SelectItem>
-                <SelectItem value="desktop">Desktop App</SelectItem>
+                {Array.from(new Set(projects.flatMap(p => p.tech))).map(tech => (
+                  <SelectItem key={tech} value={tech.toLowerCase()}>
+                    {tech}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <div className="flex gap-2 ml-auto">
@@ -93,41 +112,31 @@ export default function Page() {
         <div className="grid gap-12">
           {projects.map((project, index) => (
             <motion.div
-              key={project.title}
+              key={project._id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-            >
+              transition={{ delay: index * 0.1 }}>
               <Card className="overflow-hidden">
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Project Preview */}
                   <div className="relative aspect-video group">
                     <img
                       src={project.image}
-                      alt={project.title}
+                      alt={project.name}
                       className="object-cover w-full h-full"
                     />
                     <div
                       className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 
-                                  transition-opacity flex items-center justify-center gap-4"
-                    >
+                                  transition-opacity flex items-center justify-center gap-4">
                       <Button asChild>
-                        <a
-                          href={project.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                        <a href={project.link} target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="mr-2 h-4 w-4" />
                           View Demo
                         </a>
                       </Button>
                       <Button variant="secondary" asChild>
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                        <a href={project.github} target="_blank" rel="noopener noreferrer">
                           <Github className="mr-2 h-4 w-4" />
                           Source Code
                         </a>
@@ -137,18 +146,14 @@ export default function Page() {
 
                   {/* Project Info */}
                   <div className="p-6">
-                    <h3 className="text-2xl font-bold mb-2">{project.title}</h3>
-                    <p className="text-muted-foreground mb-4">
-                      {project.description}
-                    </p>
+                    <h3 className="text-2xl font-bold mb-2">{project.name}</h3>
+                    <p className="text-muted-foreground mb-4">{project.description}</p>
 
                     <div className="space-y-4">
                       <div>
-                        <h4 className="text-sm font-semibold mb-2">
-                          Tech Stack
-                        </h4>
+                        <h4 className="text-sm font-semibold mb-2">Tech Stack</h4>
                         <div className="flex flex-wrap gap-2">
-                          {project.tech.map((tech) => (
+                          {project.tech.map(tech => (
                             <Badge key={tech} variant="secondary">
                               {tech}
                             </Badge>
@@ -156,22 +161,19 @@ export default function Page() {
                         </div>
                       </div>
 
-                      <div>
-                        <h4 className="text-sm font-semibold mb-2">
-                          Key Features
-                        </h4>
-                        <ul className="grid grid-cols-2 gap-2 text-sm">
-                          {project.features.map((feature) => (
-                            <li
-                              key={feature}
-                              className="flex items-center gap-2"
-                            >
-                              <Check className="w-4 h-4 text-green-500" />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      {project.features && project.features.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-semibold mb-2">Key Features</h4>
+                          <ul className="grid grid-cols-2 gap-2 text-sm">
+                            {project.features.map(feature => (
+                              <li key={feature} className="flex items-center gap-2">
+                                <Check className="w-4 h-4 text-green-500" />
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -181,5 +183,5 @@ export default function Page() {
         </div>
       </div>
     </div>
-  );
+  )
 }

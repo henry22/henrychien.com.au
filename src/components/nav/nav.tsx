@@ -1,30 +1,29 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Sun, Moon } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import Link from 'next/link'
+import { motion } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import { Sun, Moon } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 export default function Nav() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
-  const pathName = usePathname();
+  const pathName = usePathname()
 
-  const isStudio = pathName.includes("/studio");
+  const isStudio = pathName.includes('/studio')
 
-  if (isStudio) return null;
+  if (isStudio) return null
 
-  // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
 
   if (!mounted) {
-    return null; // or a loading skeleton
+    return null
   }
 
   return (
@@ -34,42 +33,33 @@ export default function Nav() {
           className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+          transition={{ duration: 0.5 }}>
           <Link href="/">Matt Deal</Link>
         </motion.h1>
         <div className="flex items-center space-x-4">
           <Link
             href="/projects"
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
+            className="text-sm font-medium hover:text-primary transition-colors">
             Projects
           </Link>
           <Link
             href="/packages"
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
+            className="text-sm font-medium hover:text-primary transition-colors">
             Packages
           </Link>
           <Link
             href="/workshops"
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
+            className="text-sm font-medium hover:text-primary transition-colors">
             Workshops
           </Link>
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          >
-            {theme === "dark" ? (
-              <Sun className="h-5 w-5" />
-            ) : (
-              <Moon className="h-5 w-5" />
-            )}
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
         </div>
       </div>
     </nav>
-  );
+  )
 }

@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-
+import { PortableText } from '@portabletext/react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useAbout } from '@/lib/hooks/usePortfolioData'
 import Image from 'next/image'
@@ -12,8 +12,6 @@ export function AboutSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
   const { data: about, isLoading, error } = useAbout()
-
-  console.log(about)
 
   if (error) {
     return (
@@ -44,8 +42,8 @@ export function AboutSection() {
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8 }}
           className="relative z-10 bg-card text-card-foreground rounded-3xl p-8 md:p-12 shadow-xl max-w-4xl mx-auto">
-          <h3 className="text-3xl font-bold mb-8 text-center">{about?.title}</h3>
-          <div className="flex flex-col md:flex-row gap-8 items-center">
+          <h3 className="text-5xl font-bold mb-8 text-center mr-2">{about?.title}</h3>
+          <div className="flex flex-col md:flex-row gap-8 items-start">
             <div className="md:w-1/3">
               {about?.background && (
                 <Image
@@ -53,14 +51,14 @@ export function AboutSection() {
                   alt="Profile"
                   width={400}
                   height={400}
-                  className="rounded-full w-48 h-48 object-cover mx-auto"
+                  className="rounded-full w-48 h-48 object-cover mx-auto sticky top-8"
                 />
               )}
             </div>
-            <div className="md:w-2/3 space-y-4">
-              <p className="text-lg leading-relaxed prose dark:prose-invert">
-                {about?.content[0].children[0].text}
-              </p>
+            <div className="md:w-2/3">
+              <div className="prose dark:prose-invert max-w-none">
+                <PortableText value={about?.content} />
+              </div>
             </div>
           </div>
         </motion.div>

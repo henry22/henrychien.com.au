@@ -1,5 +1,6 @@
 import { createClient } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
+import type { ImageUrlBuilder } from '@sanity/image-url/lib/types/builder'
 
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
@@ -12,7 +13,12 @@ export const client = createClient({
 
 const builder = imageUrlBuilder(client)
 
-export function urlFor(source: any) {
+export function urlFor(source: any): ImageUrlBuilder {
+  if (!source?.asset?._ref) {
+    console.warn('Invalid image source:', source)
+    // Return a default builder instead of a string
+    return builder.image({})
+  }
   return builder.image(source)
 }
 
@@ -25,6 +31,7 @@ export async function getProjects() {
     tech,
     link,
     github,
+    features,
     "image": image.asset->url
   }`)
 }
@@ -64,15 +71,15 @@ export async function getSkills() {
     _id,
     name,
     description,
-    "icon": icon.asset->url,
+    icon,
     colors,
-   skills[] {
-        name,
-        description,
-        icon,
-        colors,
-        subSkills
-      }
+    skills[] {
+      name,
+      description,
+      icon,
+      colors,
+      subSkills
+    }
   }`)
 }
 
@@ -82,5 +89,21 @@ export async function getAbout() {
     title,
     content,
     background
+  }`)
+}
+
+export async function getHero() {
+  return client.fetch(`*[_type == "hero"][0] {
+    _id,
+    title,
+    subtitle,
+    content,
+    codeSnippet[] {
+      ...,
+      _type,
+      _key,
+      language,
+      code
+    }
   }`)
 }
