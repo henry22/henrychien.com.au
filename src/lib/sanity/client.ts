@@ -62,7 +62,8 @@ export async function getWorkshops() {
     github,
     upcoming,
     recordingLink,
-    resources
+    resources,
+    "image": image.asset->url
   }`)
 }
 

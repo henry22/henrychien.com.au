@@ -7,6 +7,7 @@ import { Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import { Links } from '@/contasnts'
 
 export default function Nav() {
   const { theme, setTheme } = useTheme()
@@ -38,20 +39,21 @@ export default function Nav() {
         </motion.h1>
         <div className="flex items-center space-x-4">
           <Link
-            href="/projects"
+            href={Links.Workshops}
+            className="text-sm font-medium hover:text-primary transition-colors">
+            Workshops
+          </Link>
+          <Link
+            href={Links.Projects}
             className="text-sm font-medium hover:text-primary transition-colors">
             Projects
           </Link>
           <Link
-            href="/packages"
+            href={Links.Packages}
             className="text-sm font-medium hover:text-primary transition-colors">
             Packages
           </Link>
-          <Link
-            href="/workshops"
-            className="text-sm font-medium hover:text-primary transition-colors">
-            Workshops
-          </Link>
+
           <Button
             variant="ghost"
             size="icon"

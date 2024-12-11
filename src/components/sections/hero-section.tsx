@@ -12,8 +12,13 @@ import { useState, useEffect } from 'react'
 import '@/styles/code-animation.css'
 import HeroSkeleton from '../ui/skeletons/heroSkeleton'
 
-// Define types for the hero data
-interface HeroData {
+type Snippet = {
+  _type: string
+  code: string
+  language: string
+}
+
+type HeroData = {
   title: string
   subtitle: string
   socialLinks?: {
@@ -23,11 +28,7 @@ interface HeroData {
     resume?: string
   }
 
-  codeSnippet: {
-    _type: string
-    code: string
-    language: string
-  }[]
+  codeSnippet: Snippet[]
 }
 
 export function HeroSection() {
@@ -66,18 +67,18 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative pt-20 pb-44 flex flex-col items-center text-center">
+    <section className="relative pt-12 md:pt-20 pb-24 md:pb-44 flex flex-col items-center text-center px-4">
       <ParticlesBackground />
 
-      <div className="relative z-10">
+      <div className="relative z-10 w-full">
         {hero.codeSnippet && hero.codeSnippet.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="w-full max-w-4xl mb-16">
-            {hero.codeSnippet.map((snippet, index) => (
-              <div key={index} className="bg-black rounded-lg shadow-2xl overflow-hidden">
+            className="w-full max-w-4xl mx-auto mb-8 md:mb-16">
+            {hero.codeSnippet.map((snippet: Snippet, index: number) => (
+              <div key={index} className="bg-black rounded-lg shadow-2xl overflow-hidden text-left">
                 <div className="flex items-center gap-2 px-4 py-3 bg-gray-800/50">
                   <div className="flex gap-2">
                     <div className="w-3 h-3 rounded-full bg-red-500" />
@@ -90,7 +91,7 @@ export function HeroSection() {
                     </span>
                   </div>
                 </div>
-                <div className="p-6 font-mono text-sm text-left">
+                <div className="p-4 overflow-x-auto">
                   {mounted && (
                     <SyntaxHighlighter
                       language={snippet.language?.toLowerCase() || 'typescript'}
@@ -99,6 +100,7 @@ export function HeroSection() {
                         background: 'transparent',
                         padding: 0,
                         margin: 0,
+                        fontSize: '14px',
                       }}
                       wrapLines={true}
                       showLineNumbers={false}
@@ -116,7 +118,7 @@ export function HeroSection() {
         )}
 
         <motion.h2
-          className="text-5xl sm:text-6xl pb-1 font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]"
+          className="text-4xl md:text-5xl lg:text-6xl pb-1 font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}>
@@ -124,7 +126,7 @@ export function HeroSection() {
         </motion.h2>
 
         <motion.p
-          className="mt-6 text-xl text-muted-foreground max-w-3xl"
+          className="mt-4 md:mt-6 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto px-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}>
@@ -132,18 +134,18 @@ export function HeroSection() {
         </motion.p>
 
         <motion.div
-          className="flex items-center justify-center gap-4 mt-8"
+          className="flex items-center justify-center gap-3 md:gap-4 mt-6 md:mt-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}>
-          <Button asChild>
+          <Button size="lg" asChild>
             <a href={socialLinks.github} target="_blank" rel="noopener noreferrer">
               <Github className="mr-2 h-4 w-4" />
               GitHub
             </a>
           </Button>
 
-          <Button asChild>
+          <Button size="lg" asChild>
             <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
               <Linkedin className="mr-2 h-4 w-4" />
               LinkedIn

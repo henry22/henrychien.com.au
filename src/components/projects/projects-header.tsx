@@ -16,7 +16,7 @@ export function ProjectsHeader() {
         className="text-muted-foreground text-lg"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}>
-        A collection of my favorite projects and applications
+        A collection of my projects and applications
       </motion.p>
     </header>
   )

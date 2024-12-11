@@ -1,28 +1,23 @@
-import { getProjects } from '@/lib/sanity/client'
 import { ProjectCard } from './projects-card'
-import { Suspense } from 'react'
-import ProjectsSkeleton from '@/components/ui/skeletons/projectsSkeleton'
 
-// Server Component for data fetching
-async function ProjectsData() {
-  const projects = await getProjects()
+import { Project } from '@/types/types'
 
-  if (!projects) return null
-
-  return (
-    <div className="grid gap-12">
-      {projects.map((project, index) => (
-        <ProjectCard key={project._id} project={project} index={index} />
-      ))}
-    </div>
-  )
+interface ProjectsListProps {
+  projects?: Project[]
+  view: 'grid' | 'list'
 }
 
-// This component wraps the async component with Suspense
-export function ProjectsList() {
+export function ProjectsList({ projects, view }: ProjectsListProps) {
+  if (!projects?.length) return null
+
   return (
-    <Suspense fallback={<ProjectsSkeleton />}>
-      <ProjectsData />
-    </Suspense>
+    <div
+      className={`grid gap-6 ${
+        view === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
+      }`}>
+      {projects.map(project => (
+        <ProjectCard key={project._id} project={project} view={view} />
+      ))}
+    </div>
   )
 }
