@@ -9,6 +9,7 @@ export default function BlogCard({ post }: { post: Post }) {
   return (
     <Link
       href={`/blog/${post.slug.current}`}
+      prefetch={true}
       className="text-primary hover:scale-105 hover:border-blue-500 hover:border-2 rounded-lg transition duration-300">
       <Card className="overflow-hidden">
         <div className="aspect-video relative">
