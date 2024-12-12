@@ -22,6 +22,19 @@ export function urlFor(source: any): ImageUrlBuilder {
   return builder.image(source)
 }
 
+export async function fetchPost(slug: string) {
+  return client.fetch(
+    `*[_type == "post" && slug.current == $slug][0] {
+    title,
+    publishedAt,
+    mainImage,
+    content,
+    estimatedReadingTime
+  }`,
+    { slug },
+  )
+}
+
 // Typed query functions
 export async function getProjects() {
   return client.fetch(`*[_type == "project"] | order(_createdAt desc) {

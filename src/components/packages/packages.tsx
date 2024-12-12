@@ -15,6 +15,7 @@ import { ContentLayout } from '@/components/ui/content-layout'
 import { useViewMode } from '@/hooks/useViewMode'
 import { Button } from '../ui/button'
 import WorkshopsSkeleton from '../ui/skeletons/workshopsSkeleton'
+import { useDebounce } from '@/hooks/useDebounce'
 
 interface Package {
   _id: string
@@ -28,7 +29,8 @@ interface Package {
 }
 
 export default function Packages() {
-  const [searchQuery, setSearchQuery] = useState('')
+  const [inputValue, setInputValue] = useState('')
+  const searchQuery = useDebounce(inputValue)
   const { view, setView } = useViewMode('list')
 
   const { data: packages, isLoading } = useQuery<Package[]>({
@@ -69,8 +71,8 @@ export default function Packages() {
               <Input
                 placeholder="Search packages..."
                 className="pl-9"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)}
               />
             </div>
             <ViewToggle view={view} setView={setView} className="ml-auto" />

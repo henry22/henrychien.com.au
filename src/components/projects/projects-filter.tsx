@@ -10,6 +10,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { Grid, List, Search } from 'lucide-react'
 import { Project } from '@/types/types'
+import { useDebounce } from '@/hooks/useDebounce'
+import { useState, useEffect } from 'react'
 
 interface ProjectsFilterProps {
   projects?: Project[]
@@ -30,6 +32,13 @@ export function ProjectsFilter({
   view,
   setView,
 }: ProjectsFilterProps) {
+  const [inputValue, setInputValue] = useState(searchQuery)
+  const debouncedValue = useDebounce(inputValue)
+
+  useEffect(() => {
+    setSearchQuery(debouncedValue)
+  }, [debouncedValue, setSearchQuery])
+
   // Get unique tech stack items
   const uniqueTechStack = projects ? Array.from(new Set(projects.flatMap(p => p.tech))).sort() : []
 
@@ -44,8 +53,8 @@ export function ProjectsFilter({
           <Input
             placeholder="Search projects..."
             className="pl-9"
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            value={inputValue}
+            onChange={e => setInputValue(e.target.value)}
           />
         </div>
         <Select value={selectedTech} onValueChange={setSelectedTech}>

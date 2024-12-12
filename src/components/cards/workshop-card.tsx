@@ -53,10 +53,12 @@ export function WorkshopCard({ workshop }: WorkshopCardProps) {
         {/* Side Panel */}
         <div className="bg-muted p-6 flex flex-col gap-4">
           <Button className="w-full" size="lg" asChild>
-            <a href={workshop.recordingLink}>
-              <Play className="w-4 h-4 mr-2" />
-              Watch Workshop
-            </a>
+            {workshop.recordingLink ? (
+              <a href={workshop.recordingLink}>
+                <Play className="w-4 h-4 mr-2" />
+                Watch Workshop
+              </a>
+            ) : null}
           </Button>
 
           <div className="bg-background p-4 rounded-lg">

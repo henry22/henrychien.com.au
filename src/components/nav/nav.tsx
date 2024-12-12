@@ -39,6 +39,11 @@ export default function Nav() {
         </motion.h1>
         <div className="flex items-center space-x-4">
           <Link
+            href={Links.Blog}
+            className="text-sm font-medium hover:text-primary transition-colors">
+            Blog
+          </Link>
+          <Link
             href={Links.Workshops}
             className="text-sm font-medium hover:text-primary transition-colors">
             Workshops

@@ -15,13 +15,15 @@ import { Badge } from '@/components/ui/badge'
 import { Book, Clock, Play } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { getWorkshops } from '@/lib/sanity/client'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import WorkshopsSkeleton from '../ui/skeletons/workshopsSkeleton'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ViewToggle } from '@/components/ui/view-toggle'
 import { ContentLayout } from '@/components/ui/content-layout'
 import { useViewMode } from '@/hooks/useViewMode'
+import { useDebounce } from '@/hooks/useDebounce'
+import { WorkshopCard } from './workshop-card'
 
 interface Workshop {
   _id: string
@@ -42,31 +44,34 @@ interface Workshop {
 }
 
 export default function Workshops() {
-  const [searchQuery, setSearchQuery] = useState('')
+  const [inputValue, setInputValue] = useState('')
+  const searchQuery = useDebounce(inputValue)
   const [selectedLevel, setSelectedLevel] = useState('all')
   const [selectedDuration, setSelectedDuration] = useState('all')
-  const { view, setView } = useViewMode('grid')
+  const { view, setView } = useViewMode('list')
 
   const { data: workshops, isLoading } = useQuery<Workshop[]>({
     queryKey: ['workshops'],
     queryFn: getWorkshops,
   })
 
-  console.log(workshops)
+  // Memoize the filtered workshops
+  const filteredWorkshops = useMemo(() => {
+    if (!workshops) return []
 
-  // Enhanced filter function to search through multiple fields
-  const filteredWorkshops = workshops?.filter((workshop: Workshop) => {
-    const searchLower = searchQuery.toLowerCase()
-    const matchesSearch =
-      workshop.title.toLowerCase().includes(searchLower) ||
-      workshop.description.toLowerCase().includes(searchLower) ||
-      workshop.topics.some(topic => topic.toLowerCase().includes(searchLower))
+    return workshops.filter(workshop => {
+      const searchLower = searchQuery.toLowerCase()
+      const matchesSearch =
+        workshop.title.toLowerCase().includes(searchLower) ||
+        workshop.description.toLowerCase().includes(searchLower) ||
+        workshop.topics.some(topic => topic.toLowerCase().includes(searchLower))
 
-    const matchesLevel = selectedLevel === 'all' || workshop.level === selectedLevel
-    const matchesDuration = selectedDuration === 'all' || workshop.duration === selectedDuration
+      const matchesLevel = selectedLevel === 'all' || workshop.level === selectedLevel
+      const matchesDuration = selectedDuration === 'all' || workshop.duration === selectedDuration
 
-    return matchesSearch && matchesLevel && matchesDuration
-  })
+      return matchesSearch && matchesLevel && matchesDuration
+    })
+  }, [workshops, searchQuery, selectedLevel, selectedDuration])
 
   if (isLoading) {
     return <WorkshopsSkeleton />
@@ -83,7 +88,7 @@ export default function Workshops() {
             Technical Workshops
           </motion.h1>
           <p className="text-muted-foreground text-lg">
-            Deep-dive video workshops on modern web development
+            Workshops built to help you learn the modern.
           </p>
         </header>
 
@@ -93,8 +98,8 @@ export default function Workshops() {
             <div className="relative flex-1 max-w-xs">
               <Input
                 placeholder="Search workshops..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)}
               />
             </div>
             <Select value={selectedLevel} onValueChange={setSelectedLevel}>
@@ -125,72 +130,8 @@ export default function Workshops() {
 
         {/* Grid Layout */}
         <ContentLayout view={view}>
-          {filteredWorkshops?.map((workshop: Workshop) => (
-            <Link
-              key={workshop._id}
-              href={workshop.github}
-              target="_blank"
-              rel="noopener noreferrer">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="group">
-                <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow">
-                  <div className={`${view === 'list' ? 'flex gap-6' : 'flex flex-col'}`}>
-                    <div
-                      className={`relative aspect-video ${view === 'list' ? 'w-1/3' : 'w-full'}`}>
-                      {workshop.image && (
-                        <Image
-                          src={workshop.image}
-                          alt={workshop.title}
-                          width={500}
-                          height={500}
-                          className="object-cover w-full h-full"
-                        />
-                      )}
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        {workshop.recordingLink && (
-                          <Button variant="secondary" asChild>
-                            <a
-                              href={workshop.recordingLink}
-                              target="_blank"
-                              rel="noopener noreferrer">
-                              <Play className="mr-2 h-4 w-4" />
-                              Watch Now
-                            </a>
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                    <div className={`p-6 ${view === 'list' ? 'flex-1' : ''}`}>
-                      <Badge
-                        variant={
-                          workshop.level === 'Beginner'
-                            ? 'default'
-                            : workshop.level === 'Intermediate'
-                              ? 'secondary'
-                              : 'destructive'
-                        }
-                        className="mb-2">
-                        {workshop.level}
-                      </Badge>
-                      <h3 className="font-semibold mb-2">{workshop.title}</h3>
-                      <p className="text-sm text-muted-foreground mb-4">{workshop.description}</p>
-                      <div className="flex items-center justify-between text-sm">
-                        <div className="flex items-center">
-                          <Clock className="w-4 h-4 mr-1" />
-                          {workshop.duration}
-                        </div>
-                        <div className="flex items-center">
-                          <Book className="w-4 h-4 mr-1" />
-                          {workshop.resources.length} Resources
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              </motion.div>
-            </Link>
+          {filteredWorkshops.map(workshop => (
+            <WorkshopCard key={workshop._id} workshop={workshop} view={view} />
           ))}
         </ContentLayout>
       </div>

@@ -7,6 +7,7 @@ import { WorkshopCard } from '@/components/cards/workshop-card'
 import { useWorkshops } from '@/lib/hooks/usePortfolioData'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Workshop } from '@/lib/data'
+import { Links } from '@/contasnts'
 
 export function FeaturedWorkshops() {
   const { data: workshops, isLoading, error } = useWorkshops()
@@ -23,7 +24,7 @@ export function FeaturedWorkshops() {
     <section className="py-20">
       <div className="flex justify-between items-center mb-12">
         <h3 className="text-3xl font-bold">Featured Workshops</h3>
-        <Link href="/workshops">
+        <Link href={Links.Workshops}>
           <Button variant="outline">
             View All Workshops
             <ArrowRight className="ml-2 h-4 w-4" />
