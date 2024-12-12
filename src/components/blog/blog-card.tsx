@@ -30,7 +30,7 @@ export default function BlogCard({ post }: { post: Post }) {
           <div className="flex items-center text-sm text-muted-foreground">
             <CalendarIcon className="mr-2 h-4 w-4" />
             <time dateTime={post.publishedAt}>
-              {new Date(post.publishedAt).toLocaleDateString('en-US', {
+              {new Date(post.publishedAt).toLocaleDateString('en-AU', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',

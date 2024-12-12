@@ -91,7 +91,7 @@ export default function BlogPost({ slug }: { slug: string }) {
         <div className="flex items-center">
           <CalendarIcon className="w-5 h-5 mr-2" />
           <time>
-            {new Date(post.publishedAt).toLocaleDateString('en-US', {
+            {new Date(post.publishedAt).toLocaleDateString('en-AU', {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
