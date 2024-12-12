@@ -1,12 +1,24 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-import { ProjectCard } from "@/components/cards/project-card";
-import { projects } from "@/lib/data";
+import { Button } from '@/components/ui/button'
+import { ArrowRight } from 'lucide-react'
+import Link from 'next/link'
+import { ProjectCard } from '@/components/cards/project-card'
+import { useProjects } from '@/lib/hooks/usePortfolioData'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Project } from '@/lib/data'
 
 export function FeaturedProjects() {
+  const { data: projects, isLoading, error } = useProjects()
+
+  if (error) {
+    return (
+      <div className="text-center py-20">
+        <p className="text-red-500">Failed to load projects</p>
+      </div>
+    )
+  }
+
   return (
     <section className="py-20">
       <div className="flex justify-between items-center mb-12">
@@ -19,10 +31,21 @@ export function FeaturedProjects() {
         </Link>
       </div>
       <div className="space-y-20">
-        {projects.slice(0, 3).map((project, index) => (
-          <ProjectCard key={project.name} project={project} index={index} />
-        ))}
+        {isLoading
+          ? // Loading skeletons
+            Array(3)
+              .fill(0)
+              .map((_, i) => (
+                <div key={i} className="h-[400px] rounded-lg">
+                  <Skeleton className="w-full h-full" />
+                </div>
+              ))
+          : projects
+              ?.slice(0, 3)
+              .map((project: Project, index: number) => (
+                <ProjectCard key={project.name} project={project} index={index} />
+              ))}
       </div>
     </section>
-  );
+  )
 }
