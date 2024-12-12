@@ -1,6 +1,7 @@
 import { createClient } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
 import type { ImageUrlBuilder } from '@sanity/image-url/lib/types/builder'
+import { Image } from 'sanity'
 
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
@@ -13,7 +14,7 @@ export const client = createClient({
 
 const builder = imageUrlBuilder(client)
 
-export function urlFor(source: any): ImageUrlBuilder {
+export function urlFor(source: Image): ImageUrlBuilder {
   if (!source?.asset?._ref) {
     console.warn('Invalid image source:', source)
     // Return a default builder instead of a string

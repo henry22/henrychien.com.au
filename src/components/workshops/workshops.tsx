@@ -9,39 +9,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Book, Clock, Play } from 'lucide-react'
+
 import { useQuery } from '@tanstack/react-query'
 import { getWorkshops } from '@/lib/sanity/client'
 import { useState, useMemo } from 'react'
 import WorkshopsSkeleton from '../ui/skeletons/workshopsSkeleton'
-import Image from 'next/image'
-import Link from 'next/link'
+
 import { ViewToggle } from '@/components/ui/view-toggle'
 import { ContentLayout } from '@/components/ui/content-layout'
 import { useViewMode } from '@/hooks/useViewMode'
 import { useDebounce } from '@/hooks/useDebounce'
 import { WorkshopCard } from './workshop-card'
-
-interface Workshop {
-  _id: string
-  title: string
-  description: string
-  duration: string
-  level: string
-  topics: string[]
-  github: string
-  image: string
-  upcoming?: {
-    date: string
-    location: string
-    registrationLink: string
-  }
-  recordingLink?: string
-  resources: string[]
-}
+import { Workshop } from '@/types/types'
 
 export default function Workshops() {
   const [inputValue, setInputValue] = useState('')

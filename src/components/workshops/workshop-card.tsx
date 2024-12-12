@@ -6,20 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Clock, Github, Play } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
-
-interface Workshop {
-  _id: string
-  title: string
-  description: string
-  duration: string
-  level: string
-  topics: string[]
-  resources: string[]
-  github: string
-  image: string
-  recordingLink?: string | null
-  upcoming?: boolean | null
-}
+import { Workshop } from '@/types/types'
 
 interface WorkshopCardProps {
   workshop: Workshop
