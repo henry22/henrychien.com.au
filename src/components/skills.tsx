@@ -10,18 +10,46 @@ import { Skeleton } from '@/components/ui/skeleton'
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity/client'
 
+type SanityImage = {
+  _type: 'image'
+  asset: {
+    _ref: string
+    _type: 'reference'
+  }
+}
+
+type Colors = {
+  dark: string
+  light: string
+  [key: string]: string
+}
+
+type Skill = {
+  name: string
+  description: string
+  icon: SanityImage
+  colors: Colors
+  subSkills: string[]
+}
+
 type SkillCategory = {
   _id: string
   name: string
   description: string
-  icon: string
+  icon: SanityImage
+  colors: Colors
+  skills: Skill[]
+}
+
+interface SkillTreeProps {
+  category: SkillCategory
+  isExpanded: boolean
+  onToggle: () => void
 }
 
 function SkillsSection() {
   const [expandedCategories, setExpandedCategories] = useState<string[]>([])
   const { data: skillCategories, isLoading, error } = useSkills()
-
-  console.log('Skill categories:', skillCategories)
 
   const toggleCategory = (categoryId: string) => {
     setExpandedCategories(prev =>
@@ -42,8 +70,7 @@ function SkillsSection() {
       <h2 className="text-4xl font-bold text-center mb-16">Skills & Expertise</h2>
       <div className="grid md:grid-cols-2 gap-16 max-w-7xl mx-auto px-4">
         {isLoading
-          ? // Loading skeletons
-            Array(2)
+          ? Array(2)
               .fill(0)
               .map((_, i) => (
                 <div key={i} className="space-y-4">
@@ -64,24 +91,13 @@ function SkillsSection() {
   )
 }
 
-function SkillTree({
-  category,
-  isExpanded,
-  onToggle,
-}: {
-  category: any
-  isExpanded: boolean
-  onToggle: () => void
-}) {
+function SkillTree({ category, isExpanded, onToggle }: SkillTreeProps) {
   const { theme } = useTheme()
   if (!theme) return null
   const currentColor = theme === 'dark' ? category.colors.dark : category.colors.light
 
-  console.log('Rendering category:', category)
-
   return (
     <div className="relative">
-      {/* Main Category Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -106,7 +122,6 @@ function SkillTree({
                     unoptimized
                   />
                 ) : (
-                  // Fallback icon or placeholder
                   <div className="w-10 h-10 bg-muted rounded-lg" />
                 )}
               </div>
@@ -124,7 +139,6 @@ function SkillTree({
         </Card>
       </motion.div>
 
-      {/* Skills List */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div
@@ -133,13 +147,12 @@ function SkillTree({
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
             className="space-y-6 relative overflow-hidden">
-            {/* Vertical Line */}
             <div
               className="absolute left-8 top-0 bottom-0 w-0.5"
               style={{ backgroundColor: currentColor }}
             />
 
-            {category.skills?.map((skill: any, index: number) => (
+            {category.skills?.map((skill, index) => (
               <motion.div
                 key={skill.name}
                 initial={{ opacity: 0, x: -20 }}
@@ -147,7 +160,6 @@ function SkillTree({
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 className="relative pl-16">
-                {/* Horizontal Line */}
                 <div
                   className="absolute left-8 top-8 w-8 h-0.5"
                   style={{ backgroundColor: currentColor }}
@@ -159,7 +171,7 @@ function SkillTree({
                       <div
                         className="w-12 h-12 rounded-lg flex items-center justify-center"
                         style={{ backgroundColor: `${skill.colors[theme]}20` }}>
-                        {skill.icon && skill.icon.asset && (
+                        {skill.icon && (
                           <Image
                             src={urlFor(skill.icon).width(32).height(32).url()}
                             alt={skill.name}
@@ -176,9 +188,8 @@ function SkillTree({
                       </div>
                     </div>
 
-                    {/* Skill Badges */}
                     <div className="flex flex-wrap gap-2">
-                      {skill.subSkills.map((subSkill: string) => (
+                      {skill.subSkills.map(subSkill => (
                         <span
                           key={subSkill}
                           className="px-3 py-1 rounded-full text-sm"

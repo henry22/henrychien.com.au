@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Check, ExternalLink, Github } from 'lucide-react'
+import Image from 'next/image'
 
 interface ProjectCardProps {
   project: Project
@@ -23,7 +24,13 @@ export function ProjectCard({ project, view }: ProjectCardProps) {
         <div className={`${view === 'list' ? 'flex gap-6' : 'flex flex-col'}`}>
           {/* Image */}
           <div className={`relative aspect-video ${view === 'list' ? 'w-1/3' : 'w-full'}`}>
-            <img src={project.image} alt={project.name} className="object-cover w-full h-full" />
+            <Image
+              src={project.image}
+              alt={project.name}
+              width={500}
+              height={500}
+              className="object-cover w-full h-full"
+            />
             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
               <Button asChild>
                 <a href={project.link} target="_blank" rel="noopener noreferrer">

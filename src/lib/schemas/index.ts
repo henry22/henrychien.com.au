@@ -1,4 +1,3 @@
-import { SchemaTypeDefinition } from 'sanity'
 import hero from './hero'
 import skills from './skills'
 import projects from './projects'

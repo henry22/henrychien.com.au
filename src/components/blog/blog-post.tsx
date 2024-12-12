@@ -10,9 +10,16 @@ import Image from 'next/image'
 import { CalendarIcon, ClockIcon } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 
+interface CodeBlock {
+  _type: 'code'
+  code: string
+  filename?: string
+  language: string
+}
+
 const components = {
   types: {
-    code: ({ value }: any) => (
+    code: ({ value }: { value: CodeBlock }) => (
       <div className="my-8">
         {value.filename && (
           <div className="bg-gray-800 text-gray-200 px-4 py-2 text-sm font-mono rounded-t-lg border-b border-gray-700">

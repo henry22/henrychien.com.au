@@ -17,11 +17,11 @@ export default function Nav() {
 
   const isStudio = pathName.includes('/studio')
 
-  if (isStudio) return null
-
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  if (isStudio) return null
 
   if (!mounted) {
     return null

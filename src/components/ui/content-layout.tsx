@@ -1,5 +1,4 @@
 import { ViewMode } from '@/hooks/useViewMode'
-import { motion } from 'framer-motion'
 
 interface ContentLayoutProps {
   view: ViewMode
