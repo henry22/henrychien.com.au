@@ -46,7 +46,6 @@ export default function BlogPost({ slug }: { slug: string }) {
       types: {
         code: ({ value }: { value: CodeBlock }) => {
           const [html, setHtml] = useState<string>()
-          console.log(value.language)
 
           useEffect(() => {
             highlight(value.code, value.language || 'typescript')
