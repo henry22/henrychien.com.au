@@ -6,11 +6,10 @@ import { Github, Linkedin } from 'lucide-react'
 import { ParticlesBackground } from '@/components/particles-background'
 import { getHero } from '@/lib/sanity/client'
 import { useQuery } from '@tanstack/react-query'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { useState, useEffect } from 'react'
 import '@/styles/code-animation.css'
 import HeroSkeleton from '../ui/skeletons/heroSkeleton'
+import { CodeBlock } from '@/components/ui/code-block'
 
 type Snippet = {
   _type: string
@@ -27,7 +26,6 @@ type HeroData = {
     twitter?: string
     resume?: string
   }
-
   codeSnippet: Snippet[]
 }
 
@@ -93,23 +91,10 @@ export function HeroSection() {
                 </div>
                 <div className="p-4 overflow-x-auto">
                   {mounted && (
-                    <SyntaxHighlighter
+                    <CodeBlock
+                      code={snippet.code}
                       language={snippet.language?.toLowerCase() || 'typescript'}
-                      style={atomDark}
-                      customStyle={{
-                        background: 'transparent',
-                        padding: 0,
-                        margin: 0,
-                        fontSize: '14px',
-                      }}
-                      wrapLines={true}
-                      showLineNumbers={false}
-                      lineProps={() => ({
-                        style: { display: 'block' },
-                        className: 'motion-line',
-                      })}>
-                      {snippet.code}
-                    </SyntaxHighlighter>
+                    />
                   )}
                 </div>
               </div>

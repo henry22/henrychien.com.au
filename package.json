@@ -19,7 +19,6 @@
     "@sanity/vision": "^3.64.1",
     "@tanstack/react-query": "^5.60.2",
     "@tanstack/react-query-devtools": "^5.60.2",
-    "@types/react-syntax-highlighter": "^15.5.13",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.3.1",
@@ -57,5 +56,12 @@
       "@types/react": "19.0.1",
       "@types/react-dom": "19.0.2"
     }
+  },
+  "babel": {
+    "compact": true,
+    "comments": false,
+    "presets": [
+      "next/babel"
+    ]
   }
 }

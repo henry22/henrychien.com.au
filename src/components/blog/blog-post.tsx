@@ -1,7 +1,8 @@
 'use client'
 
+import { useState, useEffect, ReactElement } from 'react'
+import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { useQuery } from '@tanstack/react-query'
-import { PortableText } from '@portabletext/react'
 import { codeToHtml } from 'shiki/bundle/web'
 import {
   transformerNotationHighlight,
@@ -15,13 +16,46 @@ import { urlFor } from '@/lib/sanity/client'
 import Image from 'next/image'
 import { CalendarIcon, ClockIcon } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useState, useEffect } from 'react'
 
 interface CodeBlock {
   _type: 'code'
   code: string
   filename?: string
   language: string
+}
+
+interface PortableTextProps {
+  value: CodeBlock
+}
+
+function CodeBlockComponent({ value }: PortableTextProps): ReactElement {
+  const [html, setHtml] = useState<string>()
+
+  useEffect(() => {
+    highlight(value.code, value.language || 'typescript')
+      .then(setHtml)
+      .catch(console.error)
+  }, [value.code, value.language])
+
+  return (
+    <div className="my-8">
+      {value.filename && (
+        <div className="bg-[#011627] text-gray-200 px-4 py-2 text-sm font-mono rounded-t-lg border-b border-[#1D3B53]">
+          {value.filename}
+        </div>
+      )}
+      <div
+        className="rounded-b-lg text-sm overflow-hidden"
+        dangerouslySetInnerHTML={{ __html: html || '' }}
+      />
+    </div>
+  )
+}
+
+interface CustomPortableTextComponents extends PortableTextComponents {
+  types: {
+    code: (props: PortableTextProps) => ReactElement
+  }
 }
 
 async function highlight(code: string, lang: string) {
@@ -39,34 +73,12 @@ async function highlight(code: string, lang: string) {
 }
 
 export default function BlogPost({ slug }: { slug: string }) {
-  const [components, setComponents] = useState<any>(null)
+  const [components, setComponents] = useState<CustomPortableTextComponents | null>(null)
 
   useEffect(() => {
     setComponents({
       types: {
-        code: ({ value }: { value: CodeBlock }) => {
-          const [html, setHtml] = useState<string>()
-
-          useEffect(() => {
-            highlight(value.code, value.language || 'typescript')
-              .then(setHtml)
-              .catch(console.error)
-          }, [value.code, value.language])
-
-          return (
-            <div className="my-8">
-              {value.filename && (
-                <div className="bg-[#011627] text-gray-200 px-4 py-2 text-sm font-mono rounded-t-lg border-b border-[#1D3B53]">
-                  {value.filename}
-                </div>
-              )}
-              <div
-                className="rounded-b-lg text-sm overflow-hidden"
-                dangerouslySetInnerHTML={{ __html: html || '' }}
-              />
-            </div>
-          )
-        },
+        code: CodeBlockComponent,
       },
     })
   }, [])
