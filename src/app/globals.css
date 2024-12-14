@@ -80,3 +80,165 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Update the code highlighting styles */
+.shiki {
+  @apply overflow-x-auto rounded-lg w-full bg-[#011627] !important;
+  padding: 1rem !important;
+}
+
+/* Style for each line */
+.shiki .line {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  min-height: 1.5rem;
+}
+
+/* Add some spacing between lines */
+.code-line {
+  @apply py-0.5;
+}
+
+/* Make sure inline code looks good */
+:not(pre) > code {
+  @apply bg-[#011627] px-1.5 py-0.5 rounded text-sm;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+}
+
+/* Adjust the container padding */
+pre {
+  @apply p-0 m-0;
+}
+
+/* Style scrollbars for code blocks */
+.shiki::-webkit-scrollbar {
+  @apply h-2 w-2;
+}
+
+.shiki::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.shiki::-webkit-scrollbar-thumb {
+  @apply bg-gray-500/20 rounded-full;
+}
+
+.shiki::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500/40;
+}
+
+/* Line highlighting styles */
+.shiki .line.highlighted {
+  @apply bg-blue-500/20 -mx-4 px-4 border-l-4 border-blue-500;
+}
+
+/* Focus styles */
+.shiki .line.focused {
+  @apply bg-yellow-500/20 -mx-4 px-4 border-l-4 border-yellow-500;
+}
+
+/* Word highlighting */
+.shiki .highlighted-word {
+  @apply bg-purple-500/30 rounded px-1;
+}
+
+/* Animation styles */
+.code-animation .motion-line {
+  opacity: 0;
+  animation: fadeInLine 0.3s ease forwards;
+  animation-delay: calc(var(--line-index) * 50ms);
+}
+
+@keyframes fadeInLine {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Add these styles for typing animation */
+.typing-animation .typing-line {
+  opacity: 0;
+  animation: typingLine 0.3s ease forwards;
+  animation-delay: calc(var(--line-index, 0) * 100ms);
+}
+
+@keyframes typingLine {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Add line index to each line - extend to cover more lines */
+.typing-line:nth-child(1) {
+  --line-index: 1;
+}
+.typing-line:nth-child(2) {
+  --line-index: 2;
+}
+.typing-line:nth-child(3) {
+  --line-index: 3;
+}
+.typing-line:nth-child(4) {
+  --line-index: 4;
+}
+.typing-line:nth-child(5) {
+  --line-index: 5;
+}
+.typing-line:nth-child(6) {
+  --line-index: 6;
+}
+.typing-line:nth-child(7) {
+  --line-index: 7;
+}
+.typing-line:nth-child(8) {
+  --line-index: 8;
+}
+.typing-line:nth-child(9) {
+  --line-index: 9;
+}
+.typing-line:nth-child(10) {
+  --line-index: 10;
+}
+.typing-line:nth-child(11) {
+  --line-index: 11;
+}
+.typing-line:nth-child(12) {
+  --line-index: 12;
+}
+.typing-line:nth-child(13) {
+  --line-index: 13;
+}
+.typing-line:nth-child(14) {
+  --line-index: 14;
+}
+.typing-line:nth-child(15) {
+  --line-index: 15;
+}
+.typing-line:nth-child(16) {
+  --line-index: 16;
+}
+.typing-line:nth-child(17) {
+  --line-index: 17;
+}
+.typing-line:nth-child(18) {
+  --line-index: 18;
+}
+.typing-line:nth-child(19) {
+  --line-index: 19;
+}
+.typing-line:nth-child(20) {
+  --line-index: 20;
+}
