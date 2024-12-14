@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "studio/**": {
-      "maxDuration": 60
-    }
-  }
-}

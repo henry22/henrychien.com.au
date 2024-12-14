@@ -96,7 +96,7 @@ export default function BlogPost({ slug }: { slug: string }) {
           estimatedReadingTime
         }
       `,
-        { slug },
+        { slug }
       )
     },
   })
@@ -151,11 +151,12 @@ export default function BlogPost({ slug }: { slug: string }) {
       </div>
 
       {post.mainImage && (
-        <div className="mb-12 aspect-video relative rounded-xl overflow-hidden shadow-2xl">
+        <div className="mb-12   rounded-xl overflow-hidden shadow-2xl">
           <Image
             src={urlFor(post.mainImage).url()}
             alt={post.title}
-            fill
+            width={800}
+            height={400}
             className="object-cover"
           />
         </div>
