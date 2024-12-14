@@ -2,13 +2,20 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { PortableText } from '@portabletext/react'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { codeToHtml } from 'shiki/bundle/web'
+import {
+  transformerNotationHighlight,
+  transformerNotationDiff,
+  transformerNotationFocus,
+  transformerNotationWordHighlight,
+  transformerRenderWhitespace,
+} from '@shikijs/transformers'
 import { client } from '@/lib/sanity/client'
 import { urlFor } from '@/lib/sanity/client'
 import Image from 'next/image'
 import { CalendarIcon, ClockIcon } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useState, useEffect } from 'react'
 
 interface CodeBlock {
   _type: 'code'
@@ -17,28 +24,54 @@ interface CodeBlock {
   language: string
 }
 
-const components = {
-  types: {
-    code: ({ value }: { value: CodeBlock }) => (
-      <div className="my-8">
-        {value.filename && (
-          <div className="bg-gray-800 text-gray-200 px-4 py-2 text-sm font-mono rounded-t-lg border-b border-gray-700">
-            {value.filename}
-          </div>
-        )}
-        <SyntaxHighlighter
-          language={value.language || 'typescript'}
-          style={vscDarkPlus}
-          className="rounded-b-lg text-sm"
-          showLineNumbers>
-          {value.code}
-        </SyntaxHighlighter>
-      </div>
-    ),
-  },
+async function highlight(code: string, lang: string) {
+  return codeToHtml(code, {
+    lang,
+    theme: 'night-owl',
+    transformers: [
+      transformerNotationHighlight(),
+      transformerNotationDiff(),
+      transformerNotationFocus(),
+      transformerNotationWordHighlight(),
+      transformerRenderWhitespace(),
+    ],
+  })
 }
 
 export default function BlogPost({ slug }: { slug: string }) {
+  const [components, setComponents] = useState<any>(null)
+
+  useEffect(() => {
+    setComponents({
+      types: {
+        code: ({ value }: { value: CodeBlock }) => {
+          const [html, setHtml] = useState<string>()
+          console.log(value.language)
+
+          useEffect(() => {
+            highlight(value.code, value.language || 'typescript')
+              .then(setHtml)
+              .catch(console.error)
+          }, [value.code, value.language])
+
+          return (
+            <div className="my-8">
+              {value.filename && (
+                <div className="bg-[#011627] text-gray-200 px-4 py-2 text-sm font-mono rounded-t-lg border-b border-[#1D3B53]">
+                  {value.filename}
+                </div>
+              )}
+              <div
+                className="rounded-b-lg text-sm overflow-hidden"
+                dangerouslySetInnerHTML={{ __html: html || '' }}
+              />
+            </div>
+          )
+        },
+      },
+    })
+  }, [])
+
   const { data: post, isLoading } = useQuery({
     queryKey: ['post', slug],
     queryFn: async () => {
@@ -118,7 +151,7 @@ export default function BlogPost({ slug }: { slug: string }) {
       )}
 
       <div className="prose prose-invert prose-lg max-w-none">
-        <PortableText value={post.content} components={components} />
+        {components && <PortableText value={post.content} components={components} />}
       </div>
     </article>
   )
