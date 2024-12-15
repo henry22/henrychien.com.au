@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Search, Calendar } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { Post } from '@/types/types'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useState, useEffect } from 'react'
