@@ -119,26 +119,40 @@ export default function BlogPost({ slug }: { slug: string }) {
 
   return (
     <article className="container mx-auto px-4 py-16 max-w-3xl">
-      <h1 className="text-5xl font-bold mb-6 leading-tight">{post.title}</h1>
-      <div className="flex items-center text-gray-400 mb-8 space-x-4">
-        <div className="flex items-center">
-          <CalendarIcon className="w-5 h-5 mr-2" />
-          <time>
-            {new Date(post.publishedAt).toLocaleDateString('en-AU', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </time>
+      <h1 className="text-4xl md:text-5xl font-bold mb-4 md:mb-6 leading-tight">{post.title}</h1>
+
+      {/* Metadata Container */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-6 text-gray-400 mb-8">
+        {/* Date and Read Time Group */}
+        <div className="flex items-center gap-4 flex-wrap">
+          <div className="flex items-center min-w-[140px]">
+            <CalendarIcon className="w-4 h-4 md:w-5 md:h-5 mr-2 flex-shrink-0" />
+            <time className="text-sm md:text-base">
+              {new Date(post.publishedAt).toLocaleDateString('en-AU', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </time>
+          </div>
+          <div className="flex items-center">
+            <ClockIcon className="w-4 h-4 md:w-5 md:h-5 mr-2 flex-shrink-0" />
+            <span className="text-sm md:text-base">{post.readTime} min read</span>
+          </div>
         </div>
-        <div className="flex items-center">
-          <ClockIcon className="w-5 h-5 mr-2" />
-          <span>{post.readTime} min read</span>
+
+        {/* Badges Group */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <Badge
+            variant="secondary"
+            className={`${difficultyColors[post.difficulty as Difficulty]} text-sm`}
+          >
+            {post.difficulty}
+          </Badge>
+          <Badge variant="secondary" className="text-sm">
+            {post.type}
+          </Badge>
         </div>
-        <Badge variant="secondary" className={difficultyColors[post.difficulty as Difficulty]}>
-          {post.difficulty}
-        </Badge>
-        <Badge variant="secondary">{post.type}</Badge>
       </div>
 
       {post.mainImage && (
