@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react'
 
-export function useViewMode(defaultView: 'grid' | 'list' = 'list') {
-  const [view, setView] = useState<'grid' | 'list'>(defaultView)
+export type ViewMode = 'grid' | 'list'
+
+export function useViewMode(defaultView: ViewMode = 'list') {
+  const [view, setView] = useState<ViewMode>(defaultView)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
