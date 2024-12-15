@@ -30,9 +30,10 @@ export async function fetchPost(slug: string) {
     publishedAt,
     mainImage,
     content,
-    estimatedReadingTime
+    estimatedReadingTime,
+    type
   }`,
-    { slug },
+    { slug }
   )
 }
 

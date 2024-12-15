@@ -56,6 +56,7 @@ export type Post = {
   mainImage: SanityImage
   estimatedReadingTime?: number
   content?: (PortableTextBlock | CodeBlock)[]
+  type: string
 }
 
 export interface Workshop {

@@ -58,5 +58,19 @@ export default defineType({
         },
       ],
     }),
+    defineField({
+      name: 'type',
+      title: 'Post Type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'TypeScript', value: 'TypeScript' },
+          { title: 'React', value: 'React' },
+          { title: 'Next.js', value: 'Next.js' },
+          { title: 'Tailwind CSS', value: 'Tailwind' },
+        ],
+      },
+      validation: Rule => Rule.required(),
+    }),
   ],
 })
