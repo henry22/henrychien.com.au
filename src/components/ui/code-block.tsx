@@ -65,7 +65,8 @@ export function CodeBlock({ code, language = 'typescript', filename }: CodeBlock
         variants={container}
         initial="hidden"
         animate="show"
-        className="rounded-b-lg text-sm overflow-hidden">
+        className="rounded-b-lg text-sm overflow-hidden"
+      >
         <div className="p-4" dangerouslySetInnerHTML={{ __html: html }} />
       </motion.div>
     </div>

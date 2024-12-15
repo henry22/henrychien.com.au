@@ -9,11 +9,12 @@ import { Project } from '@/types/types'
 import { useQuery } from '@tanstack/react-query'
 import ProjectsSkeleton from '../ui/skeletons/projectsSkeleton'
 import { getProjects } from '@/lib/sanity/client'
+import { useViewMode } from '@/hooks/useViewMode'
 
 export default function Projects() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedTech, setSelectedTech] = useState('all')
-  const [view, setView] = useState<'grid' | 'list'>('list')
+  const { view, setView } = useViewMode('list')
 
   const { data: projects, isLoading } = useQuery<Project[]>({
     queryKey: ['projects'],

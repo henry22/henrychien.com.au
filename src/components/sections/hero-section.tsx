@@ -10,24 +10,7 @@ import { useState, useEffect } from 'react'
 import '@/styles/code-animation.css'
 import HeroSkeleton from '../ui/skeletons/heroSkeleton'
 import { CodeBlock } from '@/components/ui/code-block'
-
-type Snippet = {
-  _type: string
-  code: string
-  language: string
-}
-
-type HeroData = {
-  title: string
-  subtitle: string
-  socialLinks?: {
-    github?: string
-    linkedin?: string
-    twitter?: string
-    resume?: string
-  }
-  codeSnippet: Snippet[]
-}
+import { HeroData, Snippet } from '@/types/types'
 
 export function HeroSection() {
   const { data: hero, isLoading } = useQuery<HeroData>({
@@ -74,7 +57,8 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="w-full max-w-4xl mx-auto mb-8 md:mb-16">
+            className="w-full max-w-4xl mx-auto mb-8 md:mb-16"
+          >
             {hero.codeSnippet.map((snippet: Snippet, index: number) => (
               <div key={index} className="bg-black rounded-lg shadow-2xl overflow-hidden text-left">
                 <div className="flex items-center gap-2 px-4 py-3 bg-gray-800/50">
@@ -106,7 +90,8 @@ export function HeroSection() {
           className="text-4xl md:text-5xl lg:text-6xl pb-1 font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}>
+          transition={{ duration: 0.8 }}
+        >
           {hero.title}
         </motion.h2>
 
@@ -114,7 +99,8 @@ export function HeroSection() {
           className="mt-4 md:mt-6 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto px-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}>
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
           {hero.subtitle}
         </motion.p>
 
@@ -122,7 +108,8 @@ export function HeroSection() {
           className="flex items-center justify-center gap-3 md:gap-4 mt-6 md:mt-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}>
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
           <Button size="lg" asChild>
             <a href={socialLinks.github} target="_blank" rel="noopener noreferrer">
               <Github className="mr-2 h-4 w-4" />

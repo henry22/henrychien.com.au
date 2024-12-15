@@ -75,3 +75,21 @@ export interface Workshop {
   recordingLink?: string
   resources: string[]
 }
+
+export type HeroData = {
+  title: string
+  subtitle: string
+  socialLinks?: {
+    github?: string
+    linkedin?: string
+    twitter?: string
+    resume?: string
+  }
+  codeSnippet: Snippet[]
+}
+
+export type Snippet = {
+  _type: string
+  code: string
+  language: string
+}
