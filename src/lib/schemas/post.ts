@@ -12,6 +12,25 @@ export default defineType({
       validation: Rule => Rule.required(),
     }),
     defineField({
+      name: 'readTime',
+      title: 'Read Time (minutes)',
+      type: 'number',
+      validation: Rule => Rule.required().min(1),
+    }),
+    defineField({
+      name: 'difficulty',
+      title: 'Difficulty Level',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Easy', value: 'easy' },
+          { title: 'Intermediate', value: 'intermediate' },
+          { title: 'Advanced', value: 'advanced' },
+        ],
+      },
+      validation: Rule => Rule.required(),
+    }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
@@ -42,6 +61,22 @@ export default defineType({
       },
     }),
     defineField({
+      name: 'type',
+      title: 'Post Type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'TypeScript', value: 'TypeScript' },
+          { title: 'React', value: 'React' },
+          { title: 'Next.js', value: 'Next.js' },
+          { title: 'Node.js', value: 'Node.js' },
+          { title: 'Database', value: 'Database' },
+          { title: 'DevOps', value: 'DevOps' },
+        ],
+      },
+      validation: Rule => Rule.required(),
+    }),
+    defineField({
       name: 'content',
       title: 'Content',
       type: 'array',
@@ -57,20 +92,6 @@ export default defineType({
           },
         },
       ],
-    }),
-    defineField({
-      name: 'type',
-      title: 'Post Type',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'TypeScript', value: 'TypeScript' },
-          { title: 'React', value: 'React' },
-          { title: 'Next.js', value: 'Next.js' },
-          { title: 'Tailwind CSS', value: 'Tailwind' },
-        ],
-      },
-      validation: Rule => Rule.required(),
     }),
   ],
 })

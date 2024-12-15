@@ -54,9 +54,10 @@ export type Post = {
   publishedAt: string
   excerpt: string
   mainImage: SanityImage
-  estimatedReadingTime?: number
-  content?: (PortableTextBlock | CodeBlock)[]
+  readTime: number
+  difficulty: 'easy' | 'intermediate' | 'advanced'
   type: string
+  content?: (PortableTextBlock | CodeBlock)[]
 }
 
 export interface Workshop {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { client } from '@/lib/sanity/client'
+import { fetchPosts } from '@/lib/sanity/client'
 import { Post } from '@/types/types'
 import BlogCard from './blog-card'
 import { BlogFilters } from './blog-filters'
@@ -21,19 +21,7 @@ export default function BlogList() {
     error,
   } = useQuery<Post[], Error>({
     queryKey: ['posts'],
-    queryFn: async () => {
-      return client.fetch(`
-        *[_type == "post"] | order(publishedAt desc) {
-          _id,
-          title,
-          slug,
-          publishedAt,
-          excerpt,
-          mainImage,
-          type,
-        }
-      `)
-    },
+    queryFn: fetchPosts,
   })
 
   // Filter posts based on search, type, and date

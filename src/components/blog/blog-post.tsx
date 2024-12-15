@@ -11,11 +11,13 @@ import {
   transformerNotationWordHighlight,
   transformerRenderWhitespace,
 } from '@shikijs/transformers'
-import { client } from '@/lib/sanity/client'
+import { fetchPost } from '@/lib/sanity/client'
 import { urlFor } from '@/lib/sanity/client'
 import Image from 'next/image'
+import { Badge } from '@/components/ui/badge'
 import { CalendarIcon, ClockIcon } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Difficulty, difficultyColors } from '@/contasnts'
 
 interface CodeBlock {
   _type: 'code'
@@ -85,20 +87,7 @@ export default function BlogPost({ slug }: { slug: string }) {
 
   const { data: post, isLoading } = useQuery({
     queryKey: ['post', slug],
-    queryFn: async () => {
-      return client.fetch(
-        `
-        *[_type == "post" && slug.current == $slug][0] {
-          title,
-          publishedAt,
-          mainImage,
-          content,
-          estimatedReadingTime
-        }
-      `,
-        { slug }
-      )
-    },
+    queryFn: () => fetchPost(slug),
   })
 
   if (isLoading) {
@@ -142,16 +131,18 @@ export default function BlogPost({ slug }: { slug: string }) {
             })}
           </time>
         </div>
-        {post.estimatedReadingTime && (
-          <div className="flex items-center">
-            <ClockIcon className="w-5 h-5 mr-2" />
-            <span>{post.estimatedReadingTime} min read</span>
-          </div>
-        )}
+        <div className="flex items-center">
+          <ClockIcon className="w-5 h-5 mr-2" />
+          <span>{post.readTime} min read</span>
+        </div>
+        <Badge variant="secondary" className={difficultyColors[post.difficulty as Difficulty]}>
+          {post.difficulty}
+        </Badge>
+        <Badge variant="secondary">{post.type}</Badge>
       </div>
 
       {post.mainImage && (
-        <div className="mb-12   rounded-xl overflow-hidden shadow-2xl">
+        <div className="mb-12 rounded-xl overflow-hidden shadow-2xl">
           <Image
             src={urlFor(post.mainImage).url()}
             alt={post.title}

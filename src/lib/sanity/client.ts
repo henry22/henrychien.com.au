@@ -31,7 +31,9 @@ export async function fetchPost(slug: string) {
     mainImage,
     content,
     estimatedReadingTime,
-    type
+    type,
+    readTime,
+    difficulty
   }`,
     { slug }
   )
@@ -121,5 +123,19 @@ export async function getHero() {
       language,
       code
     }
+  }`)
+}
+
+export async function fetchPosts() {
+  return client.fetch(`*[_type == "post"] | order(publishedAt desc) {
+    _id,
+    title,
+    slug,
+    publishedAt,
+    excerpt,
+    mainImage,
+    type,
+    readTime,
+    difficulty
   }`)
 }
