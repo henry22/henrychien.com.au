@@ -167,7 +167,7 @@ export default function BlogPost({ slug }: { slug: string }) {
         </div>
       )}
 
-      <div className="prose prose-invert prose-lg max-w-none prose-code:text-orange-500">
+      <div className="prose dark:prose-invert prose-lg max-w-none prose-code:text-orange-500">
         {components && <PortableText value={post.content} components={components} />}
       </div>
     </article>
