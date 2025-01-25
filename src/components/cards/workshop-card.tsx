@@ -13,7 +13,7 @@ interface WorkshopCardProps {
 export function WorkshopCard({ workshop }: WorkshopCardProps) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative">
-      <div className="grid md:grid-cols-[2fr,1fr] gap-6 bg-card rounded-xl overflow-hidden shadow-lg">
+      <div className="grid md:grid-cols-[2fr_1fr] gap-6 bg-card rounded-xl overflow-hidden shadow-lg">
         {/* Main Content */}
         <div className="p-6">
           <div className="flex items-center gap-3 mb-4">

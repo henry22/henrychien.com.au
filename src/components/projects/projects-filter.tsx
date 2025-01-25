@@ -44,7 +44,7 @@ export function ProjectsFilter({
 
   return (
     <motion.div
-      className="sticky top-20 z-30 bg-background/80 backdrop-blur-sm mb-8 py-4"
+      className="sticky top-20 z-30 bg-background/80 backdrop-blur-xs mb-8 py-4"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}>
       <div className="flex flex-wrap gap-4 items-center">

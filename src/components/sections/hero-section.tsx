@@ -87,7 +87,7 @@ export function HeroSection() {
         )}
 
         <motion.h2
-          className="text-4xl md:text-5xl lg:text-6xl pb-1 font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]"
+          className="text-4xl md:text-5xl lg:text-6xl pb-1 font-bold bg-clip-text text-transparent bg-linear-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}

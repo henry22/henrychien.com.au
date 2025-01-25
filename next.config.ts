@@ -1,3 +1,12 @@
+import createMDX from '@next/mdx'
+
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+})
+
 const nextConfig = {
   logging: {
     fetches: {
@@ -12,9 +21,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'cdn.sanity.io',
-      },
+      } as const,
     ],
   },
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
 }
 
-export default nextConfig
+export default withMDX(nextConfig)
