@@ -9,4 +9,10 @@ export type BlogMetadata = {
   readTime: number
   type: string
   difficulty: Difficulty
+  image: {
+    src: string
+    alt: string
+    width: number
+    height: number
+  }
 }

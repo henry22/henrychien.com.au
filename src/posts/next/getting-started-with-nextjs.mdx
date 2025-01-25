@@ -1,0 +1,111 @@
+export const metadata = {
+  title: 'Type Syncing',
+  excerpt: 'In this blog we will take a look at the Keyof and Typeof keywords',
+  publishedAt: '2024-12-19',
+  readTime: 5,
+  type: 'Next',
+  difficulty: 'Easy',
+  image: {
+    src: '/images/blog/type-sync.png',
+    alt: 'Description of your image',
+    width: 1200,
+    height: 600,
+  },
+}
+
+Lets take a look at this code
+
+```tsx
+const classNamesMap = {
+  primary: "bg-blue-500 text-white",
+  secondary: "bg-gray-200 text-black",
+  success: "bg-green-500 text-white",
+  danger: "bg-red-500 text-white",
+  disabled: "bg-gray-500 text-white",
+};
+
+type ButtonProps = {
+  variant: "primary" | "secondary" | "success" | "danger" | "disabled";
+};
+
+function Button = (props: ButtonProps) {
+  return (
+    <button className={classNamesMap[props.variant]}>
+      Click me
+    </button>
+  )
+}
+
+export default function Parent = {
+  return (
+    <>
+      <Button variant="primary"></Button>
+      <Button variant="secondary"></Button>
+      <Button variant="success"></Button>
+      <Button variant="danger"></Button>
+    </>
+  );
+};
+```
+
+Lets break it down, we have a `Javascript` object that is defining some styles that we can use as a variant for our buttons, below this we have our type buttonProps which has a union type in it with a bunch of different strings that we can use to determine the variant type.
+
+Next we create our button component
+
+```tsx
+export default function Button = (props: ButtonProps) { // [!code highlight]
+  return (
+    <button className={classNamesMap[props.variant]}> // [!code highlight]
+      Click me
+    </button>
+  )
+}
+```
+
+Here we are passing our buttonProps type to the button component and then in the className we are using our styles javaScript object to map over the items and declare this as our variant styles.
+
+Then we can call the Button in the parent and give it a variant type that we can use to define different styles.
+
+This is super cool, but there is an issue. Typically in this kind of setup the types would be stored inside a types file, so what would happen if we want to add a new variant? Well we would have to go to our types file add the new type, then go to our styles object and add the new style, then finally we can use that new variant in the component.
+
+Wouldn't it be awesome if TypeScript could give us some magic that would allow us to just add the new style and then the types are automatically inferred and we could just use them immediately without having to do that manual type update step?
+
+Luckily for us, TypeScript can do just that, we can use the types of Keyof and Typeof to setup type syncing between our types and our styles, so how do we do that?
+
+Type Syncing
+
+Lets have a look at how we can set this up
+
+Our classNamesMap object stays the same, but we are going to delete the union of variants and add this
+
+```tsx
+type ButtonProps = {
+  variant: keyof typeof classNamesMap
+}
+```
+
+What we have done here is replaced the union with this weird looking type, lets break it down.
+
+The Typeof keyword is grabbing all of the types from our classNamesMap and that would look like:
+
+```tsx
+const classNamesMap: {
+  primary: string
+  secondary: string
+  success: string
+  danger: string
+  disabled: string
+}
+```
+
+So here we have all of the types of our styles and once we add the Keyof keyword, that grabs all of the keys of the types, so these would be the primary, secondary etc. Something worth noting is that we can only use Keyof before Typeof, if we removed Typeof we would get a type error because Keyof only works on Types and classNamesMap is a runtime object and not a type.
+
+Essentially Typeof takes our styles object and turns it into a type object, then we grab all of the keys from that newly created type and we now have our list of variants
+
+```tsx
+variant: 'primary' | 'secondary' | 'success' | 'danger' | 'disabled'
+```
+
+This looks exactly like our union from the start of the blog, and it is, but now if we were to add a new style to our classNamesMap our variant type will now be able to infer the new key that is given to the object and turn that into our type variant and our styles are now synced.
+
+That's it! With this easy syntax we now have fully synced types and this makes the development experience way better.

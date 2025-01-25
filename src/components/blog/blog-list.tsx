@@ -4,9 +4,6 @@ import { useState } from 'react'
 import { BlogMetadata } from '@/types/blog'
 import BlogCard from './blog-card'
 import { BlogFilters } from './blog-filters'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { AlertCircle } from 'lucide-react'
 
 type BlogPost = BlogMetadata & { slug: string }
 

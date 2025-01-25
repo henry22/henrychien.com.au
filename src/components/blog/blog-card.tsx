@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { BlogMetadata } from '@/types/blog'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -15,6 +16,7 @@ export default function BlogCard({
   readTime,
   type,
   difficulty,
+  image,
 }: BlogCardProps) {
   return (
     <Link
@@ -23,6 +25,11 @@ export default function BlogCard({
       className="text-primary hover:scale-105 hover:border-blue-500 hover:border-2 rounded-lg transition duration-300"
     >
       <Card className="overflow-hidden">
+        {image && (
+          <div className="relative w-full aspect-[2/1]">
+            <Image src={image.src} alt={image.alt} fill className="object-cover" />
+          </div>
+        )}
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="line-clamp-2">{title}</CardTitle>

@@ -1,8 +1,8 @@
 import { readdirSync } from 'fs'
-import { join } from 'path'
+import path, { join } from 'path'
 import { BlogMetadata } from '@/types/blog'
 
-const POSTS_PATH = join(process.cwd(), 'posts')
+const POSTS_PATH = path.join(process.cwd(), 'src/posts')
 
 export async function getAllPosts() {
   const categories = readdirSync(POSTS_PATH, { withFileTypes: true }).filter(
@@ -16,7 +16,7 @@ export async function getAllPosts() {
     const files = readdirSync(categoryPath).filter(file => file.endsWith('.mdx'))
 
     for (const file of files) {
-      const post = await import(`../../posts/${category.name}/${file}`)
+      const post = await import(`@/posts/${category.name}/${file}`)
       const slug = file.replace(/\.mdx$/, '')
 
       posts.push({
@@ -37,7 +37,7 @@ export async function getPostBySlug(slug: string) {
 
   for (const category of categories) {
     try {
-      const post = await import(`../../posts/${category.name}/${slug}.mdx`)
+      const post = await import(`@/posts/${category.name}/${slug}.mdx`)
       return {
         ...post,
         category: category.name,

@@ -5,7 +5,7 @@ import {
   transformerMetaHighlight,
 } from '@shikijs/transformers'
 
-interface BlogCodeBlockProps {
+interface CodeBlockProps {
   children: React.ReactNode
   className?: string
 }
@@ -45,7 +45,7 @@ async function highlight(code: string, lang: string) {
   }
 }
 
-export default async function BlogCodeBlock({ children, className }: BlogCodeBlockProps) {
+export default async function CodeBlock({ children, className }: CodeBlockProps) {
   const language = className?.replace(/language-/, '') || 'javascript'
 
   // Handle different types of children to extract the actual code
@@ -60,14 +60,14 @@ export default async function BlogCodeBlock({ children, className }: BlogCodeBlo
     }
   }
 
-  const html = await highlight(code, language)
+  const highlightedCode = await highlight(code, language)
 
   return (
-    <div className="relative rounded-lg overflow-hidden my-4">
+    <div className="relative rounded-lg overflow-hidden my-4 w-full">
       <div className="absolute top-2 right-2 text-xs text-gray-400">{language}</div>
       <div
-        dangerouslySetInnerHTML={{ __html: html }}
-        className="p-4 bg-[#011627] [&_.highlighted]:bg-blue-500/20 [&_.diff.add]:bg-green-500/20 [&_.diff.remove]:bg-red-500/20 **:data-highlighted:bg-blue-500/20"
+        dangerouslySetInnerHTML={{ __html: highlightedCode }}
+        className="p-4 w-full bg-[#011627] [&_.highlighted]:bg-blue-500/20 [&_.diff.add]:bg-green-500/20 [&_.diff.remove]:bg-red-500/20 **:data-highlighted:bg-blue-500/20"
       />
     </div>
   )
