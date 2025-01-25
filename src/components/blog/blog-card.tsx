@@ -4,7 +4,7 @@ import { BlogMetadata } from '@/types/blog'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { CalendarIcon, Clock } from 'lucide-react'
-import { difficultyColors } from '@/contasnts'
+import { difficultyColors, Difficulty } from '@/contasnts'
 
 type BlogCardProps = BlogMetadata & { slug: string }
 
@@ -18,6 +18,8 @@ export default function BlogCard({
   difficulty,
   image,
 }: BlogCardProps) {
+  const difficultyKey = difficulty.toLowerCase() as Difficulty
+
   return (
     <Link
       href={`/blog/${slug}`}
@@ -54,7 +56,7 @@ export default function BlogCard({
                 })}
               </time>
             </div>
-            <Badge variant="secondary" className={difficultyColors[difficulty]}>
+            <Badge variant="secondary" className={difficultyColors[difficultyKey]}>
               {difficulty}
             </Badge>
           </div>

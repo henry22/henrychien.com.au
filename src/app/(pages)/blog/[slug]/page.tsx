@@ -44,6 +44,8 @@ export default async function BlogPostPage(props: Props) {
   const post = await getPostBySlug(params.slug)
   if (!post) return notFound()
 
+  const difficulty = post.metadata.difficulty.toLowerCase() as Difficulty
+
   return (
     <div className="mx-auto px-4 py-16 max-w-4xl">
       <article className="space-y-8">
@@ -71,10 +73,7 @@ export default async function BlogPostPage(props: Props) {
             </div>
 
             <div className="flex items-center gap-2 flex-wrap">
-              <Badge
-                variant="secondary"
-                className={`${difficultyColors[post.metadata.difficulty as Difficulty]} text-sm`}
-              >
+              <Badge variant="secondary" className={`${difficultyColors[difficulty]} text-sm`}>
                 {post.metadata.difficulty}
               </Badge>
               <Badge variant="secondary" className="text-sm">

@@ -1,0 +1,220 @@
+export const metadata = {
+  title: 'Generics',
+  excerpt: 'In this blog we will learn all about Generics',
+  publishedAt: '2024-12-15',
+  readTime: 8,
+  type: 'TypeScript',
+  difficulty: 'Intermediate',
+  image: {
+    src: '/images/blog/generics.webp',
+    alt: 'Generics',
+    width: 1200,
+    height: 600,
+  },
+}
+
+In this tutorial we are going to take a look at Generics in TypeScript, what they are and why they are super useful and fun!
+
+## What are Generics?
+
+### The box Analogy:
+
+You can think of generics in TypeScript kind of like a box that can hold different types of things
+
+To help clarify this, lets look at examples of other TypeScript boxes
+
+```tsx
+// This is like a box that can only hold numbers
+type NumberBox = {
+  content: number
+}
+
+// This is like a box that can only hold strings
+type StringBox = {
+  content: string
+}
+```
+
+But a Generic is different.
+
+```tsx
+// This is a generic box - it can hold anything,
+// but you specify what when you use it!
+
+type Box<T> = {
+  content: T
+}
+```
+
+The `<T>` is the generic itself, this Syntax can actually be named anything you like, for example I could call this
+`<BoxContent>` and it would work just fine, however the common practice in TypeScript is to use the
+letter `T` when declaring a Generic.
+
+Also note that the generic needs to be placed next to the Type
+declaration and also next to the content as a type, this is to tell TypeScript that any property
+in our types that have a type of `T` is a generic type and to expect all sorts of data.
+
+Lets further break this down by looking at a real world scenario.
+
+## Using Generics in a real world scenario
+
+This code below is a simple React component for a table, right now we are defining any in the tableProps for the rows and the renderRow function.
+
+```tsx
+type TableProps = {
+  rows: any[]
+  renderRow: (row: any) => React.ReactNode
+}
+
+export const Table = (props: TableProps) => {
+  return (
+    <table>
+      <tbody>
+        {props.rows.map((row, index) => (
+          <tr key={index}>{props.renderRow(row)}</tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+const data = [
+  {
+    id: 1,
+    name: 'John',
+  },
+]
+
+export default function Parent() {
+  return (
+    <div>
+      <Table rows={data} renderRow={row => <td>{row.name}</td>} />
+    </div>
+  )
+}
+```
+
+This isn’t ideal, because in this example using `any` means we have no type safety at all, if you’re
+using an editor like Cursor or VS code you will not have any auto complete via the intellisense when
+you’re trying to access the properties, so for example in the `<td> {row.name} </td>` there would be not
+autocomplete for `name`.
+
+On top of this we could theoretically pass any type into rows and javaScript
+will probably be fine with it, which isn’t great.
+
+So we have a few options, we could define the specific types in the TableProps like this
+
+```tsx
+type TableProps = {
+  rows: {
+    id: number
+    name: string
+  }[]
+  renderRow: (row: { id: number; name: string }) => React.ReactNode
+}
+```
+
+This will work, however we are now locked to these types, what if we want this Table to be fully reusable, what if we want to pass more details to this user table? Maybe we want to get some data from an API that returns the lastname, email and role of this user.
+
+With the current types we can’t do that without updating the TableProps types every time we want to add a new field, this is where Generics come in
+
+Taking the same example above, we can do this:
+
+```tsx
+type TableProps<T> = {
+  rows: T[]
+  renderRow: (row: T) => React.ReactNode
+}
+```
+
+Here we are defining rows and renderRows as Generics, and if you remember our box analogy this means that we can now put anything we like in the box.
+
+Here is what the Table component would look like now.
+
+```tsx
+interface TableProps<T> {
+  rows: T[]
+  renderRow: (row: T) => React.ReactNode
+}
+
+// We need to add the generic here as well to tell the Table component
+// that it can access the generic type
+const Table = <T,>(props: TableProps<T>) => {
+  return (
+    <table>
+      <tbody>
+        {props.rows.map((row, index) => (
+          <tr key={index}>{props.renderRow(row)}</tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+const data = [
+  {
+    id: 1,
+    name: 'John',
+  },
+]
+
+export default function Parent() {
+  return (
+    <div>
+      <Table
+        rows={data}
+        renderRow={row => (
+          <>
+            <td>{row.name}</td>
+          </>
+        )}
+      />
+    </div>
+  )
+}
+```
+
+In our parent component, we are passing data as an array, the Table will now automatically infer these types and pass them to the component, we will now have full autocomplete, and if we were to update the data array with new values the TableProps will now infer them automatically without having to change the types!
+
+So now we could add a user email to data like this:
+
+```tsx
+const data = [
+  {
+    id: 1,
+    name: 'John',
+    email: 'john@example.com',
+  },
+]
+
+export default function Parent() {
+  return (
+    <div>
+      <Table
+        rows={data}
+        renderRow={row => (
+          <div key={row.id}>
+            <td>{row.name}</td>
+            <td>{row.email}</td>
+          </div>
+        )}
+      />
+    </div>
+  )
+}
+```
+
+Now the Table will render two rows one for name and one for email, that are both fully inferred by TypeScript and have full autocomplete options.
+
+Generics are a truely wonderful and a powerful tool in your TypeScript kit
+
+If you’d like to play around with this demo yourself, you can find this tutorial and more like it in my [TypeScript Workshop Github repo](https://github.com/Dealsy/TypeScript-Workshop), this is public and free for anyone to dive into, I created this to teach developers at my current place of work all about TypeScript.
+
+In the repo you will find lessons across a broad selection of TypeScript tutorials including,
+
+- Type Syncing,
+- Discriminated unions,
+- More complex lessons on Generics,
+- Zod
+
+and moe!
