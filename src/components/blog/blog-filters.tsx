@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Search } from 'lucide-react'
-import { Post } from '@/types/types'
+import { BlogMetadata } from '@/types/blog'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
@@ -9,7 +9,7 @@ import { DatePicker } from '@/components/ui/date-picker'
 import { motion } from 'framer-motion'
 
 interface BlogFiltersProps {
-  posts?: Post[]
+  posts?: (BlogMetadata & { slug: string })[]
   searchQuery: string
   setSearchQuery: (query: string) => void
   selectedType: string
