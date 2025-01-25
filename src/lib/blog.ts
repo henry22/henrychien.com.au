@@ -1,6 +1,5 @@
 import { readdirSync } from 'fs'
 import path, { join } from 'path'
-import { BlogMetadata } from '@/types/blog'
 
 const POSTS_PATH = path.join(process.cwd(), 'src/posts')
 
@@ -43,7 +42,9 @@ export async function getPostBySlug(slug: string) {
         category: category.name,
       }
     } catch (error) {
+      console.log(error)
       // Post not found in this category, continue searching
+
       continue
     }
   }
