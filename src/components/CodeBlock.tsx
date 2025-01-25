@@ -67,7 +67,7 @@ export default async function CodeBlock({ children, className }: CodeBlockProps)
       <div className="absolute top-2 right-2 text-xs text-gray-400">{language}</div>
       <div
         dangerouslySetInnerHTML={{ __html: highlightedCode }}
-        className="p-4 w-full bg-[#011627] [&_.highlighted]:bg-blue-500/20 [&_.diff.add]:bg-green-500/20 [&_.diff.remove]:bg-red-500/20 **:data-highlighted:bg-blue-500/20"
+        className="p-4 w-full bg-[#011627] [&_.highlighted]:bg-blue-500/20 [&_.diff.add]:bg-green-500/20 [&_.diff.remove]:bg-red-500/20 data-highlighted:**:bg-blue-500/20"
       />
     </div>
   )

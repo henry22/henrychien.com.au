@@ -79,7 +79,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                 animate={{ scale: isHovered ? 1.05 : 1 }}
                 transition={{ duration: 0.3 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-50" />
+              <div className="absolute inset-0 bg-linear-to-t from-black to-transparent opacity-50" />
             </div>
           </div>
         </CardContent>

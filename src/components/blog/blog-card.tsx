@@ -27,7 +27,7 @@ export default function BlogCard({
     >
       <Card className="overflow-hidden">
         {image && (
-          <div className="relative w-full aspect-[2/1]">
+          <div className="relative w-full aspect-2/1">
             <Image src={image.src} alt={image.alt} fill className="object-cover" />
           </div>
         )}

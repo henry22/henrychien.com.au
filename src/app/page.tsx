@@ -35,7 +35,7 @@ export default function Portfolio() {
           theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'
         }`}>
         <motion.div
-          className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))] transform-none z-50"
+          className="fixed top-0 left-0 right-0 h-1 bg-linear-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))] transform-none z-50"
           style={{ scaleX }}
         />
 

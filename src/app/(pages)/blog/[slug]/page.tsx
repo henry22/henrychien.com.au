@@ -57,7 +57,7 @@ export default async function BlogPostPage(props: Props) {
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-6 text-gray-400">
             <div className="flex items-center gap-4 flex-wrap">
               <div className="flex items-center min-w-[140px]">
-                <CalendarIcon className="w-4 h-4 md:w-5 md:h-5 mr-2 flex-shrink-0" />
+                <CalendarIcon className="w-4 h-4 md:w-5 md:h-5 mr-2 shrink-0" />
                 <time className="text-sm md:text-base">
                   {new Date(post.metadata.publishedAt).toLocaleDateString('en-AU', {
                     year: 'numeric',
@@ -67,7 +67,7 @@ export default async function BlogPostPage(props: Props) {
                 </time>
               </div>
               <div className="flex items-center">
-                <ClockIcon className="w-4 h-4 md:w-5 md:h-5 mr-2 flex-shrink-0" />
+                <ClockIcon className="w-4 h-4 md:w-5 md:h-5 mr-2 shrink-0" />
                 <span className="text-sm md:text-base">{post.metadata.readTime} min read</span>
               </div>
             </div>
@@ -84,7 +84,7 @@ export default async function BlogPostPage(props: Props) {
         </header>
 
         {post.metadata.image && (
-          <div className="relative w-full aspect-[2/1] rounded-lg overflow-hidden">
+          <div className="relative w-full aspect-2/1 rounded-lg overflow-hidden">
             <Image
               src={post.metadata.image.src}
               alt={post.metadata.image.alt}

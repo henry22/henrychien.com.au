@@ -42,9 +42,10 @@ export async function getPostBySlug(slug: string) {
         category: category.name,
       }
     } catch (error) {
-      console.log(error)
-      // Post not found in this category, continue searching
-
+      // Only log error if it's not a "module not found" error
+      if ((error as NodeJS.ErrnoException).code !== 'MODULE_NOT_FOUND') {
+        console.error('Error importing post:', error)
+      }
       continue
     }
   }
