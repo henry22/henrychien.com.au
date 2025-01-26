@@ -1,7 +1,7 @@
 export const metadata = {
   title: 'Type Syncing',
   excerpt: 'In this blog we will take a look at the Keyof and Typeof keywords',
-  publishedAt: '2024-12-19',
+  publishedAt: '19-12-2024',
   readTime: 5,
   type: 'TypeScript',
   difficulty: 'Easy',
@@ -20,12 +20,11 @@ const classNamesMap = {
   primary: "bg-blue-500 text-white",
   secondary: "bg-gray-200 text-black",
   success: "bg-green-500 text-white",
-  danger: "bg-red-500 text-white",
   disabled: "bg-gray-500 text-white",
 };
 
 type ButtonProps = {
-  variant: "primary" | "secondary" | "success" | "danger" | "disabled";
+  variant: 'primary' | 'secondary' | 'success'  | 'disabled'
 };
 
 function Button = (props: ButtonProps) {
@@ -72,13 +71,18 @@ Wouldn't it be awesome if TypeScript could give us some magic that would allow u
 
 Luckily for us, TypeScript can do just that, we can use the types of Keyof and Typeof to setup type syncing between our types and our styles, so how do we do that?
 
-Type Syncing
+## Type Syncing
 
 Lets have a look at how we can set this up
 
-Our classNamesMap object stays the same, but we are going to delete the union of variants and add this
+Our classNamesMap object stays the same, but we are going to delete the union of variants and add a new type.
 
 ```tsx
+// [!code --:4]
+type ButtonProps = {
+  variant: 'primary' | 'secondary' | 'success' | 'disabled' // [!code --]
+}
+// [!code ++:4]
 type ButtonProps = {
   variant: keyof typeof classNamesMap
 }
@@ -86,7 +90,7 @@ type ButtonProps = {
 
 What we have done here is replaced the union with this weird looking type, lets break it down.
 
-The Typeof keyword is grabbing all of the types from our classNamesMap and that would look like:
+The `Typeof` keyword is grabbing all of the types from our `classNamesMap` and that would look like:
 
 ```tsx
 const classNamesMap: {
@@ -98,14 +102,29 @@ const classNamesMap: {
 }
 ```
 
-So here we have all of the types of our styles and once we add the Keyof keyword, that grabs all of the keys of the types, so these would be the primary, secondary etc. Something worth noting is that we can only use Keyof before Typeof, if we removed Typeof we would get a type error because Keyof only works on Types and classNamesMap is a runtime object and not a type.
+So here we have all of the types of our styles and once we add the `Keyof` keyword, that grabs all of the keys of the types, so these would be the primary, secondary etc. Something worth noting is that we can only use `Keyof` before `Typeof`, if we removed `Typeof` we would get a type error because `Keyof` only works on Types and `classNamesMap` is a runtime object and not a type.
 
-Essentially Typeof takes our styles object and turns it into a type object, then we grab all of the keys from that newly created type and we now have our list of variants
+Essentially `Typeof` takes our styles object and turns it into a type object, then we grab all of the keys from that newly created type and we now have our list of variants
 
 ```tsx
-variant: 'primary' | 'secondary' | 'success' | 'danger' | 'disabled'
+variant: 'primary' | 'secondary' | 'success' | 'disabled'
 ```
 
 This looks exactly like our union from the start of the blog, and it is, but now if we were to add a new style to our classNamesMap our variant type will now be able to infer the new key that is given to the object and turn that into our type variant and our styles are now synced.
+
+Here is a quick example of what it would look like, we will add a new style called `danger`
+
+```tsx
+const classNamesMap = {
+  primary: 'bg-blue-500 text-white',
+  secondary: 'bg-gray-200 text-black',
+  success: 'bg-green-500 text-white',
+  danger: 'bg-red-500 text-white', // [!code highlight]
+  disabled: 'bg-gray-500 text-white',
+}
+
+// type ButtonProps now has a new variant of danger
+variant: 'primary' | 'secondary' | 'success' | 'danger' | 'disabled'
+```
 
 That's it! With this easy syntax we now have fully synced types and this makes the development experience way better.

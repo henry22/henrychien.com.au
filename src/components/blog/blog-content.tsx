@@ -25,7 +25,7 @@ export default async function BlogContent({ slug }: { slug: string }) {
       const Content = (await import(`@/posts/${category}/${slug}.mdx`)).default
 
       return (
-        <div className="prose prose-lg max-w-none w-full prose-slate dark:prose-invert prose-pre:max-w-none prose-pre:w-full prose-code:text-purple-600 prose-code:bg-inherit dark:prose-code:text-orange-500 prose-code:before:content-none prose-code:after:content-none">
+        <div className="prose prose-lg max-w-none w-full prose-slate dark:prose-invert prose-pre:max-w-none prose-pre:w-full prose-code:text-purple-400 prose-code:bg-inherit dark:prose-code:text-orange-500 prose-code:before:content-none prose-code:after:content-none">
           <Content />
         </div>
       )

@@ -193,7 +193,21 @@ pre {
 
 /* Line highlighting styles */
 .shiki .line.highlighted {
-  @apply bg-blue-500/20 -mx-4 px-4 border-l-4 border-blue-500;
+  @apply bg-blue-500/20 relative border-l-4 border-blue-500;
+  margin-left: -1rem;
+  padding-left: calc(1rem - 4px);
+}
+
+/* Remove gap between consecutive highlighted lines */
+.shiki .line.highlighted + .line.highlighted {
+  @apply border-t-0;
+}
+
+/* Restore left border for consecutive highlights */
+.shiki .line.highlighted + .line.highlighted::before {
+  @apply absolute left-0 top-0 h-full border-l-4 border-blue-500;
+  content: '';
+  margin-left: -4px;
 }
 
 /* Focus styles */
@@ -302,4 +316,39 @@ pre {
 }
 .typing-line:nth-child(20) {
   --line-index: 20;
+}
+
+/* Enhanced diff blocks */
+pre.shiki.has-diff {
+  @apply relative;
+}
+
+/* Diff block highlighting */
+pre.shiki.has-diff .line.diff.add {
+  background: rgba(6, 129, 18, 0.259);
+  border-left: 3px solid rgb(6, 184, 20);
+  margin-left: -1rem;
+  padding-left: 1rem;
+}
+
+pre.shiki.has-diff .line.diff.remove {
+  background: rgba(232, 22, 22, 0.229);
+  border-left: 3px solid rgb(239 68 68);
+  margin-left: -1rem;
+  padding-left: 1rem;
+  opacity: 0.7;
+}
+
+pre.shiki.has-diff .line.diff.add::before,
+pre.shiki.has-diff .line.diff.remove::before {
+  content: '+';
+  display: inline-block;
+  width: 20px;
+  margin-left: -24px;
+  color: rgb(16 185 129);
+}
+
+pre.shiki.has-diff .line.diff.remove::before {
+  content: '-';
+  color: rgb(239 68 68);
 }

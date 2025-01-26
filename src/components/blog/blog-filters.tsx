@@ -46,6 +46,15 @@ export function BlogFilters({
       {} as Record<string, number>
     ) || {}
 
+  const hasActiveFilters = searchQuery || selectedType || selectedDate
+
+  const clearAllFilters = () => {
+    setInputValue('')
+    setSearchQuery('')
+    setSelectedType('')
+    setSelectedDate(undefined)
+  }
+
   return (
     <motion.div
       className="sticky top-20 z-30 bg-background/80 backdrop-blur-xs mb-8 py-4"
@@ -64,8 +73,8 @@ export function BlogFilters({
             />
           </div>
           <DatePicker date={selectedDate} setDate={setSelectedDate} />
-          {selectedType && (
-            <Button variant="ghost" size="sm" onClick={() => setSelectedType('')}>
+          {hasActiveFilters && (
+            <Button variant="ghost" size="sm" onClick={clearAllFilters}>
               Clear filters
             </Button>
           )}

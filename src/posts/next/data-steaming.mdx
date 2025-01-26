@@ -1,0 +1,161 @@
+export const metadata = {
+  title: 'Data Streaming',
+  excerpt: 'In this blog we will learn what Data Streaming is and how it works',
+  publishedAt: '26-01-2025',
+  readTime: 5,
+  type: 'Next JS',
+  difficulty: 'Intermediate',
+  image: {
+    src: '/images/blog/data_streaming.svg',
+    alt: 'Data Streaming',
+    width: 1200,
+    height: 600,
+  },
+}
+
+Data streaming is a concept in Next JS the allows you to stream data into to the client as it is generated,
+this is great for applications that have large dynamic datasets that may take time to load.
+
+With Data steaming you can render all of the static content first, and then stream in the dynamic data whilst
+displaying a loading state for that dynamic content, once the data is fully loaded the loading state is
+removed and the data is displayed.
+
+## How it works
+
+To understand how data streaming works, we will need to first understand how Server side
+Rendering (SSR) works.
+
+### SSR
+
+SSR has a few steps that need to happen before a user is able to see and interact with the
+page.
+
+These steps are:
+
+1. The data needs to be fetched from the server
+2. The server will then render the HTML for the page
+3. The HTML, CSS and JavaScript are then sent down to the client
+4. A Non-interactive page is then displayed to the user using the HTML, CSS
+5. The last step is React Hydrating the page to make it interactive
+
+<ArticleImage
+  darkSrc="/images/blog/dark_ssr.svg"
+  lightSrc="/images/blog/light_ssr.svg"
+  alt="SSR diagram showing how SSR works in Next.js"
+  size="xxlarge"
+/>
+
+These steps will block the user from getting to the page until all of the data is fetched
+and then afterwards React has finished hydrating the page.
+
+This causes that annoying user experience you've probably come across, where you click on a link
+and the page is either a blank white screen or its just hanging and it feels like nothing is happening.
+
+This is where Streaming comes in to it, Steaming essentially allows you to break down the pages HTML into smaller chuncks
+and then stream them in as they are generated.
+
+This means we can actually render the static content almost instantly, whilst the dynamic content is being fetched.
+
+This diagram shows how data streaming works.
+
+Each component is broken down into it's own request from the server.
+
+<ArticleImage
+  darkSrc="/images/blog/dark_ssr_stream.svg"
+  lightSrc="/images/blog/light_ssr_stream.svg"
+  alt="SSR diagram showing how SSR works in Next.js"
+  size="xxlarge"
+/>
+
+The first request in this diagram is the static content, you can see it is not fetching data from the server and is more than twice as
+fast as the next request.
+
+<Alert type="info">
+
+When data is streamed, multiple requests happen in parallel rather than sequentially.
+
+The total loading time depends on the size of each individual data chunk being streamed, not on waiting for previous requests to complete.
+
+</Alert>
+
+Data streaming uses the `<Suspense>` component from React to wrap the dynamic content, Suspense then gives us
+a fallback UI which can be anything you like, but is typically a loading spinner or skeleton UI.
+
+<ArticleImage
+  darkSrc="/images/blog/dark_streaming.svg"
+  lightSrc="/images/blog/light_streaming.svg"
+  alt="Data streaming diagram showing how data streaming works in Next.js"
+  size="large"
+/>
+
+In this diagram above, you can see that we are representing a dashboard and in this case there is a circle component
+, you could think of this as a profile picture where the picutre itself is being fetched from an API or Database,
+the grey circle is the fallback UI and the blue circle is the data that is being streamed in.
+
+Similairly with the content at the bottom of the diagram, in this section each component is being streamed in
+separately, and the loading state is displayed until the data is fully loaded.
+
+The rest of the componets are static and so they are loaded instantly for the user.
+
+Here is an example of how you can implement data streaming in your application:
+
+```tsx
+import { Suspense } from 'react'
+
+export default function Dashboard() {
+  return (
+    <div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProfilePicture />
+      </Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Content />
+      </Suspense>
+      <Footer />
+    </div>
+  )
+}
+```
+
+An important thing to understand is that the data being called must be called inside of the wrapped `<Suspense>` component.
+
+For example inside of `ProfilePicture` above you would see:
+
+```tsx
+export default async function ProfilePicture() {
+  const profilePicture = await fetchProfilePicture()
+  return <Image src={profilePicture} alt="Profile Picture" />
+}
+```
+
+    If you fetch data above the `<Suspense>` component and pass it in as a prop, it will not be streamed,
+    and you will not get the loading UI or that instant feedback for your users.
+
+    **Don't do this:**
+
+
+    ```tsx
+    export default function Dashboard() {
+        const profilePicture = await fetchProfilePicture()
+        return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ProfilePicture profilePicture={profilePicture} />
+        </Suspense>
+      )
+    }
+    ```
+
+The reason this doesn't work is because the data is being fetched before the `<Suspense>` component.
+The data must be feteched within the component so that Suspense can handle the loading state.
+
+## Pitfalls
+
+- Data streaming is only supported in the App Router
+- Data streaming is a server side only feature, you can't use it in client components
+
+## Conclusion
+
+Data streaming is a great way to improve the user experience of your application, by streaming in the data as it is generated
+you can provide a much more instant feedback to your users.
+
+It is a powerful feature and one that you should be using in your application.

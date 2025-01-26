@@ -4,6 +4,7 @@ import {
   transformerNotationDiff,
   transformerMetaHighlight,
 } from '@shikijs/transformers'
+import CopyButton from './CopyButton'
 
 interface CodeBlockProps {
   children: React.ReactNode
@@ -63,8 +64,11 @@ export default async function CodeBlock({ children, className }: CodeBlockProps)
   const highlightedCode = await highlight(code, language)
 
   return (
-    <div className="relative rounded-lg overflow-hidden my-4 w-full">
-      <div className="absolute top-2 right-2 text-xs text-gray-400">{language}</div>
+    <div className="relative rounded-lg overflow-hidden my-4 w-full group">
+      <div className="absolute top-2 right-2 flex items-center gap-2">
+        <span className="text-xs text-gray-400">{language}</span>
+        <CopyButton code={code} />
+      </div>
       <div
         dangerouslySetInnerHTML={{ __html: highlightedCode }}
         className="p-4 w-full bg-[#011627] [&_.highlighted]:bg-blue-500/20 [&_.diff.add]:bg-green-500/20 [&_.diff.remove]:bg-red-500/20 data-highlighted:**:bg-blue-500/20"

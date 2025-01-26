@@ -32,7 +32,6 @@ export default function BlogList({ initialPosts }: BlogListProps) {
   if (filteredPosts.length === 0) {
     return (
       <div className="space-y-8">
-        <h2 className="text-3xl font-bold">Latest Blog Posts</h2>
         <BlogFilters
           posts={initialPosts}
           searchQuery={searchQuery}
@@ -51,7 +50,6 @@ export default function BlogList({ initialPosts }: BlogListProps) {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-3xl font-bold">Latest Blog Posts</h2>
       <BlogFilters
         posts={initialPosts}
         searchQuery={searchQuery}
