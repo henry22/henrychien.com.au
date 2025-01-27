@@ -25,7 +25,7 @@ export default function Portfolio() {
       <ScrollToTop />
       <div
         className={`min-h-screen ${
-          theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'
+          theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-slate-200 text-gray-900'
         }`}
       >
         <main className="sm:max-w-7xl w-full mx-auto py-12 px-2">
@@ -40,7 +40,6 @@ export default function Portfolio() {
           <SkillsSection />
           <AboutSection />
         </main>
-        <Footer />
       </div>
     </div>
   )

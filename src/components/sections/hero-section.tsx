@@ -9,6 +9,7 @@ import { javascript } from '@codemirror/lang-javascript'
 import { nightOwl } from 'code-mirror-night-owl/night-owl'
 import { ParticlesBackground } from '../particles-background'
 import { LampContainer } from '../ui/lamp'
+import Socials from '../socials'
 
 export function HeroSection() {
   const [code, setCode] = useState(`function greet(name) {
@@ -95,29 +96,7 @@ console.log(greet('Developer'));`)
             <pre className="text-green-400 font-mono text-sm">{output}</pre>
           </div>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-8 flex space-x-4"
-        >
-          <a
-            href="https://www.linkedin.com/in/matt-deal-038177b5/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-black hover:text-blue-300 transition-colors dark:text-white"
-          >
-            <Github className="h-6 w-6" />
-          </a>
-          <a
-            href="https://github.com/Dealsy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-black hover:text-blue-300 transition-colors dark:text-white"
-          >
-            <Linkedin className="h-6 w-6" />
-          </a>
-        </motion.div>
+        <Socials />
       </LampContainer>
     </section>
   )
