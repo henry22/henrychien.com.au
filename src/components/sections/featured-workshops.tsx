@@ -8,6 +8,7 @@ import { useWorkshops } from '@/lib/hooks/usePortfolioData'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Workshop } from '@/lib/data'
 import { Links } from '@/contasnts'
+import Section from '../section'
 
 export function FeaturedWorkshops() {
   const { data: workshops, isLoading, error } = useWorkshops()
@@ -21,7 +22,7 @@ export function FeaturedWorkshops() {
   }
 
   return (
-    <section>
+    <Section className="py-12">
       <div className="flex justify-between items-center mb-12">
         <h3 className="text-xl font-bold sm:text-3xl">Featured Workshops</h3>
         <Link href={Links.Workshops}>
@@ -45,6 +46,6 @@ export function FeaturedWorkshops() {
               ?.slice(0, 3)
               .map((workshop: Workshop) => <WorkshopCard key={workshop._id} workshop={workshop} />)}
       </div>
-    </section>
+    </Section>
   )
 }

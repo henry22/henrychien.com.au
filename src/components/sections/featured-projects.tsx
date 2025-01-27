@@ -7,6 +7,7 @@ import { ProjectCard } from '@/components/cards/project-card'
 import { useProjects } from '@/lib/hooks/usePortfolioData'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Project } from '@/lib/data'
+import Section from '../section'
 
 export function FeaturedProjects() {
   const { data: projects, isLoading, error } = useProjects()
@@ -20,8 +21,8 @@ export function FeaturedProjects() {
   }
 
   return (
-    <section>
-      <div className="flex justify-between items-center mb-12">
+    <Section className="pb-12 pt-70 sm:pt-12">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 sm:mb-12 gap-4">
         <h3 className="text-xl font-bold sm:text-3xl">Featured Personal Projects</h3>
         <Link href="/projects">
           <Button variant="outline">
@@ -30,7 +31,7 @@ export function FeaturedProjects() {
           </Button>
         </Link>
       </div>
-      <div className="space-y-20">
+      <div className="space-y-8 sm:space-y-20">
         {isLoading
           ? // Loading skeletons
             Array(3)
@@ -46,6 +47,6 @@ export function FeaturedProjects() {
                 <ProjectCard key={project.name} project={project} index={index} />
               ))}
       </div>
-    </section>
+    </Section>
   )
 }
