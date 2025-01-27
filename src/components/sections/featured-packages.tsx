@@ -39,9 +39,9 @@ export function FeaturedPackages() {
   }
 
   return (
-    <section className="py-20">
+    <section>
       <div className="flex justify-between items-center mb-12">
-        <h3 className="text-3xl font-bold">Featured Packages</h3>
+        <h3 className="text-xl font-bold sm:text-3xl">Featured Packages</h3>
         <Link href="/packages">
           <Button variant="outline">
             View All Packages

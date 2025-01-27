@@ -27,7 +27,8 @@ export function AboutSection() {
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 1 }}
-        className="absolute inset-0 z-0">
+        className="absolute inset-0 z-0"
+      >
         <div className="absolute inset-0 bg-linear-to-br from-[hsl(var(--gradient-start)/0.1)] to-[hsl(var(--gradient-end)/0.1)]" />
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
       </motion.div>
@@ -41,8 +42,9 @@ export function AboutSection() {
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8 }}
-          className="relative z-10 bg-card text-card-foreground rounded-3xl p-8 md:p-12 shadow-xl max-w-4xl mx-auto">
-          <h3 className="text-5xl font-bold mb-8 text-center mr-2">{about?.title}</h3>
+          className="relative z-10 bg-card text-card-foreground rounded-3xl p-8 md:p-12 shadow-xl max-w-4xl mx-auto"
+        >
+          <h3 className=" mb-8 text-center mr-2 text-xl font-bold sm:text-3xl">{about?.title}</h3>
           <div className="flex flex-col md:flex-row gap-8 items-start">
             <div className="md:w-1/3">
               {about?.background && (

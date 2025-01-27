@@ -53,7 +53,7 @@ function SkillsSection() {
 
   const toggleCategory = (categoryId: string) => {
     setExpandedCategories(prev =>
-      prev.includes(categoryId) ? prev.filter(id => id !== categoryId) : [...prev, categoryId],
+      prev.includes(categoryId) ? prev.filter(id => id !== categoryId) : [...prev, categoryId]
     )
   }
 
@@ -67,7 +67,9 @@ function SkillsSection() {
 
   return (
     <section className="py-20">
-      <h2 className="text-4xl font-bold text-center mb-16">Skills & Expertise</h2>
+      <h2 className="font-bold text-center mb-16 text-xl font-bold sm:text-3xl">
+        Skills & Expertise
+      </h2>
       <div className="grid md:grid-cols-2 gap-16 max-w-7xl mx-auto px-4">
         {isLoading
           ? Array(2)
@@ -102,16 +104,19 @@ function SkillTree({ category, isExpanded, onToggle }: SkillTreeProps) {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="mb-8">
+        className="mb-8"
+      >
         <Card
           className="relative border-2 cursor-pointer hover:shadow-md transition-shadow"
           style={{ borderColor: currentColor }}
-          onClick={onToggle}>
+          onClick={onToggle}
+        >
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
               <div
                 className="w-16 h-16 rounded-xl flex items-center justify-center"
-                style={{ backgroundColor: `${currentColor}20` }}>
+                style={{ backgroundColor: `${currentColor}20` }}
+              >
                 {category.icon ? (
                   <Image
                     src={urlFor(category.icon).width(32).height(32).url()}
@@ -146,7 +151,8 @@ function SkillTree({ category, isExpanded, onToggle }: SkillTreeProps) {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="space-y-6 relative overflow-hidden">
+            className="space-y-6 relative overflow-hidden"
+          >
             <div
               className="absolute left-8 top-0 bottom-0 w-0.5"
               style={{ backgroundColor: currentColor }}
@@ -159,7 +165,8 @@ function SkillTree({ category, isExpanded, onToggle }: SkillTreeProps) {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="relative pl-16">
+                className="relative pl-16"
+              >
                 <div
                   className="absolute left-8 top-8 w-8 h-0.5"
                   style={{ backgroundColor: currentColor }}
@@ -170,7 +177,8 @@ function SkillTree({ category, isExpanded, onToggle }: SkillTreeProps) {
                     <div className="flex items-center gap-4 mb-4">
                       <div
                         className="w-12 h-12 rounded-lg flex items-center justify-center"
-                        style={{ backgroundColor: `${skill.colors[theme]}20` }}>
+                        style={{ backgroundColor: `${skill.colors[theme]}20` }}
+                      >
                         {skill.icon && (
                           <Image
                             src={urlFor(skill.icon).width(32).height(32).url()}
@@ -196,7 +204,8 @@ function SkillTree({ category, isExpanded, onToggle }: SkillTreeProps) {
                           style={{
                             backgroundColor: `${skill.colors[theme]}20`,
                             color: skill.colors[theme],
-                          }}>
+                          }}
+                        >
                           {subSkill}
                         </span>
                       ))}

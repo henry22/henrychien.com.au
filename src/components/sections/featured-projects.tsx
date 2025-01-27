@@ -20,9 +20,9 @@ export function FeaturedProjects() {
   }
 
   return (
-    <section className="py-20">
+    <section>
       <div className="flex justify-between items-center mb-12">
-        <h3 className="text-3xl font-bold">Featured Personal Projects</h3>
+        <h3 className="text-xl font-bold sm:text-3xl">Featured Personal Projects</h3>
         <Link href="/projects">
           <Button variant="outline">
             View All Projects

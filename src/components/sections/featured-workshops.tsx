@@ -21,9 +21,9 @@ export function FeaturedWorkshops() {
   }
 
   return (
-    <section className="py-20">
+    <section>
       <div className="flex justify-between items-center mb-12">
-        <h3 className="text-3xl font-bold">Featured Workshops</h3>
+        <h3 className="text-xl font-bold sm:text-3xl">Featured Workshops</h3>
         <Link href={Links.Workshops}>
           <Button variant="outline">
             View All Workshops
@@ -31,6 +31,7 @@ export function FeaturedWorkshops() {
           </Button>
         </Link>
       </div>
+
       <div className="grid gap-8">
         {isLoading
           ? Array(3)

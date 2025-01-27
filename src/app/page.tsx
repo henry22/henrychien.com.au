@@ -12,6 +12,7 @@ import { FeaturedWorkshops } from '@/components/sections/featured-workshops'
 import { AboutSection } from '@/components/sections/about-section'
 import { Footer } from '@/components/footer'
 import SkillsSection from '@/components/skills'
+import { LampContainer } from '@/components/ui/lamp'
 
 export default function Portfolio() {
   const [mounted, setMounted] = useState(false)
@@ -33,17 +34,22 @@ export default function Portfolio() {
       <div
         className={`min-h-screen ${
           theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'
-        }`}>
+        }`}
+      >
         <motion.div
           className="fixed top-0 left-0 right-0 h-1 bg-linear-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))] transform-none z-50"
           style={{ scaleX }}
         />
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-32">
+        <main className="sm:max-w-7xl max-w-full mx-auto px-2  sm:px-6 lg:px-8 py-12">
           <HeroSection />
           <FeaturedWorkshops />
-          <FeaturedProjects />
-          <FeaturedPackages />
+          <LampContainer color="cyan">
+            <FeaturedProjects />
+          </LampContainer>
+          <LampContainer color="emerald">
+            <FeaturedPackages />
+          </LampContainer>
           <SkillsSection />
           <AboutSection />
         </main>
