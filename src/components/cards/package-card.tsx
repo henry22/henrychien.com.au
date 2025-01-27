@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import type { Package } from '@/lib/data'
 import Link from 'next/link'
-import { ArrowUpRight, Star } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 
 interface PackageCardProps {
   pkg: Package
