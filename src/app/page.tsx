@@ -8,7 +8,6 @@ import { FeaturedProjects } from '@/components/sections/featured-projects'
 import { FeaturedPackages } from '@/components/sections/featured-packages'
 import { FeaturedWorkshops } from '@/components/sections/featured-workshops'
 import { AboutSection } from '@/components/sections/about-section'
-import { Footer } from '@/components/footer'
 import SkillsSection from '@/components/skills'
 import { LampContainer } from '@/components/ui/lamp'
 
