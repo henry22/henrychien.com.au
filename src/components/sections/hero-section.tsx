@@ -2,15 +2,14 @@
 
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Github, Linkedin } from 'lucide-react'
-import { ParticlesBackground } from '@/components/particles-background'
-import { getHero } from '@/lib/sanity/client'
+import { Github, Linkedin, ChevronDown, Mail } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { useState, useEffect } from 'react'
-import '@/styles/code-animation.css'
-import HeroSkeleton from '../ui/skeletons/heroSkeleton'
+import { getHero } from '@/lib/sanity/client'
 import { CodeBlock } from '@/components/ui/code-block'
-import { HeroData, Snippet } from '@/types/types'
+import type { HeroData, Snippet } from '@/types/types'
+import { ParticlesBackground } from '../particles-background'
+import Image from 'next/image'
 
 export function HeroSection() {
   const { data: hero, isLoading } = useQuery<HeroData>({
@@ -24,22 +23,8 @@ export function HeroSection() {
     setMounted(true)
   }, [])
 
-  useEffect(() => {
-    if (mounted) {
-      const lines = document.querySelectorAll('.motion-line')
-      lines.forEach((line, index) => {
-        const htmlLine = line as HTMLElement
-        htmlLine.style.setProperty('--line-index', index.toString())
-      })
-    }
-  }, [mounted, hero])
-
-  if (isLoading) {
-    return <HeroSkeleton />
-  }
-
-  if (!hero) {
-    return null
+  if (isLoading || !hero) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>
   }
 
   const socialLinks = {
@@ -48,83 +33,98 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative pt-12 md:pt-20 pb-24 md:pb-44 flex flex-col items-center text-center px-4">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-b from-background to-background/80">
       <ParticlesBackground />
 
-      <div className="relative z-10 w-full">
-        {hero.codeSnippet && hero.codeSnippet.length > 0 && (
+      <div className="container mx-auto px-4 py-16 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="w-full max-w-4xl mx-auto mb-8 md:mb-16"
           >
-            {hero.codeSnippet.map((snippet: Snippet, index: number) => (
-              <div key={index} className="bg-black rounded-lg shadow-2xl overflow-hidden text-left">
-                <div className="flex items-center gap-2 px-4 py-3 bg-gray-800/50">
-                  <div className="flex gap-2">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]">
+                {hero.title}
+              </span>
+            </h1>
+            <p className="text-xl text-muted-foreground mb-8">{hero.subtitle}</p>
+            <div className="flex flex-wrap gap-4 mb-8">
+              <Button size="lg" asChild>
+                <a href="#contact">
+                  <Mail className="mr-2 h-5 w-5" />
+                  Get in Touch
+                </a>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <a href="#projects">View Projects</a>
+              </Button>
+            </div>
+            <div className="flex gap-4">
+              <a
+                href={socialLinks.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                <Github className="h-6 w-6" />
+              </a>
+              <a
+                href={socialLinks.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                <Linkedin className="h-6 w-6" />
+              </a>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent z-10"></div>
+            <div className="relative z-20 bg-black/80 rounded-lg shadow-2xl overflow-hidden">
+              {hero.codeSnippet && hero.codeSnippet.length > 0 && (
+                <div className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-red-500" />
                     <div className="w-3 h-3 rounded-full bg-yellow-500" />
                     <div className="w-3 h-3 rounded-full bg-green-500" />
                   </div>
-                  <div className="flex-1 text-center">
-                    <span className="text-sm text-gray-400 font-mono">
-                      {`${snippet.language?.toLowerCase() || 'ts'}`}
-                    </span>
-                  </div>
-                </div>
-                <div className="p-4 overflow-x-auto">
                   {mounted && (
                     <CodeBlock
-                      code={snippet.code}
-                      language={snippet.language?.toLowerCase() || 'typescript'}
+                      code={hero.codeSnippet[0].code}
+                      language={hero.codeSnippet[0].language?.toLowerCase() || 'typescript'}
                     />
                   )}
                 </div>
-              </div>
-            ))}
+              )}
+            </div>
+            <div className="absolute -bottom-12 -right-12 w-64 h-64">
+              <Image
+                src="/avatar-illustration.png"
+                alt="Matt Deal"
+                width={256}
+                height={256}
+                className="rounded-full border-4 border-primary/20"
+              />
+            </div>
           </motion.div>
-        )}
-
-        <motion.h2
-          className="text-4xl md:text-5xl lg:text-6xl pb-1 font-bold bg-clip-text text-transparent bg-linear-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          {hero.title}
-        </motion.h2>
-
-        <motion.p
-          className="mt-4 md:mt-6 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto px-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          {hero.subtitle}
-        </motion.p>
-
-        <motion.div
-          className="flex items-center justify-center gap-3 md:gap-4 mt-6 md:mt-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          <Button size="lg" asChild>
-            <a href={socialLinks.github} target="_blank" rel="noopener noreferrer">
-              <Github className="mr-2 h-4 w-4" />
-              GitHub
-            </a>
-          </Button>
-
-          <Button size="lg" asChild>
-            <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
-              <Linkedin className="mr-2 h-4 w-4" />
-              LinkedIn
-            </a>
-          </Button>
-        </motion.div>
+        </div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+      >
+        <ChevronDown className="w-8 h-8 text-muted-foreground animate-bounce" />
+      </motion.div>
     </section>
   )
 }
