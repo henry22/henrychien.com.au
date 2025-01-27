@@ -25,7 +25,10 @@ export function WorkshopCard({ workshop }: WorkshopCardProps) {
         href={workshop.github}
         target="_blank"
         rel="noopener noreferrer"
-        className={cn('block transition-all duration-300', 'hover:shadow-xl hover:scale-[1.02]')}
+        className={cn(
+          'block transition-all duration-300 border-2 border-blue-500 rounded-xl',
+          'hover:shadow-xl hover:scale-[1.02]'
+        )}
       >
         <div className="grid md:grid-cols-[2fr_1fr] gap-6 bg-card rounded-xl overflow-hidden shadow-lg border border-border">
           {/* Main Content */}

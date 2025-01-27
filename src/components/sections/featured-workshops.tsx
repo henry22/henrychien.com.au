@@ -32,7 +32,7 @@ export function FeaturedWorkshops() {
         </Link>
       </div>
 
-      <div className="grid gap-8">
+      <div className="grid gap-12 sm:gap-8">
         {isLoading
           ? Array(3)
               .fill(0)

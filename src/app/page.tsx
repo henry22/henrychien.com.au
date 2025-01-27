@@ -1,9 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useScroll, useSpring } from 'framer-motion'
 import { useTheme } from 'next-themes'
-import { motion } from 'framer-motion'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { HeroSection } from '@/components/sections/hero-section'
 import { FeaturedProjects } from '@/components/sections/featured-projects'
@@ -17,12 +15,6 @@ import { LampContainer } from '@/components/ui/lamp'
 export default function Portfolio() {
   const [mounted, setMounted] = useState(false)
   const { theme } = useTheme()
-  const { scrollYProgress } = useScroll()
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  })
 
   useEffect(() => setMounted(true), [])
 
@@ -36,12 +28,7 @@ export default function Portfolio() {
           theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'
         }`}
       >
-        <motion.div
-          className="fixed top-0 left-0 right-0 h-1 bg-linear-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))] transform-none z-50"
-          style={{ scaleX }}
-        />
-
-        <main className="sm:max-w-7xl max-w-full mx-auto px-2  sm:px-6 lg:px-8 py-12">
+        <main className="sm:max-w-7xl w-full mx-auto py-12 px-2">
           <HeroSection />
           <FeaturedWorkshops />
           <LampContainer color="cyan">
