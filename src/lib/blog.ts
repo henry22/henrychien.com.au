@@ -1,5 +1,6 @@
 import { readdirSync } from 'fs'
 import path, { join } from 'path'
+import { parsePublishedDate } from './utils/formatters'
 
 const POSTS_PATH = path.join(process.cwd(), 'src/posts')
 
@@ -26,7 +27,10 @@ export async function getAllPosts() {
     }
   }
 
-  return posts.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+  return posts.sort(
+    (a, b) =>
+      parsePublishedDate(b.publishedAt).getTime() - parsePublishedDate(a.publishedAt).getTime()
+  )
 }
 
 export async function getPostBySlug(slug: string) {

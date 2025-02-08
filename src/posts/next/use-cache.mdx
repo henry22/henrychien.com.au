@@ -1,0 +1,165 @@
+export const metadata = {
+  title: 'Use Cache',
+  excerpt: 'In this blog we will learn what use cache is and how it works',
+  publishedAt: '08-02-2025',
+  readTime: 5,
+  type: 'Next JS',
+  difficulty: 'Intermediate',
+  image: {
+    src: '/images/blog/dark_cache.svg',
+    alt: 'Use Cache',
+    width: 1200,
+    height: 600,
+  },
+}
+
+`use cache` is a new directive in Next JS that allows you
+to designate components or functions to be cahced.
+
+<Alert type="info">
+  At the time of writting <time className="font-bold text-sm italic">08/02/2025</time>
+
+`use cache` is only available in the carnary build in the app router. You can upgrade to the caranry
+build by going to this [link](https://nextjs.org/docs/app/building-your-application/upgrading/canary) and following
+the instructions.
+
+</Alert>
+
+Like all other directives in Next JS, `use cache` needs to be placed at the top of the file, or like `use server` it can also be placed
+at the top of a function.
+
+Unlike `use server` and `use client`, `use cache` is not a React directive, and it is specific to Next JS.
+
+As of right now you need to update your `next.config.js` file to use `use cache`.
+
+To do this you need to add the following to your `next.config.js` file:
+
+```ts
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+  experimental: {
+    useCache: true,
+    // You can also set dynamicIO which will also enable use cache
+    dynamicIO: true,
+  },
+}
+
+export default nextConfig
+```
+
+Now that you have enabled `use cache` you can use it in your code like this:
+
+```tsx
+// Page level
+'use cache'
+
+export default async function Page() {
+  // ...
+}
+
+// Component level
+export async function MyComponent() {
+  'use cache'
+  return <></>
+}
+
+// Function level
+export async function getData() {
+  'use cache'
+  const data = await fetch('/api/data')
+  return data
+}
+```
+
+## Good to know
+
+Any serializable arguments or props passed to the cached function, will be converted to a format like JSON and automatically become a part of the cache key.
+
+When using `use cache`, there are a few important things to understand about how it handles different types of data:
+
+Non-serializable values (like functions or complex objects) that are passed into a cached function will be treated as "black boxes" - they can be passed through but not examined or changed. These values are only resolved when the request actually runs and don't affect the cache key.
+
+Let's look at an example: If you have a cached component that accepts children as a prop, it can render those children (like `<div>{children}</div>`), but it can't look inside or modify the children prop itself.
+
+Any data that your cached function returns needs to be serializable (able to be converted to a simple format like JSON). This is essential for the caching system to work properly.
+
+Keep in mind that cached functions should be "pure" - they shouldn't:
+
+- Change any state
+- Directly modify the webpage
+- Set up any timers or intervals
+
+When you use Partial Prerendering in Next.js, any parts of your app using `use cache` will be included in the initial static HTML that's generated.
+
+One advantage of `use cache` over the older `unstable_cache` is that it's more flexible - while `unstable_cache` only works with JSON data, `use cache` can handle any serializable data that React can render, including actual rendered components.
+
+## Examples
+
+### Caching routes
+
+You can cache entire routes by using `use cache` in both layout and page files.
+
+```tsx
+'use cache'
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return <div>{children}</div>
+}
+```
+
+Any components imported into the page or layout will inherit the caching behavior of the parent.
+
+```tsx
+'use cache'
+
+async function Posts() {
+  const posts = await fetch('/api/posts')
+  // loop through posts
+}
+
+export default function Page() {
+  return (
+    <main>
+      <Posts /> {/*  Posts will be cached */}
+    </main>
+  )
+}
+```
+
+### Caching components
+
+You can cache components by using the `use cache` directive in a component file.
+
+Then you can reuse this component and as long as the props contain the same structure and are serializable, the component
+will share the cache entry.
+
+```tsx
+'use cache'
+
+function ProductCard({ product }: { product: { name: string; price: number } }) {
+  return <div>{product.name}</div>
+}
+
+export default function Page() {
+  return <ProductCard product={{ name: 'Product 1', price: 100 }} />
+}
+```
+
+## Revalidating cache
+
+Next JS will by default set a revalidation time of 15 minutes when you use the `use cache` directive.
+
+If you want to change this behaviour you use:
+
+- cacheLife: For time-based revalidation
+- cacheTag: for on-demand revalidation
+
+Both of these APIs intergrate across both the client and server caching layers, which means if you configure these they will be
+applied everywhere.
+
+## Conclusion
+
+`use cache` is a new directive in Next JS that allows you to cache your components and routes.
+
+This is a significant step forward in caching in Next JS, and adds a super nice DX for working with cache.

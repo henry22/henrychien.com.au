@@ -1,18 +1,18 @@
+import type React from 'react'
 import { AlertCircle, Info, AlertTriangle } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Card, CardHeader, CardContent } from '@/components/ui/card'
 
 const alertTypes = {
   info: {
     icon: Info,
-    styles: 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950',
+    styles: 'border-blue-400 bg-blue-100 dark:border-blue-800 dark:bg-blue-950',
     textColor: 'text-blue-800 dark:text-blue-200',
     iconColor: 'text-blue-500',
     header: 'Info',
   },
   warning: {
     icon: AlertTriangle,
-    styles: 'border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950',
+    styles: 'border-yellow-400 bg-yellow-100 dark:border-yellow-800 dark:bg-yellow-950',
     textColor: 'text-yellow-800 dark:text-yellow-200',
     iconColor: 'text-yellow-500',
     header: 'Warning',
@@ -40,12 +40,14 @@ export default function Alert({
   const { styles, textColor, iconColor, header, icon: Icon } = alertTypes[type]
 
   return (
-    <Card className={cn(styles, 'border', className)}>
-      <CardHeader className="flex flex-row items-center gap-2 space-y-0 pb-2">
-        <Icon className={cn('h-6 w-6 items-center', iconColor)} />
-        <p className={cn('text-base font-medium', textColor)}>{header}</p>
-      </CardHeader>
-      <CardContent className={cn('text-sm', textColor)}>{children}</CardContent>
-    </Card>
+    <div className={cn('rounded-lg border p-4', styles, className)}>
+      <div className="flex flex-col">
+        <div className="flex items-center space-x-2">
+          <Icon className={cn('h-5 w-5 mt-4', iconColor)} aria-hidden="true" />
+          <h3 className={cn('text-sm font-medium', textColor)}>{header}</h3>
+        </div>
+        <div className={cn('text-sm', textColor)}>{children}</div>
+      </div>
+    </div>
   )
 }
