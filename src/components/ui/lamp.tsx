@@ -26,7 +26,7 @@ const colors = {
     500: 'rgb(16 185 129)',
   },
   indigo: {
-    400: 'rgb(15 15 44)',
+    400: 'rgb(85 75 255)',
     500: 'rgb(79 70 229)',
   },
 } as const
@@ -91,10 +91,10 @@ export default function LampContainer({
             style={{
               backgroundImage: `conic-gradient(var(--conic-position), var(--tw-gradient-stops))`,
             }}
-            className="absolute inset-auto right-1/2 h-56 overflow-visible bg-gradient-conic from-[var(--lamp-color-500)] via-transparent to-transparent text-white [--conic-position:from_70deg_at_center_top]"
+            className="absolute inset-auto right-1/2 h-56 overflow-visible bg-gradient-conic from-[var(--lamp-color-500)] via-transparent to-transparent text-white [--conic-position:from_70deg_at_center_top] opacity-90"
           >
-            <div className="absolute w-[100%] left-0 bg-gray-900 h-40 bottom-0 z-20 [mask-image:linear-gradient(to_top,white,transparent)]" />
-            <div className="absolute w-40 h-[100%] left-0 bg-gray-900 bottom-0 z-20 [mask-image:linear-gradient(to_right,white,transparent)]" />
+            <div className="absolute w-[100%] left-0 bg-gray-900 h-40 bottom-0 z-20 [mask-image:linear-gradient(to_top,white,transparent)] opacity-90" />
+            <div className="absolute w-40 h-[100%] left-0 bg-gray-900 bottom-0 z-20 [mask-image:linear-gradient(to_right,white,transparent)] opacity-90" />
           </motion.div>
 
           <motion.div
@@ -102,21 +102,24 @@ export default function LampContainer({
             style={{
               backgroundImage: `conic-gradient(var(--conic-position), var(--tw-gradient-stops))`,
             }}
-            className="absolute inset-auto left-1/2 h-56 bg-gradient-conic from-transparent via-transparent to-[var(--lamp-color-500)] text-white [--conic-position:from_290deg_at_center_top]"
+            className="absolute inset-auto left-1/2 h-56 bg-gradient-conic from-transparent via-transparent to-[var(--lamp-color-500)] text-white [--conic-position:from_290deg_at_center_top] opacity-90"
           >
-            <div className="absolute w-40 h-[100%] right-0 bg-gray-900 bottom-0 z-20 [mask-image:linear-gradient(to_left,white,transparent)]" />
-            <div className="absolute w-[100%] right-0 bg-gray-900 h-40 bottom-0 z-20 [mask-image:linear-gradient(to_top,white,transparent)]" />
+            <div className="absolute w-40 h-[100%] right-0 bg-gray-900 bottom-0 z-20 [mask-image:linear-gradient(to_left,white,transparent)] opacity-90" />
+            <div className="absolute w-[100%] right-0 bg-gray-900 h-40 bottom-0 z-20 [mask-image:linear-gradient(to_top,white,transparent)] opacity-90" />
           </motion.div>
 
-          <div className="absolute top-1/2 h-48 w-full translate-y-12 scale-x-150 bg-gray-900 blur-2xl" />
+          <div className="absolute top-1/2 h-48 w-full translate-y-12 scale-x-150 bg-gray-900 blur-[80px] opacity-75" />
 
           <motion.div
             {...blurAnimationConfig}
-            className="absolute inset-auto z-50 h-36 -translate-y-1/2 rounded-full blur-3xl bg-[var(--lamp-color-500)]"
+            className="absolute inset-auto z-50 h-36 -translate-y-1/2 rounded-full bg-[var(--lamp-color-500)] blur-[100px] opacity-50"
           />
 
           <div className="absolute inset-auto z-50 -translate-y-[7rem]">
-            <motion.div {...animationConfig} className="h-0.5 bg-[var(--lamp-color-400)]" />
+            <motion.div
+              {...animationConfig}
+              className="h-0.5 bg-[var(--lamp-color-400)] shadow-[0_0_10px_2px_var(--lamp-color-400)] backdrop-blur-[1px]"
+            />
           </div>
 
           <div className="absolute right-0 z-[60] -translate-y-[6.8rem] translate-x-[-8rem]"></div>
