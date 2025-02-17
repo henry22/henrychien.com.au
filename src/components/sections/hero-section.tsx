@@ -8,8 +8,9 @@ import CodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import { nightOwl } from 'code-mirror-night-owl/night-owl'
 import { ParticlesBackground } from '../particles-background'
-import { LampContainer } from '../ui/lamp'
+import LampContainer from '../ui/lamp'
 import Socials from '../socials'
+import Section from '../section'
 
 export function HeroSection() {
   const [code, setCode] = useState(`function greet(name) {
@@ -41,7 +42,7 @@ console.log(greet('Developer'));`)
   }
 
   return (
-    <section className="flex flex-col items-center text-white px-4 md:py-16">
+    <Section className="flex flex-col items-center text-white px-4 md:py-16">
       <ParticlesBackground />
 
       <LampContainer color="blue">
@@ -98,6 +99,6 @@ console.log(greet('Developer'));`)
         </motion.div>
         <Socials />
       </LampContainer>
-    </section>
+    </Section>
   )
 }

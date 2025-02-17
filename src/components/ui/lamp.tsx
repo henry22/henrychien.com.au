@@ -1,6 +1,6 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import React, { useEffect, useRef, useState } from 'react'
+import { motion, useInView } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { useTheme } from 'next-themes'
 
@@ -25,9 +25,13 @@ const colors = {
     400: 'rgb(52 211 153)',
     500: 'rgb(16 185 129)',
   },
+  indigo: {
+    400: 'rgb(15 15 44)',
+    500: 'rgb(79 70 229)',
+  },
 } as const
 
-export const LampContainer = ({
+export default function LampContainer({
   children,
   className,
   color = 'cyan',
@@ -35,110 +39,113 @@ export const LampContainer = ({
   children: React.ReactNode
   className?: string
   color?: keyof typeof colors
-}) => {
-  const { theme } = useTheme()
+}) {
+  const { theme, systemTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  const containerRef = useRef(null)
+  const isInView = useInView(containerRef, {
+    once: false,
+    amount: 0.2,
+  })
 
   useEffect(() => {
     setMounted(true)
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 760)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
   }, [])
-
-  const widths = {
-    initial: isMobile ? '8rem' : '15rem',
-    final: isMobile ? '15rem' : '40rem',
-    blur: isMobile ? '10rem' : '30rem',
-  }
 
   const colorStyle = {
     '--lamp-color-400': colors[color][400],
     '--lamp-color-500': colors[color][500],
   } as React.CSSProperties
 
-  // Don't render anything until mounted to avoid hydration mismatch
-  if (!mounted) {
-    return <div className={cn('relative w-full', className)}>{children}</div>
+  const currentTheme = mounted ? theme : systemTheme
+
+  const animationConfig = {
+    initial: { opacity: 0.5, width: '15rem' },
+    animate: isInView ? { opacity: 1, width: '30rem' } : { opacity: 0.5, width: '15rem' },
+    transition: { duration: 1, ease: [0.33, 1, 0.68, 1] },
+  }
+
+  const blurAnimationConfig = {
+    initial: 'hidden',
+    animate: isInView ? 'visible' : 'hidden',
+    variants: {
+      hidden: { opacity: 0, width: '15rem' },
+      visible: { opacity: 0.5, width: '28rem' },
+    },
+    transition: { duration: 1, ease: [0.33, 1, 0.68, 1] },
   }
 
   return (
     <div
+      ref={containerRef}
       style={colorStyle}
       className={cn(
-        'relative flex min-h-screen flex-col items-center justify-center overflow-hidden w-full rounded-md z-0',
+        'relative flex flex-col items-center justify-start w-full rounded-md z-0 py-32',
         className
       )}
     >
-      {theme === 'dark' && (
-        <div className="relative flex w-full flex-1 scale-y-125 items-center justify-center isolate z-0">
+      {currentTheme === 'dark' ? (
+        <div className="relative flex w-full items-center justify-center isolate z-0 h-[5vh] min-h-[200px]">
           <motion.div
-            initial={{ opacity: 0.5, width: widths.initial }}
-            whileInView={{ opacity: 1, width: widths.final }}
-            transition={{
-              delay: 0.3,
-              duration: 0.8,
-              ease: 'easeInOut',
-            }}
+            {...animationConfig}
             style={{
               backgroundImage: `conic-gradient(var(--conic-position), var(--tw-gradient-stops))`,
             }}
-            className="absolute inset-auto right-1/2 h-56 overflow-visible w-[30rem] bg-gradient-conic from-[var(--lamp-color-500)] via-transparent to-transparent text-white [--conic-position:from_70deg_at_center_top]"
+            className="absolute inset-auto right-1/2 h-56 overflow-visible bg-gradient-conic from-[var(--lamp-color-500)] via-transparent to-transparent text-white [--conic-position:from_70deg_at_center_top]"
           >
             <div className="absolute w-[100%] left-0 bg-gray-900 h-40 bottom-0 z-20 [mask-image:linear-gradient(to_top,white,transparent)]" />
             <div className="absolute w-40 h-[100%] left-0 bg-gray-900 bottom-0 z-20 [mask-image:linear-gradient(to_right,white,transparent)]" />
           </motion.div>
+
           <motion.div
-            initial={{ opacity: 0.5, width: widths.initial }}
-            whileInView={{ opacity: 1, width: widths.final }}
-            transition={{
-              delay: 0.3,
-              duration: 0.8,
-              ease: 'easeInOut',
-            }}
+            {...animationConfig}
             style={{
               backgroundImage: `conic-gradient(var(--conic-position), var(--tw-gradient-stops))`,
             }}
-            className="absolute inset-auto left-1/2 h-56 w-[30rem] bg-gradient-conic from-transparent via-transparent to-[var(--lamp-color-500)] text-white [--conic-position:from_290deg_at_center_top]"
+            className="absolute inset-auto left-1/2 h-56 bg-gradient-conic from-transparent via-transparent to-[var(--lamp-color-500)] text-white [--conic-position:from_290deg_at_center_top]"
           >
             <div className="absolute w-40 h-[100%] right-0 bg-gray-900 bottom-0 z-20 [mask-image:linear-gradient(to_left,white,transparent)]" />
             <div className="absolute w-[100%] right-0 bg-gray-900 h-40 bottom-0 z-20 [mask-image:linear-gradient(to_top,white,transparent)]" />
           </motion.div>
-          <div className="absolute top-1/2 h-48 w-full translate-y-12 scale-x-150 bg-gray-900 blur-2xl"></div>
-          <div className="absolute top-1/2 z-50 h-48 w-full bg-transparent opacity-10 backdrop-blur-md"></div>
-          <div className="absolute inset-auto z-50 h-36 w-[28rem] -translate-y-1/2 rounded-full opacity-50 blur-3xl bg-[var(--lamp-color-500)]"></div>
-          <motion.div
-            initial={{ width: widths.initial }}
-            whileInView={{ width: widths.blur }}
-            transition={{
-              delay: 0.3,
-              duration: 0.8,
-              ease: 'easeInOut',
-            }}
-            className="absolute inset-auto z-30 h-36 w-64 -translate-y-[6rem] rounded-full blur-2xl bg-[var(--lamp-color-400)]"
-          ></motion.div>
-          <motion.div
-            initial={{ width: widths.initial }}
-            whileInView={{ width: widths.final }}
-            transition={{
-              delay: 0.3,
-              duration: 0.8,
-              ease: 'easeInOut',
-            }}
-            className="absolute inset-auto z-50 h-0.5 w-[30rem] -translate-y-[7rem] bg-[var(--lamp-color-400)]"
-          ></motion.div>
 
-          <div className="absolute inset-auto z-40 h-44 w-full -translate-y-[12.5rem] bg-gray-900"></div>
+          <div className="absolute top-1/2 h-48 w-full translate-y-12 scale-x-150 bg-gray-900 blur-2xl" />
+
+          <motion.div
+            {...blurAnimationConfig}
+            className="absolute inset-auto z-50 h-36 -translate-y-1/2 rounded-full blur-3xl bg-[var(--lamp-color-500)]"
+          />
+
+          <div className="absolute inset-auto z-50 -translate-y-[7rem]">
+            <motion.div {...animationConfig} className="h-0.5 bg-[var(--lamp-color-400)]" />
+          </div>
+
+          <div className="absolute right-0 z-[60] -translate-y-[6.8rem] translate-x-[-8rem]"></div>
+
+          <div className="absolute inset-auto z-40 h-44 w-full -translate-y-[12.5rem] bg-gray-900" />
+        </div>
+      ) : (
+        <div className="relative flex w-full items-center justify-center isolate z-0 h-[5vh] min-h-[200px]">
+          <div className="flex flex-row gap-4 mb-65 relative z-50">
+            <div className="flex items-center gap-4">
+              <div
+                className="h-1 rounded-full w-[27rem]"
+                style={{
+                  background:
+                    'linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1))',
+                  boxShadow: '0 0 10px rgba(0, 0, 0, 0.1), inset 0 0 50px rgba(255, 255, 255, 0.5)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                }}
+              >
+                <div className="h-full w-full opacity-50" />
+              </div>
+            </div>
+          </div>
+
+          <div className="absolute inset-auto z-40 h-44 w-full -translate-y-[12.5rem] bg-transparent" />
         </div>
       )}
 
-      <div className="relative z-50 flex flex-col items-center px-5 dark:-translate-y-40 md:-translate-y-80 translate-y-0">
-        {children}
-      </div>
+      <div className={cn('relative z-50 flex flex-col items-center px-5 w-full')}>{children}</div>
     </div>
   )
 }
