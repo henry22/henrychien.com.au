@@ -25,6 +25,13 @@ const nextConfig = {
     ],
   },
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  webpack: (config: any) => {
+    config.optimization.minimize = false
+    return config
+  },
+  compiler: {
+    removeConsole: false,
+  },
 }
 
 export default withMDX(nextConfig)
