@@ -31,12 +31,12 @@ export default function BlogCard({
         <Link
           href={`/blog/${slug}`}
           prefetch={true}
-          className="text-primary hover:scale-105 hover:border-blue-500 hover:border-2 rounded-lg transition duration-300 h-full"
+          className="text-primary hover:scale-105 hover:border-blue-500 hover:border-2 rounded-lg transition duration-300"
         >
-          <Card className="overflow-hidden h-full flex flex-col">
+          <Card className="overflow-hidden flex flex-col">
             {image && (
-              <div className="relative w-full aspect-2/1">
-                <Image src={image.src} alt={image.alt} fill className="object-cover" />
+              <div className="relative w-full aspect-video">
+                <Image src={image.src} alt={image.alt} fill className="object-center" />
               </div>
             )}
             <CardHeader className="flex-none">

@@ -84,12 +84,12 @@ export default async function BlogPostPage(props: Props) {
         </header>
 
         {post.metadata.image && (
-          <div className="relative w-full aspect-2/1 rounded-lg overflow-hidden">
+          <div className="relative w-full aspect-video rounded-lg overflow-hidden">
             <Image
               src={post.metadata.image.src}
               alt={post.metadata.image.alt}
               fill
-              className="object-cover"
+              className="object-center"
               priority
             />
           </div>
