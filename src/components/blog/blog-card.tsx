@@ -33,7 +33,7 @@ export default function BlogCard({
           prefetch={true}
           className="text-primary hover:scale-105 hover:border-blue-500 hover:border-2 rounded-lg transition duration-300"
         >
-          <Card className="overflow-hidden flex flex-col">
+          <Card className="overflow-hidden flex flex-col  min-h-[400px]">
             {image && (
               <div className="relative w-full aspect-video">
                 <Image src={image.src} alt={image.alt} fill className="object-center" />
@@ -41,7 +41,7 @@ export default function BlogCard({
             )}
             <CardHeader className="flex-none">
               <div className="flex items-center justify-between">
-                <CardTitle className="line-clamp-2">{title}</CardTitle>
+                <CardTitle className="line-clamp-2 text-2xl">{title}</CardTitle>
                 <div className="flex flex-row items-center gap-3">
                   {type && (
                     <Badge variant="secondary" className="text-sm">
