@@ -42,7 +42,7 @@ console.log(greet('Developer'));`)
   }
 
   return (
-    <Section className="flex flex-col items-center text-white px-4 md:py-16">
+    <Section className="">
       <ParticlesBackground />
 
       <LampContainer color="blue">
@@ -55,7 +55,7 @@ console.log(greet('Developer'));`)
           <h1 className="text-2xl md:text-6xl font-bold mb-4 dark:text-white text-gray-900">
             Learn. Code. Innovate.
           </h1>
-          <p className="text-lg sm:text-2xl px-8 sm:px-0 dark:text-blue-200 text-gray-600 sm:max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl px-4 sm:px-0 dark:text-blue-200 text-gray-600 sm:max-w-2xl mx-auto">
             Empowering developers through interactive education and cutting-edge web development
             techniques.
           </p>
@@ -65,7 +65,7 @@ console.log(greet('Developer'));`)
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-[calc(100vw-32px)] md:w-full max-w-3xl bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-2xl overflow-hidden relative z-10 mx-auto"
+          className="w-full sm:w-[calc(100vw-32px)] md:w-full max-w-2xl bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-2xl overflow-hidden relative z-10 mx-auto"
         >
           <div className="flex justify-between items-center bg-gray-700 px-4 py-2 gap-4">
             <div className="flex space-x-2 flex-shrink-0">
@@ -81,15 +81,25 @@ console.log(greet('Developer'));`)
               <Play className="w-4 h-4 mr-2" /> Run Code
             </Button>
           </div>
-          <div className="overflow-x-auto">
-            <div className="min-w-full max-w-3xl">
+          <div className="w-full overflow-hidden">
+            <div className="max-w-full overflow-x-auto">
               <CodeMirror
                 value={code}
                 height="200px"
                 theme={nightOwl}
                 extensions={[javascript({ jsx: true })]}
                 onChange={value => setCode(value)}
-                className="text-sm min-w-[300px]"
+                className="text-sm"
+                basicSetup={{
+                  lineNumbers: true,
+                  foldGutter: false,
+                  dropCursor: true,
+                  allowMultipleSelections: true,
+                  indentOnInput: true,
+                  bracketMatching: true,
+                  highlightActiveLine: true,
+                }}
+                width="100%"
               />
             </div>
           </div>

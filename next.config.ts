@@ -29,9 +29,6 @@ const nextConfig = {
     config.optimization.minimize = false
     return config
   },
-  compiler: {
-    removeConsole: false,
-  },
 }
 
 export default withMDX(nextConfig)
