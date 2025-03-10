@@ -29,11 +29,9 @@ export default function Portfolio() {
       >
         <main className="sm:max-w-7xl w-full mx-auto py-12 px-2">
           <HeroSection />
-
           <LampContainer color="indigo">
             <FeaturedWorkshops />
           </LampContainer>
-
           <LampContainer color="cyan">
             <FeaturedProjects />
           </LampContainer>
