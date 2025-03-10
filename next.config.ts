@@ -15,6 +15,7 @@ const nextConfig = {
   },
   experimental: {
     reactCompiler: true,
+    viewTransition: true,
   },
   images: {
     remotePatterns: [
