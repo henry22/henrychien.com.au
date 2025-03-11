@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { BlogMetadata } from '@/types/blog'
 import BlogCard from './blog-card'
 import { BlogFilters } from './blog-filters'
-import { startOfDay, format } from 'date-fns'
+import { startOfDay } from 'date-fns'
 import { parsePublishedDate } from '@/lib/utils/formatters'
 
 type BlogPost = BlogMetadata & { slug: string }
@@ -35,7 +35,7 @@ export default function BlogList({ initialPosts }: BlogListProps) {
     try {
       postDate = startOfDay(parsePublishedDate(post.publishedAt))
     } catch (error) {
-      console.error('Error parsing date for post:', post.title, post.publishedAt)
+      console.error('Error parsing date for post:', post.title, post.publishedAt, error)
       return false
     }
 
