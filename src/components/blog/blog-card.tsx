@@ -46,15 +46,6 @@ export default function BlogCardNoImage({
                 'shadow-sm hover:shadow-md bg-card'
               )}
             >
-              <div className="absolute top-4 right-4 flex gap-2">
-                {type && (
-                  <Badge variant="outline" className="bg-background/80">
-                    <Hash className="h-3 w-3 mr-1" />
-                    {type}
-                  </Badge>
-                )}
-              </div>
-
               <CardHeader className="flex-none pt-6 pb-2">
                 <div className="flex items-center gap-3 mb-3">
                   <Badge
