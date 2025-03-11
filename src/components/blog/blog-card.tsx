@@ -3,7 +3,7 @@ import { unstable_ViewTransition as ViewTransition } from 'react'
 import type { BlogMetadata } from '@/types/blog'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { CalendarIcon, Clock, ArrowRightIcon, BookOpen, Hash } from 'lucide-react'
+import { CalendarIcon, Clock, ArrowRightIcon, BookOpen } from 'lucide-react'
 import { difficultyColors, type Difficulty } from '@/contasnts'
 import { parsePublishedDate } from '@/lib/utils/formatters'
 import { cn } from '@/lib/utils'
@@ -17,7 +17,6 @@ export default function BlogCardNoImage({
   publishedAt,
   readTime,
   difficulty,
-  type,
 }: BlogCardProps) {
   if (!publishedAt) return null
 
