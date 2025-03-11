@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { BlogMetadata } from '@/types/blog'
 import BlogCard from './blog-card'
 import { BlogFilters } from './blog-filters'
+import { startOfDay, format } from 'date-fns'
+import { parsePublishedDate } from '@/lib/utils/formatters'
 
 type BlogPost = BlogMetadata & { slug: string }
 
@@ -13,20 +15,35 @@ interface BlogListProps {
 
 export default function BlogList({ initialPosts }: BlogListProps) {
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedType, setSelectedType] = useState('')
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([])
+  const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([])
   const [selectedDate, setSelectedDate] = useState<Date>()
 
-  // Filter posts based on search, type, and date
+  // Filter posts based on search, types, difficulty, and date
   const filteredPosts = initialPosts.filter(post => {
     const matchesSearch = searchQuery
-      ? post.title.toLowerCase().includes(searchQuery.toLowerCase())
-      : true
-    const matchesType = selectedType ? post.type === selectedType : true
-    const matchesDate = selectedDate
-      ? new Date(post.publishedAt).toDateString() === selectedDate.toDateString()
+      ? post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
       : true
 
-    return matchesSearch && matchesType && matchesDate
+    const matchesTypes = selectedTypes.length === 0 || selectedTypes.includes(post.type)
+    const matchesDifficulties =
+      selectedDifficulties.length === 0 || selectedDifficulties.includes(post.difficulty)
+
+    // Safely parse and handle dates
+    let postDate: Date | null = null
+    try {
+      postDate = startOfDay(parsePublishedDate(post.publishedAt))
+    } catch (error) {
+      console.error('Error parsing date for post:', post.title, post.publishedAt)
+      return false
+    }
+
+    const filterDate = selectedDate ? startOfDay(selectedDate) : null
+
+    const matchesDate = filterDate && postDate ? postDate.getTime() === filterDate.getTime() : true
+
+    return matchesSearch && matchesTypes && matchesDifficulties && matchesDate
   })
 
   if (filteredPosts.length === 0) {
@@ -36,8 +53,10 @@ export default function BlogList({ initialPosts }: BlogListProps) {
           posts={initialPosts}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          selectedType={selectedType}
-          setSelectedType={setSelectedType}
+          selectedTypes={selectedTypes}
+          setSelectedTypes={setSelectedTypes}
+          selectedDifficulties={selectedDifficulties}
+          setSelectedDifficulties={setSelectedDifficulties}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
         />
@@ -54,8 +73,10 @@ export default function BlogList({ initialPosts }: BlogListProps) {
         posts={initialPosts}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
+        selectedTypes={selectedTypes}
+        setSelectedTypes={setSelectedTypes}
+        selectedDifficulties={selectedDifficulties}
+        setSelectedDifficulties={setSelectedDifficulties}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />

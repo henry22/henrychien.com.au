@@ -7,13 +7,17 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
 import { motion } from 'framer-motion'
+import { difficultyFilterColors, type Difficulty } from '@/contasnts'
+import { cn } from '@/lib/utils'
 
-interface BlogFiltersProps {
+type BlogFiltersProps = {
   posts?: (BlogMetadata & { slug: string })[]
   searchQuery: string
   setSearchQuery: (query: string) => void
-  selectedType: string
-  setSelectedType: (type: string) => void
+  selectedTypes: string[]
+  setSelectedTypes: (types: string[]) => void
+  selectedDifficulties: string[]
+  setSelectedDifficulties: (difficulties: string[]) => void
   selectedDate: Date | undefined
   setSelectedDate: (date: Date | undefined) => void
 }
@@ -22,8 +26,10 @@ export function BlogFilters({
   posts,
   searchQuery,
   setSearchQuery,
-  selectedType,
-  setSelectedType,
+  selectedTypes,
+  setSelectedTypes,
+  selectedDifficulties,
+  setSelectedDifficulties,
   selectedDate,
   setSelectedDate,
 }: BlogFiltersProps) {
@@ -46,13 +52,43 @@ export function BlogFilters({
       {} as Record<string, number>
     ) || {}
 
-  const hasActiveFilters = searchQuery || selectedType || selectedDate
+  // Get unique difficulties and their counts
+  const difficultyCount =
+    posts?.reduce(
+      (acc, post) => {
+        if (post.difficulty) {
+          acc[post.difficulty] = (acc[post.difficulty] || 0) + 1
+        }
+        return acc
+      },
+      {} as Record<string, number>
+    ) || {}
+
+  const hasActiveFilters =
+    searchQuery || selectedTypes.length > 0 || selectedDifficulties.length > 0 || selectedDate
 
   const clearAllFilters = () => {
     setInputValue('')
     setSearchQuery('')
-    setSelectedType('')
+    setSelectedTypes([])
+    setSelectedDifficulties([])
     setSelectedDate(undefined)
+  }
+
+  const toggleType = (type: string) => {
+    if (selectedTypes.includes(type)) {
+      setSelectedTypes(selectedTypes.filter(t => t !== type))
+    } else {
+      setSelectedTypes([...selectedTypes, type])
+    }
+  }
+
+  const toggleDifficulty = (difficulty: string) => {
+    if (selectedDifficulties.includes(difficulty)) {
+      setSelectedDifficulties(selectedDifficulties.filter(d => d !== difficulty))
+    } else {
+      setSelectedDifficulties([...selectedDifficulties, difficulty])
+    }
   }
 
   return (
@@ -79,17 +115,41 @@ export function BlogFilters({
             </Button>
           )}
         </div>
-        <div className="flex flex-wrap gap-2">
-          {Object.entries(typeCount).map(([type, count]) => (
-            <Badge
-              key={type}
-              variant={selectedType === type ? 'default' : 'outline'}
-              className="cursor-pointer"
-              onClick={() => setSelectedType(type === selectedType ? '' : type)}
-            >
-              {type} {count}
-            </Badge>
-          ))}
+        <div className="space-y-2">
+          <div className="flex flex-wrap gap-2">
+            <span className="text-sm text-muted-foreground">Types:</span>
+            {Object.entries(typeCount).map(([type, count]) => (
+              <Badge
+                key={type}
+                variant={selectedTypes.includes(type) ? 'default' : 'outline'}
+                className="cursor-pointer"
+                onClick={() => toggleType(type)}
+              >
+                {type} {count}
+              </Badge>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-2 dark:bg-[#020817] dark:p-0 bg-white rounded-md p-2">
+            <span className="text-sm text-muted-foreground ">Difficulty:</span>
+            {Object.entries(difficultyCount).map(([difficulty, count]) => {
+              const difficultyKey = difficulty.toLowerCase() as Difficulty
+              return (
+                <Badge
+                  key={difficulty}
+                  variant="secondary"
+                  className={cn(
+                    'cursor-pointer',
+                    selectedDifficulties.includes(difficulty)
+                      ? difficultyFilterColors[difficultyKey].selected
+                      : difficultyFilterColors[difficultyKey].default
+                  )}
+                  onClick={() => toggleDifficulty(difficulty)}
+                >
+                  {difficulty} {count}
+                </Badge>
+              )
+            })}
+          </div>
         </div>
       </div>
     </motion.div>

@@ -1,0 +1,173 @@
+export const metadata = {
+  title: 'Parallel Routes',
+  excerpt:
+    'Parallel Routes are a powerful feature in Next JS, they allow you to simultaneously or conditionally render multiple pages in the same layout view.',
+  publishedAt: '11-03-2025',
+  readTime: 5,
+  type: 'Next JS',
+  difficulty: 'advanced',
+  image: {
+    src: '/images/blog/next.png',
+    alt: 'Parallel Routes',
+    width: 1200,
+    height: 600,
+  },
+}
+
+Parallel Routes are a powerful feature in Next JS, they allow you to simultaneously or conditionally render multiple pages in the same layout view.
+This is useful for complex interfaces where you would need highly dynamic sections in the same layout.
+
+An example could be a dashboard, where you want to display some dynamic pages,
+in this scenario you might want to display some analytics, and some team activity / settings side by side.
+
+<ArticleImage
+  darkSrc="/images/blog/dark_parallel.svg"
+  lightSrc="/images/blog/light_parallel.svg"
+  alt="Parallel Routes diagram showing how parallel routes work in Next.js"
+  size="xxlarge"
+/>
+
+In the diagram above, the purple section would be the analytics page, whilst the blue section is the
+team page.
+
+Notice how I said `page`, this is becuase a parallel route does infact build a new page, in the diagram you can see
+in the top left, the break down of what the folder and file structure is.
+
+A parallel route is defined by adding an `@` symbol in front of the folder name, this tells Next JS
+that this is a parallel route.
+
+The differnce here is, instead of just navigating to this page, we actually define the parallel route in
+the layout file like this:
+
+```tsx
+export default function DashboardLayout({
+  children,
+  analytics, // [!code highlight]
+  team, // [!code highlight]
+}: {
+  children: React.ReactNode
+  analytics: React.ReactNode // [!code highlight]
+  team: React.ReactNode // [!code highlight]
+}) {
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      <div className="col-span-2">{children}</div>
+      <aside className="space-y-4">
+        {analytics} // [!code highlight]
+        {team} // [!code highlight]
+      </aside>
+    </div>
+  )
+}
+```
+
+You can see the highlighted lines above, these are the parallel routes, we pass them in as props that are
+a type of `reactNode`, This code will actually now render the pages within the layout, and you can still
+create other children here and they will also be rendered.
+
+This funny looking syntax is called a `slot`, and it is a way of passing in dynamic content to the layout.
+
+### Default Fallback
+
+Parallel routes also support a default fallback, this is a way of handling the case where a parallel route
+is not found. Next JS will then automatically render the fallback component.
+
+Create `default.tsx` for unmatched routes:
+
+```tsx
+export default function DefaultAnalytics() {
+  return <div>Select an analytics view</div>
+}
+```
+
+<Alert type="warning">
+  Always include default.tsx files for slots that might not have matching routes,
+If you do not include a `default.tsx` file, and the route is not found, Next JS will throw a
+page breaking error.
+
+</Alert>
+
+### Conditional Rendering
+
+We can also conditionally render slots, a good use case for this would be in an app where
+you have users and admins, and maybe you have a dashbaord where for a user you only want to show
+one slot, but an admin view might have two slots.
+
+In the example below, you can see the highlighted line, this is the conditional function
+that is checking if the user is an admin, if they are, then we render the anaalytics else we don't.
+
+```tsx
+export default function DashboardLayout({
+  analytics,
+  team,
+}: {
+  analytics: React.ReactNode
+  team: React.ReactNode
+}) {
+  const { user } = useAuth()
+
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      <main>{/* Main content */}</main>
+      <aside>
+        {user.isAdmin && analytics} // [!code highlight]
+        {team}
+      </aside>
+    </div>
+  )
+}
+```
+
+## Parallel Routes with Modals
+
+Parallel routes can also be used in conjunction with intercepting Routes to create modals that can support
+deep linking.
+
+This means that you can:
+
+- Create a modal that is sharable through a URL
+- This modal will preserve its context when the page is refreshed
+- Allows you to close the modal using backwards navigation rather then going to the previous route.
+- Reopening the modal from forward navigation
+
+When you open a modal using this method, the modal will have it's own route, allowing you to share the link
+to others whilst the modal maintains it's context and state.
+
+<ArticleImage
+  darkSrc="/images/blog/dark_para_modal.svg"
+  lightSrc="/images/blog/light_para_modal.svg"
+  alt="Parallel Routes diagram showing how parallel routes work in Next.js"
+  size="large"
+/>
+
+### Loading States
+
+Parallel routes also support loading states, you can create these by using a `loading.tsx` file and placing
+it in the parallel route folder.
+
+<ArticleImage
+  darkSrc="/images/blog/dark_para_loading.svg"
+  lightSrc="/images/blog/light_para_loading.svg"
+  alt="Parallel Routes diagram showing how parallel routes work in Next.js"
+  size="xs"
+/>
+
+This will allow you to create a loading screen whilst the route is loading.
+
+## Best Practices
+
+- Use clear slot names (`@analytics` vs `@chart`)
+- Keep parallel routes independent
+- Use TypeScript for slot props
+- Implement loading states per slot
+- Handle errors at slot level
+- Prefer client-side navigation between slots
+
+You can play around with parallel routes in my Next JS workshop, which is a course that I created
+to help you learn Next JS today, you can find it here:
+
+[Next JS Workshop](https://github.com/Dealsy/Next-JS-Workshop)
+
+## Resources
+
+- [Next.js Documentation Reference: Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes)
