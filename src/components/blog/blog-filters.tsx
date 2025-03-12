@@ -36,7 +36,7 @@ export function BlogFilters({
 }: BlogFiltersProps) {
   const [inputValue, setInputValue] = useState(searchQuery)
   const debouncedValue = useDebounce(inputValue)
-  const [_, startTransition] = useTransition()
+  const [, startTransition] = useTransition()
 
   useEffect(() => {
     startTransition(() => {
