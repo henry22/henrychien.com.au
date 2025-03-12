@@ -26,63 +26,89 @@ export default function BlogCardNoImage({
 
   const accentColorClass =
     {
-      easy: 'border-l-emerald-500',
-      intermediate: 'border-l-blue-500',
-      advanced: 'border-l-purple-500',
-    }[difficultyKey as keyof typeof difficultyColors] || 'border-l-primary'
+      easy: 'border-l-emerald-500 hover:border-l-emerald-400',
+      intermediate: 'border-l-blue-500 hover:border-l-blue-400',
+      advanced: 'border-l-purple-500 hover:border-l-purple-400',
+    }[difficultyKey as keyof typeof difficultyColors] || 'border-l-primary hover:border-l-primary'
 
   return (
     <>
       {isPublished ? (
-        <Link href={`/blog/${slug}`} prefetch={true} className="group block w-full">
+        <Link
+          href={`/blog/${slug}`}
+          prefetch={true}
+          className="group block w-full perspective-[1500px]"
+        >
           <ViewTransition name={`blog-${slug}`}>
             <Card
               className={cn(
                 'overflow-hidden flex flex-col min-h-[320px]',
                 'border-2 border-l-4 border-border',
                 accentColorClass,
-                'hover:border-primary/50 hover:border-l-primary transition-all duration-300',
-                'shadow-sm hover:shadow-md bg-card'
+                'hover:border-t-primary/50 hover:border-r-primary/50 hover:border-b-primary/50',
+                'hover:border-l-[8px] hover:transition-all hover:duration-300',
+                'shadow-sm hover:shadow-xl bg-card',
+                'transition-all duration-500 ease-out',
+                'group-hover:-translate-y-1',
+                'group-hover:rotate-1',
+                'group-hover:translate-x-1',
+                'group-hover:skew-x-1',
+                'group-hover:[transform-style:preserve-3d]',
+                'group-hover:[backface-visibility:visible]',
+                'relative',
+                'after:absolute after:inset-0 after:bg-gradient-to-br after:from-primary/0 after:via-primary/5 after:to-primary/10 after:opacity-0 after:transition-opacity after:duration-500',
+                'group-hover:after:opacity-100',
+                'before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-500 before:shadow-[0_0_50px_rgba(var(--primary-rgb),0.15)]',
+                'group-hover:before:opacity-100'
               )}
             >
-              <CardHeader className="flex-none pt-6 pb-2">
+              <CardHeader className="flex-none pt-6 pb-2 relative z-10">
                 <div className="flex items-center gap-3 mb-3">
                   <Badge
                     variant="secondary"
-                    className={cn('text-xs font-medium', difficultyColors[difficultyKey])}
+                    className={cn(
+                      'text-xs font-medium transition-all duration-500',
+                      difficultyColors[difficultyKey],
+                      'group-hover:translate-x-2 group-hover:-rotate-2 group-hover:scale-110'
+                    )}
                   >
                     {difficulty}
                   </Badge>
-                  <div className="flex items-center text-xs text-muted-foreground">
-                    <Clock className="mr-1 h-3 w-3" />
+                  <div className="flex items-center text-xs text-muted-foreground transition-transform duration-500 group-hover:translate-x-1">
+                    <Clock className="mr-1 h-3 w-3 transition-transform duration-500 group-hover:scale-110" />
                     <span>{readTime} min read</span>
                   </div>
                 </div>
-                <CardTitle className="line-clamp-2 text-2xl font-bold group-hover:text-primary transition-colors">
+                <CardTitle className="line-clamp-2 text-2xl font-bold transition-all duration-500 group-hover:text-primary group-hover:translate-x-1">
                   {title}
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="flex-grow py-4">
+              <CardContent className="flex-grow py-4 relative z-10">
                 <div className="flex">
-                  <div className="mr-4 hidden sm:block text-base/5 ">
+                  <div className="mr-4 hidden sm:block text-base/5">
                     <div
                       className={cn(
                         'p-2 rounded-full',
                         'border border-border',
-                        'text-muted-foreground group-hover:text-primary group-hover:border-primary transition-all'
+                        'text-muted-foreground group-hover:text-primary group-hover:border-primary',
+                        'transition-all duration-700',
+                        'group-hover:rotate-[360deg] group-hover:scale-110',
+                        'group-hover:shadow-md'
                       )}
                     >
                       <BookOpen className="h-[1lh] w-5" />
                     </div>
                   </div>
-                  <p className="text-muted-foreground line-clamp-3">{excerpt}</p>
+                  <p className="text-muted-foreground line-clamp-3 transition-all duration-500 group-hover:translate-x-1">
+                    {excerpt}
+                  </p>
                 </div>
               </CardContent>
 
-              <CardFooter className="flex justify-between items-center flex-none py-5 border-t">
-                <div className="flex items-center text-xs text-muted-foreground">
-                  <CalendarIcon className="mr-2 h-3 w-3" />
+              <CardFooter className="flex justify-between items-center flex-none py-5 border-t relative z-10">
+                <div className="flex items-center text-xs text-muted-foreground transition-transform duration-500 group-hover:-translate-x-1">
+                  <CalendarIcon className="mr-2 h-3 w-3 transition-transform duration-500 group-hover:scale-110" />
                   <time dateTime={publishedAt}>
                     {publishedDate.toLocaleDateString('en-AU', {
                       year: 'numeric',
@@ -91,9 +117,9 @@ export default function BlogCardNoImage({
                     })}
                   </time>
                 </div>
-                <div className="text-primary text-sm font-medium flex items-center opacity-70 group-hover:opacity-100 transition-all duration-300">
+                <div className="text-primary text-sm font-medium flex items-center opacity-70 group-hover:opacity-100 transition-all duration-500">
                   Read article{' '}
-                  <ArrowRightIcon className="ml-1 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
+                  <ArrowRightIcon className="ml-1 h-4 w-4 transform transition-all duration-500 group-hover:translate-x-2 group-hover:scale-110" />
                 </div>
               </CardFooter>
             </Card>

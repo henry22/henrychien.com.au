@@ -1,0 +1,192 @@
+export const metadata = {
+  title: 'Perfect Icon Alignment with Tailwind CSS and Line Height',
+  excerpt:
+    'Learn how to perfectly center icons with text using Tailwind CSS line-height utilities.',
+  publishedAt: '12-03-2025',
+  readTime: 5,
+  type: 'Tailwind CSS',
+  difficulty: 'Intermediate',
+}
+
+If you've been building UIs for any length of time, you've probably encountered the seemingly simple task of aligning an icon with some text. You know what I mean - those moments when you're building a navigation menu, a list of features, or a pricing card, and you just want the icon to sit perfectly with the text. Sounds easy, right?
+
+Well, let's explore this journey together, looking at different approaches I've used over the years, and discover how the CSS class `lh` can now be used in Taillwind V4, to finally solves this age-old challenge.
+
+## The Flexbox Approach: A Common Solution
+
+When I first started using Tailwind, my go-to solution was Flexbox with `items-center`. It's a natural choice - after all, Flexbox was designed for this kind of layout. Here's a common pattern you might see in feature lists or navigation menus:
+
+```html
+<li class="flex items-center gap-x-3">
+  <svg class="size-5"><!-- icon path --></svg>
+  Seamless integrations with popular tools
+</li>
+```
+
+This works perfectly when your text stays on a single line. The `items-center` class does exactly what it says - it centers the items vertically within the flex container. Simple and clean!
+
+But here's where it gets tricky. What happens when your text wraps to multiple lines? Let's see:
+
+<LiveCode
+  code={`<div class="p-6">
+  <ul class="space-y-4">
+    {/* The problematic approach with items-center */}
+    <li class="flex items-center gap-x-3 rounded-lg p-4 shadow-sm">
+      <svg class="size-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+      </svg>
+      <span>Watch how the icon moves to the middle when this text wraps to multiple lines</span>
+    </li>
+  </ul>
+</div>`}
+  height={260}
+/>
+
+The problem becomes clear: `items-center` centers the icon relative to the entire height of the wrapped text. Instead of staying aligned with the first line where it logically belongs, the icon awkwardly floats in the middle of the text block. This creates a disconnected, unpolished look that gets worse the more text you add.
+
+This isn't just a minor visual quirk - it's a fundamental limitation of how Flexbox handles vertical alignment. When content wraps, the entire text block becomes the reference point for centering, not just the first line where we typically want our icons to align.
+
+We could push the icon to the top of the line by using a margin-top, but this doesn't feel great, and if the
+text or icon size changes, then we also need to remember to update the margin.
+
+## The Margin Method: Quick but Fragile
+
+Frustrated with the limitations of the Flexbox approach, many developers (myself included) have turned to the quick fix: margin adjustments.
+
+```html
+<li class="flex gap-x-3">
+  <svg class="h-5 w-5 mt-[0.2rem]"><!-- icon path --></svg>
+  Feature description
+</li>
+```
+
+At first glance, this seems great! It's simpler than the Flexbox solution - no extra div needed. Just add a carefully calculated margin-top, and voilà! The icon aligns perfectly with your text.
+
+But there's a catch. Let's see what happens when we change text sizes:
+
+<LiveCode
+  code={`<div class="p-6">
+  <ul class="space-y-8">
+    <li class="flex gap-x-3">
+      <svg class="size-5 flex-none mt-[0.2rem] text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+      </svg>
+      <span class="text-base">With text-base, our margin-top looks fine</span>
+    </li>
+    <li class="flex gap-x-3">
+      <svg class="size-5 flex-none mt-[0.2rem] text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+      </svg>
+      <span class="text-2xl">With text-2xl, our icon is now misaligned</span>
+    </li>
+    <li class="flex gap-x-3">
+      <svg class="size-5 flex-none mt-[0.2rem] text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+      </svg>
+      <span class="text-3xl">With text-3xl, it's contiunes to be misaligned</span>
+    </li>
+
+  </ul>
+</div>`}
+  height={520}
+/>
+
+That hardcoded margin value is making assumptions about your typography that simply don't scale. Change the text size from `text-base` to `text-lg`? Your alignment breaks. Switch the line height? Yep, breaks again.
+
+I've spent more time than I'd like to admit tweaking margin values across different screen sizes and text styles. There has to be a better way, right?
+
+## Enter the Line Height (lh) Utility: The Elegant Solution
+
+This is where the CSS class `lh` comes in, Tailwind's V4 update allows us to use this new class,
+and it's a game-changer. Instead of trying to manually calculate margins or wrapping icons in extra markup, we can now do this:
+
+```html
+<li class="flex gap-x-3">
+  <svg class="h-[1lh] w-5"><!-- icon path --></svg>
+  Feature description
+</li>
+```
+
+That's it. One simple class: `h-[1lh]`. It tells the icon, "Hey, be exactly as tall as one line of the current text." No assumptions about text size, no manual calculations, no extra markup.
+
+If we define a `text-base/6` class, then the icon will be `h-[1lh]` tall.
+
+This means that the line height will always update to match the text size, you can try it out below,
+Try to change the `text-base/6` to `text-base/9` and see how the icon height updates to match the new line height.
+
+<LiveCode
+  code={`<div class="p-6">
+<ul class="space-y-8 text-base/6">
+<li class="flex gap-x-3">
+  <svg class="h-[1lh] w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+    <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+  </svg>
+  <span>Our icon height matches the line height perfectly, no matter what we change it too.</span>
+</li>
+</ul>
+</div>`}
+  height={400}
+/>
+
+What makes this solution so elegant is that it automatically adapts to whatever context it's in. Change the text size? The icon adjusts. Modify the line height? The icon follows suit. It's like having an icon that automatically knows exactly how tall it should be to look perfect with your text.
+
+## See It in Action
+
+But don't take my word for it - try it yourself! I've put together an interactive example that shows all three methods side by side. Play around with it, change some values, and see how each approach handles different scenarios:
+
+<LiveCode
+  code={`<div class="p-8">
+  <div class="space-y-6 mx-auto">
+    {/* Method 1: Using line-height (lh) - The Modern Way */}
+    <div class="flex gap-x-3 items-start rounded-lg bg-emerald-50 p-4 text-emerald-800 ring-1 ring-emerald-900/10">
+      <svg class="h-[1lh] w-5 flex-none" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" />
+      </svg>
+      <div>
+        <p class="font-medium">Modern lh Method</p>
+        <p class="text-base/6">Using the new \`h-[1lh]\` utility provides perfect alignment that works with any text size or line height. Try changing the text size - it stays aligned!</p>
+      </div>
+    </div>
+
+    {/* Method 2: Using Flexbox - Common Approach */}
+    <div class="flex gap-x-3 items-start rounded-lg bg-amber-50 p-4 text-amber-800 ring-1 ring-amber-900/10">
+      <div class="flex h-6 items-center">
+        <svg class="h-5 w-5 flex-none" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" />
+        </svg>
+      </div>
+      <div>
+        <p class="font-medium">Flexbox Method</p>
+        <p class="text-base/6">Using a flex container with \`items-center\` works, but requires extra markup and can be tricky with different text sizes.</p>
+      </div>
+    </div>
+
+    {/* Method 3: Using Margin - Traditional Approach */}
+    <div class="flex gap-x-3 items-start rounded-lg bg-rose-50 p-4 text-rose-900 ring-1 ring-rose-900/10">
+      <svg class="h-5 w-5 flex-none mt-[0.375rem]" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" />
+      </svg>
+      <div>
+        <p class="font-medium">Margin Method</p>
+        <p class="text-base/6">Using margin-top to align icons is fragile - it needs to be adjusted when text size changes and breaks with different line heights.</p>
+      </div>
+    </div>
+
+  </div>
+</div>`}
+  height={800}
+/>
+
+Try these experiments with the code above:
+
+1. Change `text-base/6` to `text-lg/7` in each example
+2. Add more lines of text to see how alignment holds up
+3. Switch between different text sizes and line heights
+
+You'll quickly see why the `lh` utility is such a breakthrough. It's not just another way to align icons - it's the way we should have been doing it all along.
+
+## The Takeaway
+
+While both the Flexbox and margin approaches have served us well over the years, the new `lh` utility represents a significant step forward in how we handle icon alignment. It's more maintainable, more flexible, and just works the way we always wanted icon alignment to work.
+
+Next time you're reaching for `mt-[something]` or wrapping your icon in a flex container, remember there's a better way. The `lh` utility is here to save us from the icon alignment headaches of the past!
