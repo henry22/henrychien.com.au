@@ -3,21 +3,22 @@ import { Badge } from '@/components/ui/badge'
 import { Search } from 'lucide-react'
 import { BlogMetadata } from '@/types/blog'
 import { useDebounce } from '@/hooks/useDebounce'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
 import { motion } from 'framer-motion'
 import { difficultyFilterColors, type Difficulty } from '@/contasnts'
 import { cn } from '@/lib/utils'
+import { useTransition } from 'react'
 
 type BlogFiltersProps = {
   posts?: (BlogMetadata & { slug: string })[]
   searchQuery: string
   setSearchQuery: (query: string) => void
   selectedTypes: string[]
-  setSelectedTypes: (types: string[]) => void
+  setSelectedTypes: React.Dispatch<React.SetStateAction<string[]>>
   selectedDifficulties: string[]
-  setSelectedDifficulties: (difficulties: string[]) => void
+  setSelectedDifficulties: React.Dispatch<React.SetStateAction<string[]>>
   selectedDate: Date | undefined
   setSelectedDate: (date: Date | undefined) => void
 }
@@ -35,10 +36,13 @@ export function BlogFilters({
 }: BlogFiltersProps) {
   const [inputValue, setInputValue] = useState(searchQuery)
   const debouncedValue = useDebounce(inputValue)
+  const [, startTransition] = useTransition()
 
   useEffect(() => {
-    setSearchQuery(debouncedValue)
-  }, [debouncedValue, setSearchQuery])
+    startTransition(() => {
+      setSearchQuery(debouncedValue)
+    })
+  }, [debouncedValue, setSearchQuery, startTransition])
 
   // Get unique types and their counts
   const typeCount =
@@ -67,29 +71,39 @@ export function BlogFilters({
   const hasActiveFilters =
     searchQuery || selectedTypes.length > 0 || selectedDifficulties.length > 0 || selectedDate
 
-  const clearAllFilters = () => {
-    setInputValue('')
-    setSearchQuery('')
-    setSelectedTypes([])
-    setSelectedDifficulties([])
-    setSelectedDate(undefined)
-  }
+  const clearAllFilters = useCallback(() => {
+    startTransition(() => {
+      setInputValue('')
+      setSearchQuery('')
+      setSelectedTypes([])
+      setSelectedDifficulties([])
+      setSelectedDate(undefined)
+    })
+  }, [setSearchQuery, setSelectedTypes, setSelectedDifficulties, setSelectedDate])
 
-  const toggleType = (type: string) => {
-    if (selectedTypes.includes(type)) {
-      setSelectedTypes(selectedTypes.filter(t => t !== type))
-    } else {
-      setSelectedTypes([...selectedTypes, type])
-    }
-  }
+  const toggleType = useCallback(
+    (type: string) => {
+      startTransition(() => {
+        setSelectedTypes((prev: string[]) =>
+          prev.includes(type) ? prev.filter((t: string) => t !== type) : [...prev, type]
+        )
+      })
+    },
+    [setSelectedTypes]
+  )
 
-  const toggleDifficulty = (difficulty: string) => {
-    if (selectedDifficulties.includes(difficulty)) {
-      setSelectedDifficulties(selectedDifficulties.filter(d => d !== difficulty))
-    } else {
-      setSelectedDifficulties([...selectedDifficulties, difficulty])
-    }
-  }
+  const toggleDifficulty = useCallback(
+    (difficulty: string) => {
+      startTransition(() => {
+        setSelectedDifficulties((prev: string[]) =>
+          prev.includes(difficulty)
+            ? prev.filter((d: string) => d !== difficulty)
+            : [...prev, difficulty]
+        )
+      })
+    },
+    [setSelectedDifficulties]
+  )
 
   return (
     <motion.div
@@ -108,7 +122,10 @@ export function BlogFilters({
               onChange={e => setInputValue(e.target.value)}
             />
           </div>
-          <DatePicker date={selectedDate} setDate={setSelectedDate} />
+          <DatePicker
+            date={selectedDate}
+            setDate={date => startTransition(() => setSelectedDate(date))}
+          />
           {hasActiveFilters && (
             <Button variant="ghost" size="sm" onClick={clearAllFilters}>
               Clear filters
@@ -122,7 +139,10 @@ export function BlogFilters({
               <Badge
                 key={type}
                 variant={selectedTypes.includes(type) ? 'default' : 'outline'}
-                className="cursor-pointer"
+                className={cn(
+                  'cursor-pointer transition-all duration-300',
+                  selectedTypes.includes(type) && 'scale-110'
+                )}
                 onClick={() => toggleType(type)}
               >
                 {type} {count}
@@ -130,7 +150,7 @@ export function BlogFilters({
             ))}
           </div>
           <div className="flex flex-wrap gap-2 dark:bg-[#020817] dark:p-0 bg-white rounded-md p-2">
-            <span className="text-sm text-muted-foreground ">Difficulty:</span>
+            <span className="text-sm text-muted-foreground">Difficulty:</span>
             {Object.entries(difficultyCount).map(([difficulty, count]) => {
               const difficultyKey = difficulty.toLowerCase() as Difficulty
               return (
@@ -138,9 +158,9 @@ export function BlogFilters({
                   key={difficulty}
                   variant="secondary"
                   className={cn(
-                    'cursor-pointer',
+                    'cursor-pointer transition-all duration-300',
                     selectedDifficulties.includes(difficulty)
-                      ? difficultyFilterColors[difficultyKey].selected
+                      ? cn(difficultyFilterColors[difficultyKey].selected, 'scale-110')
                       : difficultyFilterColors[difficultyKey].default
                   )}
                   onClick={() => toggleDifficulty(difficulty)}

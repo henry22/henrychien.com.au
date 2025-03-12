@@ -46,7 +46,7 @@ export default function BlogCardNoImage({
                 'border-2 border-l-4 border-border',
                 accentColorClass,
                 'hover:border-t-primary/50 hover:border-r-primary/50 hover:border-b-primary/50',
-                'hover:border-l-[8px] hover:transition-all hover:duration-300',
+                'hover:border-l-8 hover:transition-all hover:duration-300',
                 'shadow-sm hover:shadow-xl bg-card',
                 'transition-all duration-500 ease-out',
                 'group-hover:-translate-y-1',

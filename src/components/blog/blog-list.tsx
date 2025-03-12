@@ -6,6 +6,7 @@ import BlogCard from './blog-card'
 import { BlogFilters } from './blog-filters'
 import { startOfDay } from 'date-fns'
 import { parsePublishedDate } from '@/lib/utils/formatters'
+import { unstable_ViewTransition as ViewTransition } from 'react'
 
 type BlogPost = BlogMetadata & { slug: string }
 
@@ -80,11 +81,13 @@ export default function BlogList({ initialPosts }: BlogListProps) {
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredPosts.map(post => (
-          <BlogCard key={post.slug} {...post} />
-        ))}
-      </div>
+      <ViewTransition>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredPosts.map(post => (
+            <BlogCard key={post.slug} {...post} />
+          ))}
+        </div>
+      </ViewTransition>
     </div>
   )
 }
