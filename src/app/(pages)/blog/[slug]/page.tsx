@@ -6,6 +6,7 @@ import { CalendarIcon, ClockIcon } from 'lucide-react'
 import { difficultyColors, Difficulty } from '@/contasnts'
 import { getPostBySlug, getAllPosts } from '@/lib/blog'
 import BlogContent from '@/components/blog/blog-content'
+import BackButton from '@/components/blog/back-button'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -44,6 +45,7 @@ export default async function BlogPostPage(props: Props) {
         <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-[95%] lg:max-w-[90%] xl:max-w-[85%] 2xl:max-w-[95%]">
           <article className="space-y-6 sm:space-y-8">
             <header>
+              <BackButton />
               <ViewTransition name={`blog-title-${params.slug}`}>
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
                   {post.metadata.title}
