@@ -6,7 +6,6 @@ import { CalendarIcon, ClockIcon } from 'lucide-react'
 import { difficultyColors, Difficulty } from '@/contasnts'
 import { getPostBySlug, getAllPosts } from '@/lib/blog'
 import BlogContent from '@/components/blog/blog-content'
-import Image from 'next/image'
 
 interface Props {
   params: Promise<{ slug: string }>

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import Editor from '@monaco-editor/react'
-import { loader } from '@monaco-editor/react'
+import Editor, { loader } from '@monaco-editor/react'
 import nightOwlTheme from 'monaco-themes/themes/Night Owl.json'
+import type * as monaco from 'monaco-editor'
 
 type CodeEditorProps = {
   initialValue: string
@@ -10,6 +10,8 @@ type CodeEditorProps = {
   height?: string
   className?: string
 }
+
+type MonacoTheme = monaco.editor.IStandaloneThemeData
 
 export default function CodeEditor({
   initialValue,
@@ -20,7 +22,7 @@ export default function CodeEditor({
 }: CodeEditorProps) {
   useEffect(() => {
     loader.init().then(monaco => {
-      monaco.editor.defineTheme('nightOwl', nightOwlTheme as any)
+      monaco.editor.defineTheme('nightOwl', nightOwlTheme as MonacoTheme)
     })
   }, [])
 
