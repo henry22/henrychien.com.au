@@ -39,8 +39,10 @@ function formatCode(code: string): string {
 
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     const media = window.matchMedia(query)
     if (media.matches !== matches) {
       setMatches(media.matches)
@@ -50,6 +52,7 @@ function useMediaQuery(query: string) {
     return () => window.removeEventListener('resize', listener)
   }, [matches, query])
 
+  if (!mounted) return false
   return matches
 }
 
@@ -93,42 +96,45 @@ export default function LiveCode({ code }: LiveCodeProps) {
   }
 
   return (
-    <ResizablePanelGroup
-      direction={isMobile ? 'vertical' : 'horizontal'}
-      className={cn(
-        'w-full rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900'
-      )}
-    >
-      <ResizablePanel defaultSize={60} minSize={30}>
-        <div className="relative h-full">
-          <Button
-            size="sm"
-            variant="ghost"
-            className="absolute right-6 top-6 z-10"
-            onClick={handleCopy}
-          >
-            {copied ? (
-              <CheckIcon className="h-4 w-4 text-green-500" />
-            ) : (
-              <ClipboardIcon className="h-4 w-4" />
-            )}
-          </Button>
-          <div className="h-full p-4">
-            <CodeEditor
-              initialValue={editorCode}
-              onChange={setEditorCode}
-              language={'html'}
-              height={`${previewHeight}px`}
-            />
+    <div suppressHydrationWarning className="w-full">
+      <ResizablePanelGroup
+        direction={isMobile ? 'vertical' : 'horizontal'}
+        className={cn(
+          'w-full rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900',
+          isMobile ? 'min-h-[600px]' : ''
+        )}
+      >
+        <ResizablePanel defaultSize={60} minSize={30}>
+          <div className="relative h-full">
+            <Button
+              size="sm"
+              variant="ghost"
+              className="absolute right-6 top-6 z-10"
+              onClick={handleCopy}
+            >
+              {copied ? (
+                <CheckIcon className="h-4 w-4 text-green-500" />
+              ) : (
+                <ClipboardIcon className="h-4 w-4" />
+              )}
+            </Button>
+            <div className="h-full p-4">
+              <CodeEditor
+                initialValue={editorCode}
+                onChange={setEditorCode}
+                language={'html'}
+                height={isMobile ? '300px' : `${previewHeight}px`}
+              />
+            </div>
           </div>
-        </div>
-      </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={40} minSize={30}>
-        <div ref={previewRef} className="h-full p-4">
-          <CodePreview code={editorCode} />
-        </div>
-      </ResizablePanel>
-    </ResizablePanelGroup>
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={40} minSize={30}>
+          <div ref={previewRef} className="h-full p-4">
+            <CodePreview code={editorCode} />
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </div>
   )
 }
