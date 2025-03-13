@@ -4,8 +4,6 @@ import { useState } from 'react'
 import { BlogMetadata } from '@/types/blog'
 import BlogCard from './blog-card'
 import { BlogFilters } from './blog-filters'
-import { startOfDay } from 'date-fns'
-import { parsePublishedDate } from '@/lib/utils/formatters'
 import { unstable_ViewTransition as ViewTransition } from 'react'
 
 type BlogPost = BlogMetadata & { slug: string }
@@ -29,15 +27,6 @@ export default function BlogList({ initialPosts }: BlogListProps) {
     const matchesTypes = selectedTypes.length === 0 || selectedTypes.includes(post.type)
     const matchesDifficulties =
       selectedDifficulties.length === 0 || selectedDifficulties.includes(post.difficulty)
-
-    // Safely parse and handle dates
-    let postDate: Date | null = null
-    try {
-      postDate = startOfDay(parsePublishedDate(post.publishedAt))
-    } catch (error) {
-      console.error('Error parsing date for post:', post.title, post.publishedAt, error)
-      return false
-    }
 
     return matchesSearch && matchesTypes && matchesDifficulties
   })
