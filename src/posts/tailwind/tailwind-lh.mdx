@@ -39,7 +39,6 @@ But here's where it gets tricky. What happens when your text wraps to multiple l
     </li>
   </ul>
 </div>`}
-  height={400}
 />
 
 The problem becomes clear: `items-center` centers the icon relative to the entire height of the wrapped text. Instead of staying aligned with the first line where it logically belongs, the icon awkwardly floats in the middle of the text block. This creates a disconnected, unpolished look that gets worse the more text you add.
@@ -88,7 +87,6 @@ But there's a catch. Let's see what happens when we change text sizes:
 
   </ul>
 </div>`}
-  height={520}
 />
 
 That hardcoded margin value is making assumptions about your typography that simply don't scale. Change the text size from `text-base` to `text-lg`? Your alignment breaks. Switch the line height? Yep, breaks again.
@@ -125,7 +123,6 @@ Try to change the `text-base/6` to `text-base/9` and see how the icon height upd
 </li>
 </ul>
 </div>`}
-  height={400}
 />
 
 What makes this solution so elegant is that it automatically adapts to whatever context it's in. Change the text size? The icon adjusts. Modify the line height? The icon follows suit. It's like having an icon that automatically knows exactly how tall it should be to look perfect with your text.
@@ -174,7 +171,7 @@ But don't take my word for it - try it yourself! I've put together an interactiv
 
   </div>
 </div>`}
-  height={930}
+
 />
 
 Try these experiments with the code above:

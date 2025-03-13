@@ -8,7 +8,7 @@ import { difficultyColors, type Difficulty } from '@/contasnts'
 import { parsePublishedDate } from '@/lib/utils/formatters'
 import { cn } from '@/lib/utils'
 
-const EXCERPT_MAX_LENGTH = 100
+const EXCERPT_MAX_LENGTH = 75
 
 function truncateExcerpt(text: string): string {
   if (text.length <= EXCERPT_MAX_LENGTH) return text
