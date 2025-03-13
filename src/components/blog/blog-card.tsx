@@ -8,6 +8,13 @@ import { difficultyColors, type Difficulty } from '@/contasnts'
 import { parsePublishedDate } from '@/lib/utils/formatters'
 import { cn } from '@/lib/utils'
 
+const EXCERPT_MAX_LENGTH = 100
+
+function truncateExcerpt(text: string): string {
+  if (text.length <= EXCERPT_MAX_LENGTH) return text
+  return text.slice(0, EXCERPT_MAX_LENGTH).trim() + '...'
+}
+
 type BlogCardProps = Omit<BlogMetadata & { slug: string }, 'image'>
 
 export default function BlogCardNoImage({
@@ -42,7 +49,7 @@ export default function BlogCardNoImage({
           <ViewTransition name={`blog-${slug}`}>
             <Card
               className={cn(
-                'overflow-hidden flex flex-col min-h-[320px]',
+                'overflow-hidden flex flex-col h-[350px]',
                 'border-2 border-l-4 border-border',
                 accentColorClass,
                 'hover:border-t-primary/50 hover:border-r-primary/50 hover:border-b-primary/50',
@@ -84,8 +91,8 @@ export default function BlogCardNoImage({
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="flex-grow py-4 relative z-10">
-                <div className="flex">
+              <CardContent className="flex-1 py-4 relative z-10 overflow-hidden">
+                <div className="flex h-full">
                   <div className="mr-4 hidden sm:block text-base/5">
                     <div
                       className={cn(
@@ -101,7 +108,7 @@ export default function BlogCardNoImage({
                     </div>
                   </div>
                   <p className="text-muted-foreground line-clamp-3 transition-all duration-500 group-hover:translate-x-1">
-                    {excerpt}
+                    {truncateExcerpt(excerpt)}
                   </p>
                 </div>
               </CardContent>

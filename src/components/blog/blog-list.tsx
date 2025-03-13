@@ -18,7 +18,6 @@ export default function BlogList({ initialPosts }: BlogListProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedTypes, setSelectedTypes] = useState<string[]>([])
   const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([])
-  const [selectedDate, setSelectedDate] = useState<Date>()
 
   // Filter posts based on search, types, difficulty, and date
   const filteredPosts = initialPosts.filter(post => {
@@ -40,11 +39,7 @@ export default function BlogList({ initialPosts }: BlogListProps) {
       return false
     }
 
-    const filterDate = selectedDate ? startOfDay(selectedDate) : null
-
-    const matchesDate = filterDate && postDate ? postDate.getTime() === filterDate.getTime() : true
-
-    return matchesSearch && matchesTypes && matchesDifficulties && matchesDate
+    return matchesSearch && matchesTypes && matchesDifficulties
   })
 
   if (filteredPosts.length === 0) {
@@ -58,8 +53,6 @@ export default function BlogList({ initialPosts }: BlogListProps) {
           setSelectedTypes={setSelectedTypes}
           selectedDifficulties={selectedDifficulties}
           setSelectedDifficulties={setSelectedDifficulties}
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
         />
         <div className="flex justify-center items-center h-[300px]">
           <p>No posts found.</p>
@@ -78,8 +71,6 @@ export default function BlogList({ initialPosts }: BlogListProps) {
         setSelectedTypes={setSelectedTypes}
         selectedDifficulties={selectedDifficulties}
         setSelectedDifficulties={setSelectedDifficulties}
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
       />
       <ViewTransition>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
