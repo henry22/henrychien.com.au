@@ -10,7 +10,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <div className="print:hidden">
+        <ReactQueryDevtools initialIsOpen={false} />
+      </div>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         {children}
       </ThemeProvider>

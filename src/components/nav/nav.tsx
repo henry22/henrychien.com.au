@@ -29,7 +29,7 @@ export default function Nav() {
   }
 
   return (
-    <nav className="sticky top-0 z-40 backdrop-blur-md bg-slate-200/40 dark:bg-gray-900/40 border-b border-border">
+    <nav className="print:hidden sticky top-0 z-40 backdrop-blur-md bg-slate-200/40 dark:bg-gray-900/40 border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <motion.h1
           className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]"
