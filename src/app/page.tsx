@@ -12,21 +12,10 @@ import SkillsSection from '@/components/skills'
 import LampContainer from '@/components/ui/lamp'
 
 export default function Portfolio() {
-  const [mounted, setMounted] = useState(false)
-  const { theme } = useTheme()
-
-  useEffect(() => setMounted(true), [])
-
-  if (!mounted) return null
-
   return (
     <div>
       <ScrollToTop />
-      <div
-        className={`min-h-screen ${
-          theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-background text-gray-900'
-        }`}
-      >
+      <div>
         <main className="sm:max-w-7xl w-full mx-auto py-12 px-2">
           <HeroSection />
           <LampContainer color="indigo">
