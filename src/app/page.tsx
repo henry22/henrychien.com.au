@@ -1,7 +1,5 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useTheme } from 'next-themes'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { HeroSection } from '@/components/sections/hero-section'
 import { FeaturedProjects } from '@/components/sections/featured-projects'
