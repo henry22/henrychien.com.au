@@ -7,6 +7,7 @@ import { difficultyColors, Difficulty } from '@/contasnts'
 import { getPostBySlug, getAllPosts } from '@/lib/blog'
 import BlogContent from '@/components/blog/blog-content'
 import BackButton from '@/components/blog/back-button'
+import { parsePublishedDate } from '@/lib/utils/formatters'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -57,7 +58,7 @@ export default async function BlogPostPage(props: Props) {
                   <div className="flex items-center min-w-[140px]">
                     <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 shrink-0" />
                     <time className="text-sm sm:text-base">
-                      {new Date(post.metadata.publishedAt).toLocaleDateString('en-AU', {
+                      {parsePublishedDate(post.metadata.publishedAt).toLocaleDateString('en-AU', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',

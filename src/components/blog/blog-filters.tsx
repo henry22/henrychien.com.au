@@ -10,6 +10,8 @@ import { difficultyFilterColors, type Difficulty } from '@/contasnts'
 import { cn } from '@/lib/utils'
 import { useTransition } from 'react'
 
+const DIFFICULTY_ORDER = ['Easy', 'Intermediate', 'Advanced'] as const
+
 type BlogFiltersProps = {
   posts?: (BlogMetadata & { slug: string })[]
   searchQuery: string
@@ -139,7 +141,8 @@ export function BlogFilters({
           </div>
           <div className="flex flex-wrap gap-2 dark:bg-[#020817] dark:p-0 bg-white rounded-md p-2 justify-center">
             <span className="text-sm text-muted-foreground">Difficulty:</span>
-            {Object.entries(difficultyCount).map(([difficulty, count]) => {
+            {DIFFICULTY_ORDER.map(difficulty => {
+              const count = difficultyCount[difficulty] || 0
               const difficultyKey = difficulty.toLowerCase() as Difficulty
               return (
                 <Badge
