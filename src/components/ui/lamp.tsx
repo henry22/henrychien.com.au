@@ -134,10 +134,7 @@ export default function LampContainer({
           <div className="absolute inset-auto z-40 h-44 w-full -translate-y-[12.5rem] " />
         </div>
       ) : (
-        <div
-          className="relativ
-        e flex w-full items-center justify-center isolate z-0 h-[5vh] min-h-[200px] scale-[0.7] sm:scale-100"
-        >
+        <div className="relative flex w-full items-center justify-center isolate z-0 h-[5vh] min-h-[200px] scale-[0.7] sm:scale-100">
           <div className="flex flex-row gap-4 mb-65 relative z-50">
             <div className="flex items-center gap-4">
               <div
