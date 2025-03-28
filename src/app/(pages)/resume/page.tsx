@@ -45,15 +45,15 @@ export default function ResumePage() {
               <div className="flex flex-wrap gap-4 text-sm text-slate-600 mb-4">
                 <div className="flex items-center">
                   <MapPin className="h-4 w-4 mr-1 text-indigo-500 print:text-current" />
-                  13 O'Leary way, Maddingley
+                  available upon request
                 </div>
                 <div className="flex items-center">
                   <Phone className="h-4 w-4 mr-1 text-indigo-500 print:text-current" />
-                  0400 640 639
+                  available upon request
                 </div>
                 <div className="flex items-center">
                   <Mail className="h-4 w-4 mr-1 text-indigo-500 print:text-current" />
-                  contact@mattdeal.com.au
+                  available upon request
                 </div>
               </div>
               <div className="flex flex-wrap gap-5 text-sm print:text-[10pt]">

@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useMotionTemplate, useMotionValue, AnimatePresence } from 'framer-motion'
+import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
 import { ArrowRight, Clock } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import type { Workshop } from '@/lib/data'
@@ -29,8 +29,6 @@ export default function WorkshopCard({
   imagePosition = 'right',
   primaryImage,
 }: WorkshopCardProps) {
-  if (!workshop.github) return null
-
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
   const cardRef = useRef<HTMLDivElement>(null)
@@ -40,6 +38,8 @@ export default function WorkshopCard({
     mouseX.set(clientX - left)
     mouseY.set(clientY - top)
   }
+
+  if (!workshop.github) return null
 
   return (
     <motion.div
