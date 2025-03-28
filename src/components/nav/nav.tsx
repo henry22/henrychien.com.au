@@ -8,6 +8,7 @@ import { useTheme } from 'next-themes'
 import { useState, useEffect } from 'react'
 import { Links } from '@/contasnts'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { usePathname } from 'next/navigation'
 
 const NavLinks = [
   { href: Links.Blog, label: 'Blog' },
@@ -19,6 +20,9 @@ const NavLinks = [
 export default function Nav() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+
+  const url = usePathname()
+  const activeLink = NavLinks.find(link => url.includes(link.href))
 
   useEffect(() => {
     setMounted(true)
@@ -46,7 +50,9 @@ export default function Nav() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium hover:text-primary transition-colors"
+              className={`text-sm font-medium hover:text-primary transition-colors ${
+                activeLink?.href === link.href ? 'text-primary' : ''
+              }`}
             >
               {link.label}
             </Link>
