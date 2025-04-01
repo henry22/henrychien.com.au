@@ -3,7 +3,6 @@ import './globals.css'
 import { Providers } from './providers'
 import NavWrapper from '@/components/nav/nav-wrapper'
 import { Footer } from '@/components/footer'
-import { PostHogProvider } from '@/components/PostHogProvider'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -27,15 +26,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        <PostHogProvider>
-          <Providers>
-            <div className="flex-1">
-              <NavWrapper />
-              {children}
-            </div>
-            <Footer />
-          </Providers>
-        </PostHogProvider>
+        <Providers>
+          <div className="flex-1">
+            <NavWrapper />
+            {children}
+          </div>
+          <Footer />
+        </Providers>
       </body>
     </html>
   )
