@@ -10,6 +10,7 @@ import BackButton from '@/components/blog/back-button'
 import { parsePublishedDate } from '@/lib/utils/formatters'
 import Script from 'next/script'
 import { BlogMetadata } from '@/types/blog'
+import Comments from '@/components/blog/comments'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -111,7 +112,7 @@ export default async function BlogPostPage(props: Props) {
     <ViewTransition name={`blog-${params.slug}`}>
       <BlogPostSchema post={post} canonicalUrl={canonicalUrl} />
       <div className="w-full min-h-screen">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-[95%] lg:max-w-[90%] xl:max-w-[85%] 2xl:max-w-[95%]">
+        <div className="mx-auto px-4 sm:px-6 lg:px-10 py-8 sm:py-12 lg:py-16 max-w-[95%] lg:max-w-[90%] xl:max-w-[85%] 2xl:max-w-[70%]">
           <article className="space-y-6 sm:space-y-8">
             <header>
               <BackButton />
@@ -150,6 +151,7 @@ export default async function BlogPostPage(props: Props) {
               </div>
             </header>
             <BlogContent slug={params.slug} />
+            <Comments slug={params.slug} />
           </article>
         </div>
       </div>
