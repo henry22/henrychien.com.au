@@ -15,16 +15,19 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
-type BlogPost = BlogMetadata & { slug: string }
+type BlogPost = {
+  metadata: BlogMetadata
+  slug: string
+}
 
 function BlogPostSchema({ post, canonicalUrl }: { post: BlogPost; canonicalUrl: string }) {
-  const publishedDate = parsePublishedDate(post.publishedAt)
+  const publishedDate = parsePublishedDate(post.metadata.publishedAt)
 
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.excerpt,
+    headline: post.metadata.title,
+    description: post.metadata.excerpt,
     datePublished: publishedDate.toISOString(),
     dateModified: publishedDate.toISOString(),
     author: {
@@ -43,7 +46,7 @@ function BlogPostSchema({ post, canonicalUrl }: { post: BlogPost; canonicalUrl: 
       '@type': 'WebPage',
       '@id': canonicalUrl,
     },
-    keywords: [post.type, post.difficulty],
+    keywords: [post.metadata.type, post.metadata.difficulty],
   }
 
   return (
