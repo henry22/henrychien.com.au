@@ -8,27 +8,87 @@ import { getPostBySlug, getAllPosts } from '@/lib/blog'
 import BlogContent from '@/components/blog/blog-content'
 import BackButton from '@/components/blog/back-button'
 import { parsePublishedDate } from '@/lib/utils/formatters'
+import Script from 'next/script'
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
+function BlogPostSchema({ post, canonicalUrl }: { post: any; canonicalUrl: string }) {
+  const publishedDate = parsePublishedDate(post.metadata.publishedAt)
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.metadata.title,
+    description: post.metadata.excerpt,
+    datePublished: publishedDate.toISOString(),
+    dateModified: publishedDate.toISOString(),
+    author: {
+      '@type': 'Person',
+      name: 'Matt Deal',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Matt Deal',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://mattdeal.com.au/images/logo.png',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+    },
+    keywords: [post.metadata.type, post.metadata.difficulty],
+  }
+
+  return (
+    <Script
+      id="blog-post-schema"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}
+
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
-
   const { slug } = params
-
   const post = await getPostBySlug(slug)
 
   if (!post) return { title: 'Post Not Found' }
 
+  const publishedDate = parsePublishedDate(post.metadata.publishedAt)
+  const canonicalUrl = `https://mattdeal.com.au/blog/${slug}`
+
   return {
-    title: `${post.metadata.title} | Your Name`,
+    title: `${post.metadata.title} | Matt Deal`,
     description: post.metadata.excerpt,
+    metadataBase: new URL('https://mattdeal.com.au'),
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: post.metadata.title,
       description: post.metadata.excerpt,
       type: 'article',
+      publishedTime: publishedDate.toISOString(),
+      authors: ['Matt Deal'],
+      siteName: 'Matt Deal',
+      url: canonicalUrl,
+    },
+    twitter: {
+      card: 'summary',
+      title: post.metadata.title,
+      description: post.metadata.excerpt,
+      creator: '@mattdeal',
+    },
+    other: {
+      'article:published_time': publishedDate.toISOString(),
+      'article:author': 'Matt Deal',
+      'article:section': post.metadata.type,
+      'article:tag': [post.metadata.type, post.metadata.difficulty],
     },
   }
 }
@@ -39,9 +99,11 @@ export default async function BlogPostPage(props: Props) {
   if (!post) return notFound()
 
   const difficulty = post.metadata.difficulty.toLowerCase() as Difficulty
+  const canonicalUrl = `https://mattdeal.com.au/blog/${params.slug}`
 
   return (
     <ViewTransition name={`blog-${params.slug}`}>
+      <BlogPostSchema post={post} canonicalUrl={canonicalUrl} />
       <div className="w-full min-h-screen">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-[95%] lg:max-w-[90%] xl:max-w-[85%] 2xl:max-w-[95%]">
           <article className="space-y-6 sm:space-y-8">
