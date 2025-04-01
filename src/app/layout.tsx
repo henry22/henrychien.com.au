@@ -3,6 +3,7 @@ import './globals.css'
 import { Providers } from './providers'
 import NavWrapper from '@/components/nav/nav-wrapper'
 import { Footer } from '@/components/footer'
+import { PostHogProvider } from '@/components/PostHogProvider'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -20,23 +21,21 @@ export const metadata = {
   description: 'Portfolio website',
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        <Providers>
-          <div className="flex-1">
-            <NavWrapper />
-            {children}
-          </div>
-          <Footer />
-        </Providers>
+        <PostHogProvider>
+          <Providers>
+            <div className="flex-1">
+              <NavWrapper />
+              {children}
+            </div>
+            <Footer />
+          </Providers>
+        </PostHogProvider>
       </body>
     </html>
   )
