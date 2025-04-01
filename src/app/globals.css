@@ -413,3 +413,22 @@ pre.shiki.has-diff .line.diff.remove::before {
 .animate-pulse-slow {
   animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Block highlighting styles */
+.shiki .block-highlighted {
+  @apply bg-blue-500/20 relative border-l-4 border-blue-500;
+  margin-left: -1rem;
+  padding-left: calc(1rem - 4px);
+}
+
+/* Remove gap between consecutive highlighted lines */
+.shiki .block-highlighted + .block-highlighted {
+  @apply border-t-0;
+}
+
+/* Restore left border for consecutive highlights */
+.shiki .block-highlighted + .block-highlighted::before {
+  @apply absolute left-0 top-0 h-full border-l-4 border-blue-500;
+  content: '';
+  margin-left: -4px;
+}
