@@ -116,7 +116,7 @@ export default async function BlogPostPage(props: Props) {
             <header>
               <BackButton />
               <ViewTransition name={`blog-title-${params.slug}`}>
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl mb-4 sm:mb-6 leading-tight font-bold font-cinzel">
                   {post.metadata.title}
                 </h1>
               </ViewTransition>

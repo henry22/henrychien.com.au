@@ -6,6 +6,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  --font-cinzel: var(--font-cinzel), serif;
+  --font-geist-sans: var(--font-geist-sans), sans-serif;
+  --font-geist-mono: var(--font-geist-mono), monospace;
+
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
 
