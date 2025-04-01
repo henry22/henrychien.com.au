@@ -9,19 +9,22 @@ import BlogContent from '@/components/blog/blog-content'
 import BackButton from '@/components/blog/back-button'
 import { parsePublishedDate } from '@/lib/utils/formatters'
 import Script from 'next/script'
+import { BlogMetadata } from '@/types/blog'
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
-function BlogPostSchema({ post, canonicalUrl }: { post: any; canonicalUrl: string }) {
-  const publishedDate = parsePublishedDate(post.metadata.publishedAt)
+type BlogPost = BlogMetadata & { slug: string }
+
+function BlogPostSchema({ post, canonicalUrl }: { post: BlogPost; canonicalUrl: string }) {
+  const publishedDate = parsePublishedDate(post.publishedAt)
 
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    headline: post.metadata.title,
-    description: post.metadata.excerpt,
+    headline: post.title,
+    description: post.excerpt,
     datePublished: publishedDate.toISOString(),
     dateModified: publishedDate.toISOString(),
     author: {
@@ -40,7 +43,7 @@ function BlogPostSchema({ post, canonicalUrl }: { post: any; canonicalUrl: strin
       '@type': 'WebPage',
       '@id': canonicalUrl,
     },
-    keywords: [post.metadata.type, post.metadata.difficulty],
+    keywords: [post.type, post.difficulty],
   }
 
   return (
