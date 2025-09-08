@@ -12,25 +12,6 @@ export default defineType({
       validation: Rule => Rule.required(),
     }),
     defineField({
-      name: 'readTime',
-      title: 'Read Time (minutes)',
-      type: 'number',
-      validation: Rule => Rule.required().min(1),
-    }),
-    defineField({
-      name: 'difficulty',
-      title: 'Difficulty Level',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Easy', value: 'easy' },
-          { title: 'Intermediate', value: 'intermediate' },
-          { title: 'Advanced', value: 'advanced' },
-        ],
-      },
-      validation: Rule => Rule.required(),
-    }),
-    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
@@ -51,6 +32,33 @@ export default defineType({
       title: 'Excerpt',
       type: 'text',
       rows: 4,
+    }),
+    defineField({
+      name: 'mainImage',
+      title: 'Main image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'readTime',
+      title: 'Read Time (minutes)',
+      type: 'number',
+      validation: Rule => Rule.required().min(1),
+    }),
+    defineField({
+      name: 'difficulty',
+      title: 'Difficulty Level',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Easy', value: 'easy' },
+          { title: 'Intermediate', value: 'intermediate' },
+          { title: 'Advanced', value: 'advanced' },
+        ],
+      },
+      validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'type',
@@ -80,6 +88,15 @@ export default defineType({
           type: 'code',
           options: {
             language: 'typescript',
+            languageAlternatives: [
+              { title: 'TypeScript', value: 'typescript' },
+              { title: 'JavaScript', value: 'javascript' },
+              { title: 'HTML', value: 'html' },
+              { title: 'CSS', value: 'css' },
+              { title: 'JSON', value: 'json' },
+              { title: 'Python', value: 'python' },
+              { title: 'Bash', value: 'bash' },
+            ],
             withFilename: true,
           },
         },

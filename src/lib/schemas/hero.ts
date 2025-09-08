@@ -1,22 +1,24 @@
-export default {
+import { defineField, defineType } from 'sanity'
+
+export default defineType({
   name: 'hero',
   title: 'Hero Section',
   type: 'document',
   fields: [
-    {
+    defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
-      default: 'Crafting Digital Experiences',
-    },
-    {
+      initialValue: 'Crafting Digital Experiences',
+    }),
+    defineField({
       name: 'subtitle',
       title: 'Subtitle',
       type: 'text',
-      default:
+      initialValue:
         'Full Stack Developer with a focus on Frontend, passionate about crafting beautiful and functional web applications',
-    },
-    {
+    }),
+    defineField({
       name: 'socialLinks',
       title: 'Social Links',
       type: 'object',
@@ -26,8 +28,8 @@ export default {
         { name: 'twitter', title: 'Twitter URL', type: 'url' },
         { name: 'resume', title: 'Resume URL', type: 'url' },
       ],
-    },
-    {
+    }),
+    defineField({
       name: 'codeSnippet',
       title: 'Code Snippet',
       type: 'array',
@@ -64,6 +66,6 @@ export default {
           },
         },
       ],
-    },
+    }),
   ],
-}
+})
