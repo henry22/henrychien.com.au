@@ -49,6 +49,21 @@ export async function getProjects() {
     link,
     github,
     features,
+    featured,
+    "image": image.asset->url
+  }`)
+}
+
+export async function getFeaturedProjects() {
+  return client.fetch(`*[_type == "project" && featured == true] | order(_createdAt desc) {
+    _id,
+    name,
+    description,
+    tech,
+    link,
+    github,
+    features,
+    featured,
     "image": image.asset->url
   }`)
 }
