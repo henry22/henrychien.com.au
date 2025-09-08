@@ -12,9 +12,7 @@ import { usePathname } from 'next/navigation'
 
 const NavLinks = [
   { href: Links.Blog, label: 'Blog' },
-  { href: Links.Workshops, label: 'Workshops' },
   { href: Links.Projects, label: 'Projects' },
-  { href: Links.Packages, label: 'Packages' },
 ]
 
 export default function Nav() {

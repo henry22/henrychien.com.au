@@ -53,37 +53,6 @@ export async function getProjects() {
   }`)
 }
 
-export async function getPackages() {
-  return client.fetch(`*[_type == "package"] | order(_createdAt desc) {
-    _id,
-    name,
-    description,
-    downloads,
-    version,
-    npmLink,
-    githubLink,
-    documentation,
-    tags,
-    "image": image.asset->url
-  }`)
-}
-
-export async function getWorkshops() {
-  return client.fetch(`*[_type == "workshop"] | order(_createdAt desc) {
-    _id,
-    title,
-    description,
-    duration,
-    level,
-    topics,
-    github,
-    upcoming,
-    recordingLink,
-    resources,
-    "image": image.asset->url
-  }`)
-}
-
 export async function getSkills() {
   return client.fetch(`*[_type == "skillCategory"] {
     _id,
