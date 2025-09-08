@@ -2,6 +2,7 @@ import { readdirSync } from 'fs'
 import path, { join } from 'path'
 import { parsePublishedDate } from './utils/formatters'
 import { fetchPosts } from './sanity/client'
+import type { PortableTextBlock } from '@portabletext/types'
 
 const POSTS_PATH = path.join(process.cwd(), 'src/posts')
 
@@ -29,6 +30,7 @@ export interface SanityPost {
   readTime: number
   difficulty: string
   source: 'sanity'
+  content?: PortableTextBlock[]
 }
 
 export type BlogPost = MDXPost | SanityPost
@@ -76,6 +78,7 @@ async function getSanityPosts(): Promise<SanityPost[]> {
         type: string
         readTime: number
         difficulty: string
+        content?: PortableTextBlock[]
       }) => ({
         ...post,
         slug: typeof post.slug === 'object' ? post.slug : { current: post.slug },

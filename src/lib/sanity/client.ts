@@ -120,6 +120,7 @@ export async function fetchPosts() {
     publishedAt,
     excerpt,
     mainImage,
+    content,
     type,
     readTime,
     difficulty

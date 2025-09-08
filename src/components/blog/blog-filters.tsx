@@ -102,28 +102,27 @@ export function BlogFilters({
       animate={{ opacity: 1, y: 0 }}
     >
       <div className="space-y-4 w-full max-w-3xl px-4">
-        <div className="flex justify-center w-full">
-          <div className="flex items-center gap-4 w-full max-w-[460px]">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search posts..."
-                className="pl-9"
-                value={inputValue}
-                onChange={e => setInputValue(e.target.value)}
-              />
-            </div>
-            <div className="w-[100px] flex justify-end">
-              {hasActiveFilters && (
-                <Button variant="ghost" size="sm" onClick={clearAllFilters}>
-                  Clear filters
-                </Button>
-              )}
-            </div>
+        {/* Search Section */}
+        <div className="flex flex-col items-center gap-2 w-full">
+          <div className="relative w-full max-w-[400px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search posts..."
+              className="pl-9 text-center"
+              value={inputValue}
+              onChange={e => setInputValue(e.target.value)}
+            />
           </div>
+          {hasActiveFilters && (
+            <Button variant="ghost" size="sm" onClick={clearAllFilters}>
+              Clear filters
+            </Button>
+          )}
         </div>
-        <div className="space-y-2">
-          <div className="flex flex-wrap gap-2 justify-center">
+
+        {/* Filter Section - Centered */}
+        <div className="flex flex-col items-center gap-2 w-full">
+          <div className="flex flex-wrap gap-2 items-center justify-center">
             <span className="text-sm text-muted-foreground">Types:</span>
             {Object.entries(typeCount).map(([type, count]) => (
               <Badge
@@ -139,7 +138,7 @@ export function BlogFilters({
               </Badge>
             ))}
           </div>
-          <div className="flex flex-wrap gap-2 dark:bg-[#020817] dark:p-0 bg-white rounded-md p-2 justify-center">
+          <div className="flex flex-wrap gap-2 items-center justify-center dark:bg-[#020817] dark:p-0 bg-white rounded-md p-2">
             <span className="text-sm text-muted-foreground">Difficulty:</span>
             {DIFFICULTY_ORDER.map(difficulty => {
               const count = difficultyCount[difficulty] || 0

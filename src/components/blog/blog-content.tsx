@@ -2,12 +2,13 @@ import path from 'path'
 import fs from 'fs/promises'
 import MaskedContent from './masked-content'
 import { PortableText } from '@portabletext/react'
+import type { PortableTextBlock } from '@portabletext/types'
 
 type BlogContentProps = {
   slug: string
   post?: {
     source: 'mdx' | 'sanity'
-    content?: unknown
+    content?: PortableTextBlock[]
   }
 }
 
