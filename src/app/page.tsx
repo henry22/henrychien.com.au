@@ -9,10 +9,10 @@ import LampContainer from '@/components/ui/lamp'
 
 export default function Portfolio() {
   return (
-    <div className="w-full overflow-x-hidden">
+    <div className="w-full overflow-x-hidden" suppressHydrationWarning>
       <ScrollToTop />
-      <div className="w-full">
-        <main className="w-full py-12 px-4 md:px-6 lg:px-8">
+      <div className="w-full" suppressHydrationWarning>
+        <main className="w-full py-12 px-4 md:px-6 lg:px-8" suppressHydrationWarning>
           <HeroSection />
           <LampContainer color="cyan">
             <FeaturedProjects />

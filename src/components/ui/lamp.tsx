@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { useTheme } from 'next-themes'
+import { useIsClient } from '@/hooks/useIsClient'
 
 const colors = {
   cyan: {
@@ -40,8 +41,8 @@ export default function LampContainer({
   className?: string
   color?: keyof typeof colors
 }) {
-  const { theme, systemTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const { theme } = useTheme()
+  const isClient = useIsClient()
   const [isMobile, setIsMobile] = useState(false)
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, {
@@ -50,19 +51,19 @@ export default function LampContainer({
   })
 
   useEffect(() => {
-    setMounted(true)
+    if (!isClient) return
     const checkMobile = () => setIsMobile(window.innerWidth < 640)
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  }, [isClient])
 
   const colorStyle = {
     '--lamp-color-400': colors[color][400],
     '--lamp-color-500': colors[color][500],
   } as React.CSSProperties
 
-  const currentTheme = mounted ? theme : systemTheme
+  const currentTheme = isClient ? theme : 'light'
 
   const animationConfig = {
     initial: { opacity: 0.5, width: '8rem' },
