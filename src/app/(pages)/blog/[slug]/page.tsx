@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { unstable_ViewTransition as ViewTransition } from 'react'
 import { Badge } from '@/components/ui/badge'
-import { CalendarIcon, ClockIcon } from 'lucide-react'
+import { CalendarIcon, ClockIcon, FileText, Database } from 'lucide-react'
 import { difficultyColors, Difficulty } from '@/contasnts'
 import { getPostBySlug, getAllPosts } from '@/lib/blog'
 import BlogContent from '@/components/blog/blog-content'
@@ -16,19 +16,51 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
-type BlogPost = {
+type BlogPostData = {
   metadata: BlogMetadata
   slug: string
+  source: 'mdx' | 'sanity'
+  category?: string
+  content?: unknown
 }
 
-function BlogPostSchema({ post, canonicalUrl }: { post: BlogPost; canonicalUrl: string }) {
-  const publishedDate = parsePublishedDate(post.metadata.publishedAt)
+function getMetadata(post: {
+  source: 'mdx' | 'sanity'
+  metadata?: BlogMetadata
+  title?: string
+  excerpt?: string
+  publishedAt?: string
+  readTime?: number
+  type?: string
+  difficulty?: string
+}): BlogMetadata {
+  if (post.source === 'mdx' && post.metadata) {
+    return post.metadata
+  } else {
+    // Sanity post
+    return {
+      title: post.title || '',
+      excerpt: post.excerpt || '',
+      publishedAt: post.publishedAt || '',
+      readTime: post.readTime || 0,
+      type: post.type || '',
+      difficulty: (post.difficulty as 'easy' | 'intermediate' | 'advanced') || 'intermediate',
+    }
+  }
+}
+
+function BlogPostSchema({ post, canonicalUrl }: { post: BlogPostData; canonicalUrl: string }) {
+  const metadata = getMetadata(post)
+  const publishedDate =
+    post.source === 'mdx'
+      ? parsePublishedDate(metadata.publishedAt)
+      : new Date(metadata.publishedAt)
 
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    headline: post.metadata.title,
-    description: post.metadata.excerpt,
+    headline: metadata.title,
+    description: metadata.excerpt,
     datePublished: publishedDate.toISOString(),
     dateModified: publishedDate.toISOString(),
     author: {
@@ -47,7 +79,7 @@ function BlogPostSchema({ post, canonicalUrl }: { post: BlogPost; canonicalUrl: 
       '@type': 'WebPage',
       '@id': canonicalUrl,
     },
-    keywords: [post.metadata.type, post.metadata.difficulty],
+    keywords: [metadata.type, metadata.difficulty],
   }
 
   return (
@@ -66,19 +98,23 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   if (!post) return { title: 'Post Not Found' }
 
-  const publishedDate = parsePublishedDate(post.metadata.publishedAt)
+  const metadata = getMetadata(post)
+  const publishedDate =
+    post.source === 'mdx'
+      ? parsePublishedDate(metadata.publishedAt)
+      : new Date(metadata.publishedAt)
   const canonicalUrl = `https://henrychien.com.au/blog/${slug}`
 
   return {
-    title: `${post.metadata.title} | Henry Chien`,
-    description: post.metadata.excerpt,
+    title: `${metadata.title} | Henry Chien`,
+    description: metadata.excerpt,
     metadataBase: new URL('https://henrychien.com.au'),
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: post.metadata.title,
-      description: post.metadata.excerpt,
+      title: metadata.title,
+      description: metadata.excerpt,
       type: 'article',
       publishedTime: publishedDate.toISOString(),
       authors: ['Henry Chien'],
@@ -88,8 +124,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     other: {
       'article:published_time': publishedDate.toISOString(),
       'article:author': 'Henry Chien',
-      'article:section': post.metadata.type,
-      'article:tag': [post.metadata.type, post.metadata.difficulty],
+      'article:section': metadata.type,
+      'article:tag': [metadata.type, metadata.difficulty],
     },
   }
 }
@@ -99,12 +135,17 @@ export default async function BlogPostPage(props: Props) {
   const post = await getPostBySlug(params.slug)
   if (!post) return notFound()
 
-  const difficulty = post.metadata.difficulty.toLowerCase() as Difficulty
+  const metadata = getMetadata(post)
+  const difficulty = metadata.difficulty.toLowerCase() as Difficulty
   const canonicalUrl = `https://henrychien.com.au/blog/${params.slug}`
+  const publishedDate =
+    post.source === 'mdx'
+      ? parsePublishedDate(metadata.publishedAt)
+      : new Date(metadata.publishedAt)
 
   return (
     <ViewTransition name={`blog-${params.slug}`}>
-      <BlogPostSchema post={post} canonicalUrl={canonicalUrl} />
+      <BlogPostSchema post={post as BlogPostData} canonicalUrl={canonicalUrl} />
       <div className="w-full min-h-screen">
         <div className="mx-auto px-4 sm:px-6 lg:px-10 py-8 sm:py-12 lg:py-16 max-w-[95%] lg:max-w-[90%] xl:max-w-[85%] 2xl:max-w-[70%]">
           <article className="space-y-6 sm:space-y-8">
@@ -112,7 +153,7 @@ export default async function BlogPostPage(props: Props) {
               <BackButton />
               <ViewTransition name={`blog-title-${params.slug}`}>
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl mb-4 sm:mb-6 leading-tight font-bold font-cinzel">
-                  {post.metadata.title}
+                  {metadata.title}
                 </h1>
               </ViewTransition>
 
@@ -121,7 +162,7 @@ export default async function BlogPostPage(props: Props) {
                   <div className="flex items-center min-w-[140px]">
                     <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 shrink-0" />
                     <time className="text-sm sm:text-base">
-                      {parsePublishedDate(post.metadata.publishedAt).toLocaleDateString('en-AU', {
+                      {publishedDate.toLocaleDateString('en-AU', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
@@ -130,21 +171,30 @@ export default async function BlogPostPage(props: Props) {
                   </div>
                   <div className="flex items-center">
                     <ClockIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 shrink-0" />
-                    <span className="text-sm sm:text-base">{post.metadata.readTime} min read</span>
+                    <span className="text-sm sm:text-base">{metadata.readTime} min read</span>
+                  </div>
+                  {/* Source indicator */}
+                  <div className="flex items-center">
+                    {post.source === 'mdx' ? (
+                      <FileText className="w-4 h-4 sm:w-5 sm:h-5 mr-2 shrink-0" />
+                    ) : (
+                      <Database className="w-4 h-4 sm:w-5 sm:h-5 mr-2 shrink-0" />
+                    )}
+                    <span className="text-sm sm:text-base uppercase font-mono">{post.source}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 flex-wrap">
                   <Badge variant="secondary" className={`${difficultyColors[difficulty]} text-sm`}>
-                    {post.metadata.difficulty}
+                    {metadata.difficulty}
                   </Badge>
                   <Badge variant="secondary" className="text-sm">
-                    {post.metadata.type}
+                    {metadata.type}
                   </Badge>
                 </div>
               </div>
             </header>
-            <BlogContent slug={params.slug} />
+            <BlogContent slug={params.slug} post={post} />
             <Comments slug={params.slug} />
           </article>
         </div>
@@ -156,6 +206,11 @@ export default async function BlogPostPage(props: Props) {
 export async function generateStaticParams() {
   const posts = await getAllPosts()
   return posts.map(post => ({
-    slug: post.slug,
+    slug:
+      post.source === 'mdx'
+        ? post.slug
+        : typeof post.slug === 'string'
+          ? post.slug
+          : post.slug.current,
   }))
 }

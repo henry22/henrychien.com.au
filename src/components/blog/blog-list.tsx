@@ -1,12 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { BlogMetadata } from '@/types/blog'
+import { BlogPost } from '@/lib/blog'
 import BlogCard from './blog-card'
 import { BlogFilters } from './blog-filters'
 import { unstable_ViewTransition as ViewTransition } from 'react'
-
-type BlogPost = BlogMetadata & { slug: string }
 
 interface BlogListProps {
   initialPosts: BlogPost[]
@@ -63,9 +61,13 @@ export default function BlogList({ initialPosts }: BlogListProps) {
       />
       <ViewTransition>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredPosts.map(post => (
-            <BlogCard key={post.slug} {...post} />
-          ))}
+          {filteredPosts.map(post => {
+            const key =
+              post.source === 'mdx'
+                ? post.slug
+                : post._id || (typeof post.slug === 'string' ? post.slug : post.slug.current)
+            return <BlogCard key={key} post={post} />
+          })}
         </div>
       </ViewTransition>
     </div>

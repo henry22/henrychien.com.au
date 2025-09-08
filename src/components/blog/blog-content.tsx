@@ -1,8 +1,27 @@
 import path from 'path'
 import fs from 'fs/promises'
 import MaskedContent from './masked-content'
+import { PortableText } from '@portabletext/react'
 
-export default async function BlogContent({ slug }: { slug: string }) {
+type BlogContentProps = {
+  slug: string
+  post?: {
+    source: 'mdx' | 'sanity'
+    content?: unknown
+  }
+}
+
+export default async function BlogContent({ slug, post }: BlogContentProps) {
+  // If we have a post object and it's from Sanity, render Sanity content
+  if (post && post.source === 'sanity' && post.content) {
+    return (
+      <MaskedContent>
+        <div className="prose prose-lg dark:prose-invert max-w-none">
+          <PortableText value={post.content} />
+        </div>
+      </MaskedContent>
+    )
+  }
   // Get all folders in the posts directory
   const postsDir = path.join(process.cwd(), 'src/posts')
 

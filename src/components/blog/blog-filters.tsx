@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Search } from 'lucide-react'
-import { BlogMetadata } from '@/types/blog'
+import { BlogPost } from '@/lib/blog'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
@@ -13,7 +13,7 @@ import { useTransition } from 'react'
 const DIFFICULTY_ORDER = ['Easy', 'Intermediate', 'Advanced'] as const
 
 type BlogFiltersProps = {
-  posts?: (BlogMetadata & { slug: string })[]
+  posts?: BlogPost[]
   searchQuery: string
   setSearchQuery: (query: string) => void
   selectedTypes: string[]

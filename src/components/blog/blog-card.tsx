@@ -1,30 +1,35 @@
 import Link from 'next/link'
 import { unstable_ViewTransition as ViewTransition } from 'react'
-import type { BlogMetadata } from '@/types/blog'
+import type { BlogPost } from '@/lib/blog'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { CalendarIcon, Clock, ArrowRightIcon, BookOpen } from 'lucide-react'
+import { CalendarIcon, Clock, ArrowRightIcon, BookOpen, FileText, Database } from 'lucide-react'
 import { difficultyColors, type Difficulty } from '@/contasnts'
 import { parsePublishedDate } from '@/lib/utils/formatters'
 import { cn } from '@/lib/utils'
 
 const EXCERPT_MAX_LENGTH = 75
 
-function truncateExcerpt(text: string): string {
-  if (text.length <= EXCERPT_MAX_LENGTH) return text
+function truncateExcerpt(text: string | null | undefined): string {
+  if (!text || text.length <= EXCERPT_MAX_LENGTH) return text || ''
   return text.slice(0, EXCERPT_MAX_LENGTH).trim() + '...'
 }
 
-type BlogCardProps = Omit<BlogMetadata & { slug: string }, 'image'>
+type BlogCardProps = {
+  post: BlogPost
+}
 
-export default function BlogCardNoImage({
-  slug,
-  title,
-  excerpt,
-  publishedAt,
-  readTime,
-  difficulty,
-}: BlogCardProps) {
+function getSlug(post: BlogPost): string {
+  if (post.source === 'mdx') {
+    return post.slug
+  } else {
+    return typeof post.slug === 'string' ? post.slug : post.slug.current
+  }
+}
+
+export default function BlogCardNoImage({ post }: BlogCardProps) {
+  const slug = getSlug(post)
+  const { title, excerpt, publishedAt, readTime, difficulty } = post
   if (!publishedAt) return null
 
   const difficultyKey = difficulty.toLowerCase() as Difficulty
@@ -84,6 +89,15 @@ export default function BlogCardNoImage({
                   <div className="flex items-center text-xs text-muted-foreground transition-transform duration-500 group-hover:translate-x-1">
                     <Clock className="mr-1 h-3 w-3 transition-transform duration-500 group-hover:scale-110" />
                     <span>{readTime} min read</span>
+                  </div>
+                  {/* Source indicator */}
+                  <div className="flex items-center text-xs text-muted-foreground transition-transform duration-500 group-hover:translate-x-1">
+                    {post.source === 'mdx' ? (
+                      <FileText className="mr-1 h-3 w-3 transition-transform duration-500 group-hover:scale-110" />
+                    ) : (
+                      <Database className="mr-1 h-3 w-3 transition-transform duration-500 group-hover:scale-110" />
+                    )}
+                    <span className="uppercase font-mono">{post.source}</span>
                   </div>
                 </div>
                 <CardTitle className="line-clamp-2 text-2xl font-medium font-cinzel transition-all duration-500 group-hover:text-primary group-hover:translate-x-1">
