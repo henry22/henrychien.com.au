@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Sun, Moon, Menu } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import { useState, useEffect } from 'react'
+import { useIsClient } from '@/hooks/useIsClient'
 import { Links } from '@/contasnts'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { usePathname } from 'next/navigation'
@@ -17,17 +17,39 @@ const NavLinks = [
 
 export default function Nav() {
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-
+  const isClient = useIsClient()
   const url = usePathname()
   const activeLink = NavLinks.find(link => url.includes(link.href))
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return null
+  if (!isClient) {
+    return (
+      <nav className="print:hidden sticky top-0 z-40 backdrop-blur-md bg-slate-200/40 dark:bg-gray-900/40 border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]">
+            <Link href="/">Henry Chien</Link>
+          </h1>
+          <div className="hidden md:flex items-center space-x-4">
+            {NavLinks.map(link => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Button variant="ghost" size="icon">
+              <Moon className="h-5 w-5" />
+            </Button>
+          </div>
+          <div className="md:hidden flex items-center space-x-2">
+            <Button variant="ghost" size="icon">
+              <Moon className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+      </nav>
+    )
   }
 
   return (

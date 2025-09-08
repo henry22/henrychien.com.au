@@ -9,6 +9,7 @@ import { useSkills } from '@/lib/hooks/usePortfolioData'
 import { Skeleton } from '@/components/ui/skeleton'
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity/client'
+import { useIsClient } from '@/hooks/useIsClient'
 
 type SanityImage = {
   _type: 'image'
@@ -95,9 +96,10 @@ function SkillsSection() {
 
 function SkillTree({ category, isExpanded, onToggle }: SkillTreeProps) {
   const { theme } = useTheme()
+  const isClient = useIsClient()
+
   // Use fallback to prevent hydration mismatch
-  const currentColor =
-    (theme === 'dark' ? category.colors.dark : category.colors.light) || category.colors.light
+  const currentColor = isClient && theme === 'dark' ? category.colors.dark : category.colors.light
 
   return (
     <div className="relative">
@@ -178,7 +180,9 @@ function SkillTree({ category, isExpanded, onToggle }: SkillTreeProps) {
                     <div className="flex items-center gap-4 mb-4">
                       <div
                         className="w-12 h-12 rounded-lg flex items-center justify-center"
-                        style={{ backgroundColor: `${skill.colors[theme || 'light']}20` }}
+                        style={{
+                          backgroundColor: `${skill.colors[isClient && theme === 'dark' ? 'dark' : 'light']}20`,
+                        }}
                       >
                         {skill.icon && (
                           <Image
@@ -203,8 +207,8 @@ function SkillTree({ category, isExpanded, onToggle }: SkillTreeProps) {
                           key={subSkill}
                           className="px-3 py-1 rounded-full text-sm"
                           style={{
-                            backgroundColor: `${skill.colors[theme || 'light']}20`,
-                            color: skill.colors[theme || 'light'],
+                            backgroundColor: `${skill.colors[isClient && theme === 'dark' ? 'dark' : 'light']}20`,
+                            color: skill.colors[isClient && theme === 'dark' ? 'dark' : 'light'],
                           }}
                         >
                           {subSkill}

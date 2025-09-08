@@ -1,8 +1,8 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { useState, useEffect } from 'react'
 import Giscus from '@giscus/react'
+import { useIsClient } from '@/hooks/useIsClient'
 
 type CommentsProps = {
   slug: string
@@ -10,11 +10,7 @@ type CommentsProps = {
 
 export default function Comments({ slug }: CommentsProps) {
   const { theme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const isClient = useIsClient()
 
   // Check if Giscus is configured
   const repoId = process.env.NEXT_PUBLIC_GITHUB_REPO_ID
@@ -45,7 +41,7 @@ export default function Comments({ slug }: CommentsProps) {
         reactionsEnabled="1"
         emitMetadata="0"
         inputPosition="top"
-        theme={mounted && theme === 'dark' ? 'dark' : 'light'}
+        theme={isClient && theme === 'dark' ? 'dark' : 'light'}
         lang="en"
         loading="lazy"
       />

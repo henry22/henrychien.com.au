@@ -2,8 +2,8 @@
 
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
+import { useIsClient } from '@/hooks/useIsClient'
 
 const sizeClasses = {
   xs: 'max-w-xs', // max-width: 384px
@@ -33,13 +33,9 @@ export default function ArticleImage({
   size = 'medium',
 }: ThemeImageProps) {
   const { theme, systemTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const isClient = useIsClient()
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const currentTheme = mounted ? (theme === 'system' ? systemTheme : theme) : 'light'
+  const currentTheme = isClient ? (theme === 'system' ? systemTheme : theme) : 'light'
   const src = currentTheme === 'dark' ? darkSrc : lightSrc
 
   return (
