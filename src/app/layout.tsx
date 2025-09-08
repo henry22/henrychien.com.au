@@ -30,6 +30,27 @@ export const metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Suppress React prop warnings for Sanity Studio compatibility
+              const originalConsoleError = console.error;
+              console.error = function(...args) {
+                const message = args[0];
+                if (typeof message === 'string' && (
+                  message.includes('React does not recognize') ||
+                  message.includes('disableTransition') ||
+                  message.includes('prop on a DOM element')
+                )) {
+                  return; // Suppress these specific warnings
+                }
+                originalConsoleError.apply(console, args);
+              };
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} antialiased flex flex-col min-h-screen`}
       >

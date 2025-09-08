@@ -28,4 +28,28 @@ export default defineConfig({
     // Code input plugin for code blocks
     codeInput(),
   ],
+  // Studio configuration to reduce React warnings
+  studio: {
+    components: {
+      layout: (props: any) => {
+        // Suppress React prop warnings in development
+        if (typeof window !== 'undefined') {
+          const originalError = console.error
+          console.error = (...args) => {
+            const message = args[0]
+            if (
+              typeof message === 'string' &&
+              (message.includes('React does not recognize') ||
+                message.includes('disableTransition') ||
+                message.includes('prop on a DOM element'))
+            ) {
+              return // Suppress these warnings
+            }
+            originalError.apply(console, args)
+          }
+        }
+        return props.renderDefault(props)
+      },
+    },
+  },
 })
