@@ -39,11 +39,7 @@ export default function ArticleImage({
     setMounted(true)
   }, [])
 
-  if (!mounted) {
-    return null
-  }
-
-  const currentTheme = theme === 'system' ? systemTheme : theme
+  const currentTheme = mounted ? (theme === 'system' ? systemTheme : theme) : 'light'
   const src = currentTheme === 'dark' ? darkSrc : lightSrc
 
   return (

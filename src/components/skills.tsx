@@ -95,8 +95,9 @@ function SkillsSection() {
 
 function SkillTree({ category, isExpanded, onToggle }: SkillTreeProps) {
   const { theme } = useTheme()
-  if (!theme) return null
-  const currentColor = theme === 'dark' ? category.colors.dark : category.colors.light
+  // Use fallback to prevent hydration mismatch
+  const currentColor =
+    (theme === 'dark' ? category.colors.dark : category.colors.light) || category.colors.light
 
   return (
     <div className="relative">
@@ -177,7 +178,7 @@ function SkillTree({ category, isExpanded, onToggle }: SkillTreeProps) {
                     <div className="flex items-center gap-4 mb-4">
                       <div
                         className="w-12 h-12 rounded-lg flex items-center justify-center"
-                        style={{ backgroundColor: `${skill.colors[theme]}20` }}
+                        style={{ backgroundColor: `${skill.colors[theme || 'light']}20` }}
                       >
                         {skill.icon && (
                           <Image
@@ -202,8 +203,8 @@ function SkillTree({ category, isExpanded, onToggle }: SkillTreeProps) {
                           key={subSkill}
                           className="px-3 py-1 rounded-full text-sm"
                           style={{
-                            backgroundColor: `${skill.colors[theme]}20`,
-                            color: skill.colors[theme],
+                            backgroundColor: `${skill.colors[theme || 'light']}20`,
+                            color: skill.colors[theme || 'light'],
                           }}
                         >
                           {subSkill}
