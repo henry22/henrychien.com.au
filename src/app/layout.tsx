@@ -23,7 +23,7 @@ const cinzel = Cinzel({
 })
 
 export const metadata = {
-  title: 'Mattdeal.com.au',
+  title: 'henrychien.com.au',
   description: 'Portfolio website',
 }
 

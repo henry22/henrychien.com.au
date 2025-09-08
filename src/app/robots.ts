@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/studio/', '/api/'],
     },
-    sitemap: 'https://mattdeal.com.au/sitemap.xml',
+    sitemap: 'https://henrychien.com.au/sitemap.xml',
   }
 }

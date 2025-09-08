@@ -33,14 +33,14 @@ function BlogPostSchema({ post, canonicalUrl }: { post: BlogPost; canonicalUrl: 
     dateModified: publishedDate.toISOString(),
     author: {
       '@type': 'Person',
-      name: 'Matt Deal',
+      name: 'Henry Chien',
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Matt Deal',
+      name: 'Henry Chien',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://mattdeal.com.au/images/logo.png',
+        url: 'https://henrychien.com.au/images/logo.png',
       },
     },
     mainEntityOfPage: {
@@ -67,12 +67,12 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   if (!post) return { title: 'Post Not Found' }
 
   const publishedDate = parsePublishedDate(post.metadata.publishedAt)
-  const canonicalUrl = `https://mattdeal.com.au/blog/${slug}`
+  const canonicalUrl = `https://henrychien.com.au/blog/${slug}`
 
   return {
-    title: `${post.metadata.title} | Matt Deal`,
+    title: `${post.metadata.title} | Henry Chien`,
     description: post.metadata.excerpt,
-    metadataBase: new URL('https://mattdeal.com.au'),
+    metadataBase: new URL('https://henrychien.com.au'),
     alternates: {
       canonical: canonicalUrl,
     },
@@ -81,19 +81,13 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       description: post.metadata.excerpt,
       type: 'article',
       publishedTime: publishedDate.toISOString(),
-      authors: ['Matt Deal'],
-      siteName: 'Matt Deal',
+      authors: ['Henry Chien'],
+      siteName: 'Henry Chien',
       url: canonicalUrl,
-    },
-    twitter: {
-      card: 'summary',
-      title: post.metadata.title,
-      description: post.metadata.excerpt,
-      creator: '@mattdeal',
     },
     other: {
       'article:published_time': publishedDate.toISOString(),
-      'article:author': 'Matt Deal',
+      'article:author': 'Henry Chien',
       'article:section': post.metadata.type,
       'article:tag': [post.metadata.type, post.metadata.difficulty],
     },
@@ -106,7 +100,7 @@ export default async function BlogPostPage(props: Props) {
   if (!post) return notFound()
 
   const difficulty = post.metadata.difficulty.toLowerCase() as Difficulty
-  const canonicalUrl = `https://mattdeal.com.au/blog/${params.slug}`
+  const canonicalUrl = `https://henrychien.com.au/blog/${params.slug}`
 
   return (
     <ViewTransition name={`blog-${params.slug}`}>

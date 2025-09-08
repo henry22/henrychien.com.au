@@ -71,12 +71,12 @@ export default function ResumePage() {
 
                     <span className="font-bold text-slate-700 mr-2">Portfolio:</span>
                     <a
-                      href="https://mattdeal.com.au"
+                      href="https://henrychien.com.au"
                       target="_blank"
                       className="flex items-center mr-3 text-indigo-600 hover:text-indigo-800 transition-colors"
                     >
                       <Globe className="h-4 w-4 mr-1" />
-                      mattdeal.com.au
+                      henrychien.com.au
                     </a>
                   </div>
 
@@ -84,20 +84,12 @@ export default function ResumePage() {
                     <span className="font-bold text-slate-700 mr-2">GitHub:</span>
                     <div className="flex gap-4">
                       <a
-                        href="https://github.com/Dealsy"
+                        href="https://github.com/henry22"
                         target="_blank"
                         className="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors"
                       >
                         <Github className="h-4 w-4 mr-1" />
                         Personal
-                      </a>
-                      <a
-                        href="https://github.com/matthew-deal-rocketlab"
-                        target="_blank"
-                        className="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors"
-                      >
-                        <Github className="h-4 w-4 mr-1" />
-                        Rocketlab-personal
                       </a>
                     </div>
                   </div>

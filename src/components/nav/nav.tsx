@@ -41,7 +41,7 @@ export default function Nav() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Link href="/">Matt Deal</Link>
+          <Link href="/">Henry Chien</Link>
         </motion.h1>
 
         {/* Desktop Navigation */}

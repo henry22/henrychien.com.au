@@ -14,7 +14,7 @@ export default function Comments({ slug }: CommentsProps) {
     <div className="mt-16 border-t pt-8">
       <Giscus
         id="comments"
-        repo="dealsy/mattdeal.com.au"
+        repo="henry22/henrychien.com.au"
         repoId={process.env.NEXT_PUBLIC_GITHUB_REPO_ID || ''} // You'll need to replace this with your actual repo ID
         category="General"
         categoryId={process.env.NEXT_PUBLIC_GITHUB_CATEGORY_ID || ''} // You'll need to replace this with your actual category ID

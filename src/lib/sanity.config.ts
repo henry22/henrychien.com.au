@@ -14,7 +14,7 @@ export default defineConfig({
     types: schemaTypes,
   },
   cors: {
-    origin: ['https://mattdeal.com.au', 'http://localhost:3000'],
+    origin: ['https://henrychien.com.au', 'http://localhost:3000'],
     credentials: true,
   },
 })
