@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useIsClient } from '@/hooks/useIsClient'
 
 type MaskedContentProps = {
   children: React.ReactNode
@@ -9,8 +10,11 @@ type MaskedContentProps = {
 export default function MaskedContent({ children }: MaskedContentProps) {
   const [maskPercentage, setMaskPercentage] = useState(80)
   const contentRef = useRef<HTMLDivElement>(null)
+  const isClient = useIsClient()
 
   useEffect(() => {
+    if (!isClient) return
+
     const content = contentRef.current
     if (!content) return
 
@@ -46,7 +50,7 @@ export default function MaskedContent({ children }: MaskedContentProps) {
       window.removeEventListener('scroll', handleScroll)
       cancelAnimationFrame(rafId)
     }
-  }, [])
+  }, [isClient])
 
   return (
     <div className="relative">

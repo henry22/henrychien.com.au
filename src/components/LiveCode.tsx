@@ -43,13 +43,15 @@ function useMediaQuery(query: string) {
 
   useEffect(() => {
     setMounted(true)
+    if (typeof window === 'undefined') return
+
     const media = window.matchMedia(query)
     if (media.matches !== matches) {
       setMatches(media.matches)
     }
     const listener = () => setMatches(media.matches)
-    window.addEventListener('resize', listener)
-    return () => window.removeEventListener('resize', listener)
+    media.addEventListener('change', listener)
+    return () => media.removeEventListener('change', listener)
   }, [matches, query])
 
   if (!mounted) return false

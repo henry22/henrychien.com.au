@@ -3,18 +3,22 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
+import { useIsClient } from '@/hooks/useIsClient'
 
 export function ScrollToTop() {
   const [visible, setVisible] = useState(false)
+  const isClient = useIsClient()
 
   useEffect(() => {
+    if (!isClient) return
+
     const toggleVisible = () => {
       setVisible(window.pageYOffset > 500)
     }
 
     window.addEventListener('scroll', toggleVisible)
     return () => window.removeEventListener('scroll', toggleVisible)
-  }, [])
+  }, [isClient])
 
   return (
     <motion.button
