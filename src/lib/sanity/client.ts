@@ -41,7 +41,7 @@ export async function fetchPost(slug: string) {
 
 // Typed query functions
 export async function getProjects() {
-  return client.fetch(`*[_type == "project"] | order(_createdAt desc) {
+  return client.fetch(`*[_type == "project"] | order(order asc, _createdAt desc) {
     _id,
     name,
     description,
@@ -50,12 +50,13 @@ export async function getProjects() {
     github,
     features,
     featured,
+    order,
     "image": image.asset->url
   }`)
 }
 
 export async function getFeaturedProjects() {
-  return client.fetch(`*[_type == "project" && featured == true] | order(_createdAt desc) {
+  return client.fetch(`*[_type == "project" && featured == true] | order(order asc, _createdAt desc) {
     _id,
     name,
     description,
@@ -64,6 +65,7 @@ export async function getFeaturedProjects() {
     github,
     features,
     featured,
+    order,
     "image": image.asset->url
   }`)
 }
