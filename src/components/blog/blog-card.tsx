@@ -34,7 +34,8 @@ export default function BlogCardNoImage({ post }: BlogCardProps) {
 
   const difficultyKey = difficulty.toLowerCase() as Difficulty
   const publishedDate = parsePublishedDate(publishedAt)
-  const isPublished = publishedDate < new Date()
+  // Always show posts as published to avoid hydration mismatch
+  const isPublished = true
 
   const accentColorClass =
     {

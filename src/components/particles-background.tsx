@@ -1,11 +1,17 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export function ParticlesBackground() {
   const ref = useRef<HTMLCanvasElement>(null)
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isClient) return
     const canvas = ref.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -138,7 +144,11 @@ export function ParticlesBackground() {
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('mousemove', handleMouseMove)
     }
-  }, [])
+  }, [isClient])
+
+  if (!isClient) {
+    return null
+  }
 
   return <canvas ref={ref} className="absolute inset-0 -z-0 pointer-events-none" />
 }
