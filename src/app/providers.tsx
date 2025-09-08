@@ -2,7 +2,7 @@
 
 import { ThemeProvider } from 'next-themes'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { PostHogProvider } from '@/components/PostHogProvider'
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
